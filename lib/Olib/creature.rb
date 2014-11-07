@@ -63,7 +63,7 @@ module Olib
 	  if woundinfo =~ /some minor cuts and bruises on (his|her|its) (?:right arm|right foreleg)/	then @wounds[:right_arm]  = 1;  end
 	  if woundinfo =~ /some minor cuts and bruises on (his|her|its) (?:left arm|left foreleg)/		then @wounds[:left_arm]   = 1;  end
 	  if woundinfo =~ /minor bruises around (his|her|its) neck/										then @wounds[:neck]       = 1;  end
-	  if woundinfo =~ /minor bruises about (his|her|its) head/										then @wounds[:head]       = 1;  end
+	  if woundinfo =~ /minor bruises around (his|her|its) head/										then @wounds[:head]       = 1;  end
 	  if woundinfo =~ /minor cuts and bruises on (his|her|its) chest/								then @wounds[:chest]      = 1;  end
 	  if woundinfo =~ /minor cuts and bruises on (his|her|its) abdomen/								then @wounds[:abdomen]    = 1;  end
 	  if woundinfo =~ /minor cuts and bruises on (his|her|its) back/								then @wounds[:back]       = 1;  end
@@ -76,7 +76,7 @@ module Olib
 	  if woundinfo =~ /fractured and bleeding left (?:hind )?leg/									then @wounds[:left_leg]   = 2;  end
 	  if woundinfo =~ /fractured and bleeding (?:right arm|right foreleg)/							then @wounds[:right_arm]  = 2;  end
 	  if woundinfo =~ /fractured and bleeding (?:left arm|left foreleg)/							then @wounds[:left_arm]   = 2;  end
-	  if woundinfo =~ /moderate bleeding (his|her|its) neck/										then @wounds[:neck]       = 2;  end
+	  if woundinfo =~ /moderate bleeding from (his|her|its) neck/									then @wounds[:neck]       = 2;  end
 	  if woundinfo =~ /minor lacerations about (his|her|its) head and a possible mild concussion/	then @wounds[:head]       = 2;  end
 	  if woundinfo =~ /deep lacerations across (his|her|its) chest/									then @wounds[:chest]      = 2;  end
 	  if woundinfo =~ /deep lacerations across (his|her|its) abdomen/								then @wounds[:abdomen]    = 2;  end
@@ -90,10 +90,10 @@ module Olib
       if woundinfo =~ /severed left (?:hind )?leg/													then @wounds[:left_leg]   = 3;  end
       if woundinfo =~ /severed (?:right arm|right foreleg)/											then @wounds[:right_arm]  = 3;  end
       if woundinfo =~ /severed (?:left arm|left foreleg)/											then @wounds[:left_arm]   = 3;  end
-	  if woundinfo =~ /snapped bones and serious bleeding around (his|her|its) neck/				then @wounds[:neck]       = 3;  end
+	  if woundinfo =~ /snapped bones and serious bleeding from (his|her|its) neck/					then @wounds[:neck]       = 3;  end
       if woundinfo =~ /severe head trauma and bleeding from (his|her|its) ears/						then @wounds[:head]       = 3;  end
-	  if woundinfo =~ /deep gashes and serious bleeding on (his|her|its) chest/						then @wounds[:chest]      = 3;  end
-	  if woundinfo =~ /deep gashes and serious bleeding on (his|her|its) abdomen/					then @wounds[:abdomen]    = 3;  end
+	  if woundinfo =~ /deep gashes and serious bleeding from (his|her|its) chest/					then @wounds[:chest]      = 3;  end
+	  if woundinfo =~ /deep gashes and serious bleeding from (his|her|its) abdomen/					then @wounds[:abdomen]    = 3;  end
 	  if woundinfo =~ /deep gashes and serious bleeding from (his|her|its) back/					then @wounds[:back]       = 3;  end
       if woundinfo =~ /blinded left eye/															then @wounds[:left_eye]   = 3;  end
       if woundinfo =~ /blinded right eye/															then @wounds[:right_eye]  = 3;  end
