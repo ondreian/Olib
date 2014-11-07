@@ -1,0 +1,1235 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"cur",
+				"current_window_rooms"
+			],
+			[
+				"turn",
+				"turnin"
+			],
+			[
+				"cas",
+				"cast_resolve"
+			],
+			[
+				"cast_",
+				"cast_sanctuary"
+			],
+			[
+				"san",
+				"sanctuary_watcher"
+			],
+			[
+				"herb",
+				"herbsack"
+			],
+			[
+				"auto",
+				"automagic"
+			],
+			[
+				"get",
+				"getAttributes"
+			],
+			[
+				"rend",
+				"renderRelatedDocumentViews"
+			],
+			[
+				"Var",
+				"VariationsTemplate"
+			],
+			[
+				"n",
+				"n"
+			],
+			[
+				"con",
+				"controllerName"
+			],
+			[
+				"name",
+				"namespace"
+			],
+			[
+				"is",
+				"isDefined"
+			],
+			[
+				"nams",
+				"namespace"
+			],
+			[
+				"del",
+				"delegations"
+			],
+			[
+				"reg",
+				"registerDelegates"
+			],
+			[
+				"mod",
+				"moduleKeywords"
+			],
+			[
+				"regist",
+				"registerMixins"
+			],
+			[
+				"regis",
+				"registerMixins"
+			],
+			[
+				"fl",
+				"flip_verified"
+			],
+			[
+				"chan",
+				"change_hidden"
+			],
+			[
+				"ca",
+				"change_discontinued"
+			],
+			[
+				"change",
+				"change_verified"
+			],
+			[
+				"tran",
+				"transactions"
+			],
+			[
+				"clas",
+				"class_name"
+			],
+			[
+				"ds",
+				"description"
+			],
+			[
+				"Gem",
+				"Gemstone_Data_Project"
+			],
+			[
+				"C",
+				"Caravansary"
+			],
+			[
+				"store",
+				"store_in"
+			],
+			[
+				"subd",
+				"Subdocument_Collection_View"
+			],
+			[
+				"put",
+				"put_regex"
+			],
+			[
+				"do",
+				"dothistimeout"
+			],
+			[
+				"right",
+				"right_hand"
+			],
+			[
+				"un",
+				"UnknownHerb"
+			],
+			[
+				"fa",
+				"failure"
+			],
+			[
+				"P",
+				"PoorDataQuality"
+			],
+			[
+				"task",
+				"taskamster"
+			],
+			[
+				"chec",
+				"checkbounty"
+			],
+			[
+				"creat",
+				"creatures"
+			],
+			[
+				"pr",
+				"prioritize_foes"
+			],
+			[
+				"em",
+				"embedded_documents"
+			],
+			[
+				"tra",
+				"transport"
+			],
+			[
+				"attr",
+				"attributes"
+			],
+			[
+				"go2",
+				"go2_center"
+			],
+			[
+				"sto",
+				"take_stock"
+			],
+			[
+				"empt",
+				"empties"
+			],
+			[
+				"false",
+				"false"
+			],
+			[
+				"filter",
+				"filterer"
+			],
+			[
+				"swap",
+				"swapFilter"
+			],
+			[
+				"swa",
+				"swapSort"
+			],
+			[
+				"segm",
+				"segmentation-menus"
+			],
+			[
+				"data",
+				"data-sorter"
+			],
+			[
+				"ver",
+				"verified"
+			],
+			[
+				"not",
+				"not-discontinued"
+			],
+			[
+				"flip",
+				"flip_verified"
+			],
+			[
+				"fli",
+				"flip_discontinued"
+			],
+			[
+				"names",
+				"namespace"
+			],
+			[
+				"crea",
+				"creatures"
+			],
+			[
+				"ch",
+				"checkDb"
+			],
+			[
+				"set",
+				"setCacheFor"
+			],
+			[
+				"when",
+				"whenCounted"
+			],
+			[
+				"was",
+				"wasRefreshed"
+			],
+			[
+				"disk",
+				"disk_owners"
+			],
+			[
+				"wo",
+				"woundinfo"
+			],
+			[
+				"inj",
+				"injuries"
+			],
+			[
+				"inc",
+				"incapacitated"
+			],
+			[
+				"cach",
+				"cached"
+			],
+			[
+				"Bl",
+				"BLAZE_DB"
+			],
+			[
+				"pro",
+				"production"
+			],
+			[
+				"rel",
+				"relativeToNow"
+			],
+			[
+				"time",
+				"timestamp"
+			],
+			[
+				"p",
+				"project"
+			],
+			[
+				"col",
+				"collection"
+			],
+			[
+				"coll",
+				"collections"
+			],
+			[
+				"boo",
+				"bootstrapped"
+			],
+			[
+				"BOO",
+				"BOOTSTRAPPING"
+			],
+			[
+				"BO",
+				"BOOTSTRAPPED"
+			],
+			[
+				"SY",
+				"SYNCED"
+			],
+			[
+				"SYN",
+				"SYNCING"
+			],
+			[
+				"_",
+				"__state__"
+			],
+			[
+				"pre",
+				"preventDefault"
+			],
+			[
+				"inspe",
+				"inspector"
+			],
+			[
+				"clo",
+				"close_inspector"
+			],
+			[
+				"delete",
+				"delegate"
+			],
+			[
+				"l",
+				"l"
+			],
+			[
+				"hea",
+				"Hearth"
+			],
+			[
+				"has",
+				"hasOne"
+			],
+			[
+				"att",
+				"attr"
+			],
+			[
+				"nam",
+				"namespace"
+			],
+			[
+				"me",
+				"megaphone"
+			],
+			[
+				"form",
+				"form-group"
+			],
+			[
+				"sub",
+				"sub_v"
+			],
+			[
+				"te",
+				"text"
+			],
+			[
+				"to",
+				"toDays"
+			],
+			[
+				"days",
+				"daysToZero"
+			],
+			[
+				"need",
+				"needed"
+			],
+			[
+				"com",
+				"competitorStockEvts"
+			],
+			[
+				"temla",
+				"templates"
+			],
+			[
+				"class",
+				"className"
+			],
+			[
+				"load",
+				"loadPages"
+			],
+			[
+				"boder",
+				"border-color"
+			],
+			[
+				"a",
+				"a"
+			],
+			[
+				"pos",
+				"position"
+			],
+			[
+				"fil",
+				"filename"
+			],
+			[
+				"lo",
+				"logo"
+			],
+			[
+				"title",
+				"title_validator"
+			],
+			[
+				"Page",
+				"Page_Upsert"
+			],
+			[
+				"re",
+				"resources"
+			],
+			[
+				"Pa",
+				"Pages_Index"
+			],
+			[
+				"border",
+				"border-left"
+			],
+			[
+				"vali",
+				"validatorArgs"
+			],
+			[
+				"sour",
+				"sourceLink_validator"
+			],
+			[
+				"vald",
+				"validate"
+			],
+			[
+				"vid",
+				"videoLink_validator"
+			],
+			[
+				"teas",
+				"teaser_validator"
+			],
+			[
+				"valid",
+				"validate"
+			],
+			[
+				"ti",
+				"title_validator"
+			],
+			[
+				"vide",
+				"videoLink"
+			],
+			[
+				"email",
+				"email_validator"
+			],
+			[
+				"first",
+				"first_name_validator"
+			],
+			[
+				"last",
+				"last_name"
+			],
+			[
+				"pass",
+				"passIfEmpty"
+			],
+			[
+				"sou",
+				"sourceLink"
+			],
+			[
+				"text",
+				"textarea"
+			],
+			[
+				"publish",
+				"publishEvent"
+			],
+			[
+				"Pr",
+				"Post_Write"
+			],
+			[
+				"stl",
+				"stylesheet"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Olib.gemspec",
+			"settings":
+			{
+				"buffer_size": 751,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Benjamin/Dropbox/lich/scripts/alvis.lic",
+			"settings":
+			{
+				"buffer_size": 6300,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "lib/Olib/help_menu.rb",
+			"settings":
+			{
+				"buffer_size": 330,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "lib/Olib.rb",
+			"settings":
+			{
+				"buffer_size": 316,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 73.0,
+		"selected_items":
+		[
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Preferences: Browse Packages"
+			]
+		],
+		"width": 549.0
+	},
+	"console":
+	{
+		"height": 162.0,
+		"history":
+		[
+			"import urllib2,os; pf='Package Control.sublime-package'; ipp=sublime.installed_packages_path(); os.makedirs(ipp) if not os.path.exists(ipp) else None; urllib2.install_opener(urllib2.build_opener(urllib2.ProxyHandler())); open(os.path.join(ipp,pf),'wb').write(urllib2.urlopen('http://sublime.wbond.net/'+pf.replace(' ','%20')).read()); print('Please restart Sublime Text to finish installation')"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/Benjamin/Dropbox/lich/Olib",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib"
+	],
+	"file_history":
+	[
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/dictionary.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/help_menu.rb",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/update-playershops.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/squelch",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/0lib.lic",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/jewelry.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/wand.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/unknown.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/clothing.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/uncommon.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/jar.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/herb.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/gem.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/box.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/scroll.rb",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/0bounty.lic.dep",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/container.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/item.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/transport.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/bounty.rb",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/gem-test.lic",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/creature.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/creatures.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/extender.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/Olib.gemspec",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/0models.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/0dev.lic",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/herb.lic",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/scroll.lic",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/box.lic",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/jar.lic",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/objects/gems.lic",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/olib.sublime-workspace",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/0bounty.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/sailormoon.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/stealth.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/rogue.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/bigshot.lic",
+		"/C/Users/Benjamin/Dropbox/lich/data/spell-list.xml",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/warmode.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/lnet.lic",
+		"/C/Users/Benjamin/Dropbox/lich/data/lich.db3",
+		"/C/Users/Benjamin/Dropbox/lich/lich.rbw",
+		"/C/Program Files/command-line-scripts/sqlite3.def",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/killcounter.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/track_gem_transaction.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/autowar2.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/sloot.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/xp.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/ego2.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/clericbot.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/healbot.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/inactivespells.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/gameobj-data.xml",
+		"/C/Users/Benjamin/Dropbox/lich/mongoid.yml",
+		"/C/Users/Benjamin/Dropbox/lich/lich.dep.3rbw",
+		"/C/Users/Benjamin/Dropbox/lich/lich.dep2.rbw",
+		"/C/Users/Benjamin/Dropbox/lich/lich.4.6.0.rb",
+		"/C/Users/Benjamin/Dropbox/lich/lich.dep.rbw",
+		"/C/Users/Benjamin/Dropbox/lich/temp/debug-1410534928.txt",
+		"/C/Users/Benjamin/Dropbox/lich/temp/debug-1410534981.txt",
+		"/C/Users/Benjamin/Dropbox/lich/temp/debug-1410534797.txt",
+		"/C/Users/Benjamin/Dropbox/lich/lich.rb",
+		"/C/Users/Benjamin/Dropbox/lich/temp/debug-1410534679.txt",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/Olib/group.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/extensions/creatures.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/extensions/creature.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/extensions/group.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/extensions/item.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/extensions/extender.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/extensions/transport.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/extensions/dictionary.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/extensions/vbulletin.rb",
+		"/C/Users/Benjamin/Dropbox/lich/Olib/lib/extensions/container.rb",
+		"/C/Users/Benjamin/Dropbox/lich/olib.sublime-workspace",
+		"/C/Users/Benjamin/Dropbox/lich/olib.sublime-project",
+		"/C/Users/Benjamin/Dropbox/lich/0lib/lib/Olib.rb",
+		"/C/Users/Benjamin/Dropbox/lich/0lib/Olib.gemspec",
+		"/C/Users/Benjamin/Dropbox/lich/0lib/lib/0lib.rb",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/vbull.lic",
+		"/C/Users/Benjamin/Dropbox/lich/scripts/gem_stats.lic",
+		"/C/dev/blaze/client.admin/app/views/base/subdocument-card-view.coffee",
+		"/C/dev/blaze/client.admin/app/views/base/upsert-view.coffee",
+		"/C/dev/blaze/client.admin/app/templates/product-groups/card.jade",
+		"/C/dev/blaze/client.admin/app/views/product-groups/index.coffee",
+		"/C/dev/blaze/client.admin/app/views/selling-points/card.coffee",
+		"/C/dev/blaze/client.admin/app/views/products/upsert.coffee",
+		"/C/dev/blaze/client.admin/app/templates/products/upsert.jade",
+		"/C/dev/blaze/client.admin/app/templates/images/automagic/card.jade",
+		"/C/dev/blaze/client.admin/app/styles/images.styl",
+		"/C/dev/blaze/client.admin/app/views/base/subdocument-collection-view.coffee",
+		"/C/dev/blaze/app/views/layouts/dashboard2_layout.jade",
+		"/C/dev/blaze/app/views/application/admin.jade",
+		"/C/dev/blaze/client.admin/app/models/pushers/model.coffee",
+		"/C/dev/blaze/client.admin/app/models/products/model.coffee",
+		"/C/dev/blaze/client.admin/app/models/selling-points/collection.coffee",
+		"/C/dev/blaze/client.admin/app/views/selling-points/index.coffee",
+		"/C/dev/blaze/client.admin/app/templates/pushers/upsert.jade",
+		"/C/dev/blaze/client.admin/app/models/base/model.coffee",
+		"/C/dev/blaze/client.admin/app/views/pushers/upsert.coffee",
+		"/C/dev/blaze/client.admin/app/views/products/selling-points/card.coffee",
+		"/C/dev/blaze/client.admin/app/models/pushers/selling_point.coffee",
+		"/C/dev/blaze/client.admin/app/styles/inspector.styl",
+		"/C/dev/blaze/app/models/product.coffee",
+		"/C/dev/blaze/client.admin/app/controllers/products-controller.coffee",
+		"/C/dev/blaze/client.admin/app/controllers/suppliers-controller.coffee",
+		"/C/dev/blaze/client.admin/app/controllers/markets-controller.coffee",
+		"/C/dev/blaze/client.admin/app/controllers/brands-controller.coffee",
+		"/C/dev/blaze/client.admin/app/controllers/dashboard-controller.coffee",
+		"/C/dev/blaze/app/models/brand.coffee",
+		"/C/dev/blaze/app/models/color.coffee",
+		"/C/dev/blaze/app/models/material.coffee",
+		"/C/dev/blaze/app/models/product_group.coffee",
+		"/C/dev/blaze/app/models/pusher.coffee",
+		"/C/dev/blaze/app/models/review.coffee",
+		"/C/dev/blaze/app/models/scope.coffee",
+		"/C/dev/blaze/app/models/sizing_chart.coffee",
+		"/C/dev/blaze/app/models/supplier.coffee",
+		"/C/dev/blaze/app/models/transaction.coffee",
+		"/C/dev/blaze/app/models/user.coffee",
+		"/C/dev/blaze/app/models/variation.coffee",
+		"/C/dev/blaze/app/models/variations_template.coffee",
+		"/C/dev/blaze/app/models/product_package.coffee",
+		"/C/dev/blaze/app/models/metafields.coffee",
+		"/C/dev/blaze/app/models/image.coffee",
+		"/C/dev/blaze/app/models/category.coffee",
+		"/C/dev/blaze/app/models/market.coffee"
+	],
+	"find":
+	{
+		"height": 43.0
+	},
+	"find_in_files":
+	{
+		"height": 117.0,
+		"where_history":
+		[
+			"<open files>",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"o.",
+			"Client.notify",
+			"Gemstone_Regex",
+			"@_origin",
+			"Olib::Olib::",
+			"Gemstone_Regex",
+			"Library.do",
+			"DB",
+			"sigil_of_resolve",
+			"sigil",
+			"9704",
+			"sigil",
+			"insert",
+			"cast_san",
+			"before_dying",
+			"DangerousEnvironment",
+			"hook",
+			"Downstream",
+			"cost",
+			"exit",
+			"...\")",
+			"sanctuary",
+			"exits",
+			"echo",
+			"no_echo",
+			"echo",
+			"backtrace",
+			"stack",
+			"dictionary",
+			"0lib",
+			"_O",
+			"getAttributes",
+			"_id",
+			"hasOne",
+			"market",
+			"group",
+			"brands",
+			"pushers",
+			"redis",
+			"mediator.publish",
+			"total",
+			"@[prop]",
+			"citizen",
+			"@@cache['gems']",
+			"@@cache.gems",
+			"is paused",
+			"re[",
+			"go2",
+			"def find_guard",
+			"find_guard",
+			"shop[:building",
+			"locals",
+			"priority",
+			"flip_class",
+			"active",
+			"'published'",
+			"'verified'",
+			"publish",
+			"ns ",
+			"_total",
+			"class Creature",
+			"setItem",
+			"brand",
+			"Brand",
+			"brand",
+			"arket",
+			"brand",
+			"Brand",
+			".[0]",
+			"at(0)",
+			"pusher",
+			"product",
+			"Product",
+			"progress",
+			"synced",
+			"group",
+			"product",
+			"Product",
+			"product",
+			"groups",
+			"product",
+			"Pusher",
+			"product",
+			"Product",
+			"path.length",
+			"handle",
+			"path",
+			"logo",
+			"pageload-overlay",
+			"brand",
+			"product",
+			"color",
+			"product-group",
+			"product",
+			"product-group",
+			"Product_Group",
+			"@refs.collection",
+			"crud_socket",
+			"api.resources",
+			"Pusher",
+			"Product",
+			"product",
+			"c.socket().send",
+			"c[c.settings.Model]",
+			"namespace(",
+			"@namespace(",
+			"kill_shot",
+			"Creature",
+			"aim",
+			"sync",
+			"serializeAttributes",
+			"serializeModelAttributes",
+			"serializeAttributes",
+			"group",
+			".toJSON",
+			"toDays",
+			"reverse",
+			"dir",
+			"brand",
+			"_lunrInitialize",
+			"theme",
+			"brand",
+			"theme",
+			"page",
+			"./sessions",
+			"tcp",
+			"theme",
+			"post"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"",
+			"echo",
+			"Olib::Gemstone_Regex",
+			"Olib::",
+			"Olib::Gemstone_Regex",
+			"Olib.do",
+			"Olib",
+			"",
+			"belongsTo",
+			"image",
+			"images",
+			"brands",
+			"@::[key]",
+			"@@cache[:gems]",
+			"@@cache['gems']",
+			"put_regex[",
+			"data",
+			"swap_class",
+			"hidden",
+			"attr",
+			"namespace",
+			"verifi",
+			"image",
+			"Image",
+			"Supplier",
+			"supplier",
+			"market",
+			"Market",
+			"[0]",
+			"snapshot",
+			"pusher",
+			"Pusher",
+			"pusher",
+			"Pusher",
+			"pusher",
+			"pushers",
+			"pusher",
+			"Pusher",
+			"preloader",
+			"sizing-chart",
+			"pusher",
+			"brand",
+			"supplier",
+			"material",
+			"market",
+			"color",
+			"categorie",
+			"Categorie",
+			"window.Hearth.get(@namespace)",
+			"",
+			"Category",
+			"Scope",
+			"Image",
+			"VariationsTemplate",
+			"Transaction",
+			"Customer",
+			"Material",
+			"Color",
+			"Market",
+			"SizingChart",
+			"Brand",
+			"Supplier",
+			"Pusher",
+			"pusher",
+			"c.socket().emit",
+			"@Model",
+			"@namespace(",
+			"product",
+			"product-group",
+			"group",
+			"brand",
+			"../sessions",
+			"supplier",
+			"brand",
+			"product-group",
+			"-",
+			"crud match,",
+			"api",
+			"",
+			"sync",
+			"active",
+			"post",
+			"theme",
+			"page",
+			"post",
+			"Post",
+			"page",
+			"Page",
+			"Error_View",
+			"page",
+			"banner",
+			"ws",
+			"Theme",
+			"theme",
+			"Theme",
+			"theme",
+			"Page",
+			"page",
+			"Page",
+			"page",
+			"post",
+			"posts",
+			"@post",
+			"published",
+			"#{cdn}",
+			"Message",
+			"message",
+			"Thread",
+			"type: mongoose.Schema.ObjectId",
+			"",
+			"new mongoose.Schema",
+			">\\n\\t <k",
+			"\\t <k",
+			"/keys>\\n",
+			"/>\\n",
+			"/>\\r\\n",
+			"logglier",
+			"req.",
+			"Q.",
+			"",
+			"{ name: '$1' }",
+			";#{Script.self.name}",
+			"#{item}",
+			"Gem_Report.bounty_group,",
+			"Gem_Report.bounty_group",
+			"Gem_Report.sort_by_times_seen",
+			"Gem_Report.sort_by_town",
+			"ln"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Olib.gemspec",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 751,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								691,
+								691
+							]
+						],
+						"settings":
+						{
+							"origPos": 0.0,
+							"syncScroll": false,
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/Benjamin/Dropbox/lich/scripts/alvis.lic",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6300,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6155,
+								6155
+							]
+						],
+						"settings":
+						{
+							"origPos": 0.0,
+							"syncScroll": false,
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3211.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "lib/Olib/help_menu.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 330,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								311,
+								311
+							]
+						],
+						"settings":
+						{
+							"origPos": 0.0,
+							"syncScroll": false,
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "lib/Olib.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 316,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								312,
+								312
+							]
+						],
+						"settings":
+						{
+							"origPos": 0.0,
+							"syncScroll": false,
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 38.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "olib.sublime-project",
+	"replace":
+	{
+		"height": 80.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 357.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
