@@ -153,7 +153,6 @@ module Olib
       location = "head"      if @wounds[:right_eye] == 3
       location = "neck"      if @wounds[:head]      == 3
       location = "back"      if @wounds[:neck]      == 3
-      Client.notify "#{@name} >> #{location}"
       location
     end
  
