@@ -69,8 +69,8 @@ module Olib
 	  if woundinfo =~ /minor cuts and bruises on (his|her|its) back/								then @wounds[:back]       = 1;  end
 	  if woundinfo =~ /bruised left eye/															then @wounds[:left_eye]   = 1;  end
 	  if woundinfo =~ /bruised right eye/															then @wounds[:right_eye]  = 1;  end
-	  if woundinfo =~ /some minor cuts and bruises on (his|her|its) (?:right hand|right paw)/		then @wounds[:right_hand] = 1;  end
-	  if woundinfo =~ /some minor cuts and bruises on (his|her|its) (?:left hand|left paw)/			then @wounds[:left_hand]  = 1;  end
+	  if woundinfo =~ /some minor cuts and bruises on (his|her|its) right (?:hand|paw|claw)/		then @wounds[:right_hand] = 1;  end
+	  if woundinfo =~ /some minor cuts and bruises on (his|her|its) left (?:hand|paw|claw)/			then @wounds[:left_hand]  = 1;  end
 	  if woundinfo =~ /a strange case of muscle twitching/											then @wounds[:nerves]     = 1;  end
 	  if woundinfo =~ /fractured and bleeding right (?:hind )?leg/									then @wounds[:right_leg]  = 2;  end
 	  if woundinfo =~ /fractured and bleeding left (?:hind )?leg/									then @wounds[:left_leg]   = 2;  end
@@ -83,8 +83,8 @@ module Olib
 	  if woundinfo =~ /deep lacerations across (his|her|its) back/									then @wounds[:back]       = 2;  end
 	  if woundinfo =~ /swollen left eye/															then @wounds[:left_eye]   = 2;  end
 	  if woundinfo =~ /swollen right eye/															then @wounds[:right_eye]  = 2;  end
-	  if woundinfo =~ /fractured and bleeding (?:right hand|right paw)/								then @wounds[:right_hand] = 2;  end
-	  if woundinfo =~ /fractured and bleeding (?:left hand|left paw)/								then @wounds[:left_hand]  = 2;  end
+	  if woundinfo =~ /fractured and bleeding right (?:hand|paw|claw)/								then @wounds[:right_hand] = 2;  end
+	  if woundinfo =~ /fractured and bleeding left (?:hand|paw|claw)/								then @wounds[:left_hand]  = 2;  end
 	  if woundinfo =~ /a case of sporadic convulsions/												then @wounds[:nerves]     = 2;  end
       if woundinfo =~ /severed right (?:hind )?leg/													then @wounds[:right_leg]  = 3;  end
       if woundinfo =~ /severed left (?:hind )?leg/													then @wounds[:left_leg]   = 3;  end
@@ -97,8 +97,8 @@ module Olib
 	  if woundinfo =~ /deep gashes and serious bleeding from (his|her|its) back/					then @wounds[:back]       = 3;  end
       if woundinfo =~ /blinded left eye/															then @wounds[:left_eye]   = 3;  end
       if woundinfo =~ /blinded right eye/															then @wounds[:right_eye]  = 3;  end
-      if woundinfo =~ /severed (?:right hand|right paw)/											then @wounds[:right_hand] = 3;  end
-      if woundinfo =~ /severed (?:left hand|left paw)/												then @wounds[:left_hand]  = 3;  end
+      if woundinfo =~ /severed right (?:hand|paw|claw)/												then @wounds[:right_hand] = 3;  end
+      if woundinfo =~ /severed left (?:hand|paw|claw)/												then @wounds[:left_hand]  = 3;  end
 	  if woundinfo =~ /a case of uncontrollable convulsions/										then @wounds[:nerves]     = 3;  end
       @wounds
     end
