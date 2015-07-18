@@ -1,2 +1,4 @@
-class Unknown_O < Item_Wrapper
+module Olib
+  class Unknown < Gameobj_Extender
+  end
 end

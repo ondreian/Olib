@@ -1,2 +1,4 @@
-class Uncommon_O < Item_Wrapper
+module Olib
+  class Uncommon < Gameobj_Extender
+  end
 end

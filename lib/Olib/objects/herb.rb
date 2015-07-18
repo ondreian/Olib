@@ -1,2 +1,4 @@
-class Herb_O < Item_Wrapper
+module Olib
+  class Herb < Gameobj_Extender
+  end
 end

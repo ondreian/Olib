@@ -2,8 +2,10 @@
 	"folders":
 	[
 		{
-			"follow_symlinks": true,
 			"path": "."
+		},
+		{
+			"path": "C:\\Users\\Benjamin\\Dropbox\\lich\\scripts"
 		}
 	]
 }

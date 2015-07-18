@@ -1,11 +1,27 @@
 # for defining containers ala lootsack and using them across scripts
+class String
+  def to_class
+    Kernel.const_get self
+  rescue NameError 
+    nil
+  end
+
+  def is_a_defined_class?
+    true if self.to_class
+  rescue NameError
+    false
+  end
+end
+
 module Olib
   class Container < Gameobj_Extender
-    attr_accessor :ref, :types, :full
+    attr_accessor :ref, :types, :full, :id
 
     def initialize(id)
       # set the default value of full being false, we can only know by attempting to add something
       @full = false
+
+      @id   = id
 
       # extract the class name to attempt to lookup the item by your settings
       # ex: class Lootsack
@@ -15,10 +31,19 @@ module Olib
       @ref = GameObj[@id] || (GameObj.inv.find { |obj| obj.name =~ /\b#{Regexp.escape(UserVars.send(setting).strip)}$/i } || GameObj.inv.find { |obj| obj.name =~ /\b#{Regexp.escape(UserVars.send(setting)).sub(' ', ' .*')}$/i } || GameObj.inv.find { |obj| obj.name =~ /\b#{Regexp.escape(UserVars.send(setting)).sub(' ', ' .*')}/i })
 
       return "error: failed to find your #{setting.to_s}" unless @ref 
-       
-      fput "look in ##{@ref.id}" unless GameObj[@ref.id].contents
-      self._extend(@ref)._constructor
       
+      unless GameObj[@ref.id].contents
+        tops = [
+          'table'
+        ]
+
+        action = tops.include?(@ref.noun) ? "look on ##{@ref.id}" : "look in ##{@ref.id}"
+         
+        fput action
+      end
+      _constructor
+      super @ref
+            
     end
 
 
@@ -38,9 +63,10 @@ module Olib
       return contents.flatten.uniq(&:id)
     end
 
-    def _constructor
+   def _constructor
       singleton  = (class << self; self end)
-      @types    = { #method       => #regex
+      @types    = { 
+                  # method       => /regex/
                     "gems"        => /gem/, 
                     "boxes"       => /box/, 
                     "scrolls"     => /scroll/,
@@ -58,12 +84,22 @@ module Olib
             GameObj[@id].contents.select do |item| item.type.nil?   end : 
             GameObj[@id].contents.select do |item| item.type =~ exp end
 
-          matches.map! do |item| eval("Olib::#{method.gsub(/es$/,'').gsub(/s$/, '').capitalize!}").new(item) end
+
+          matches.map! do |item| 
+            klass = "#{method.gsub(/es$/,'').gsub(/s$/, '').capitalize!}"
+            if klass.is_a_defined_class?
+              eval(klass).new(item)
+            else
+              item
+            end 
+
+          end
           
           matches
         end
       end
     end
+
 
     def __verbs__
       @verbs = 'open close analyze inspect weigh'.split(' ').map(&:to_sym)
@@ -85,5 +121,7 @@ module Olib
       self
     end
   end
+
+
 
 end

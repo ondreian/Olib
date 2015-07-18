@@ -1,2 +1,4 @@
-class Clothing_O < Item_Wrapper
+module Olib
+  class Clothing < Gameobj_Extender
+  end
 end
