@@ -40,6 +40,7 @@ module Olib
     end
 
     def Bounty.gem
+        
     end
 
     def Bounty.location

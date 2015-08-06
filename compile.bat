@@ -1,0 +1,1 @@
+gem build Olib.gemspec && gem install Olib-%1.gem

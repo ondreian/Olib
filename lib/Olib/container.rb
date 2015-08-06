@@ -1,4 +1,5 @@
 # for defining containers ala lootsack and using them across scripts
+
 class String
   def to_class
     Kernel.const_get self
@@ -15,22 +16,17 @@ end
 
 module Olib
   class Container < Gameobj_Extender
-    attr_accessor :ref, :types, :full, :id
+    attr_accessor :ref
 
-    def initialize(id)
-      # set the default value of full being false, we can only know by attempting to add something
-      @full = false
-
-      @id   = id
-
+    def initialize(id=nil)
       # extract the class name to attempt to lookup the item by your settings
       # ex: class Lootsack
       # ex: class Gemsack
-      setting = self.class.name.downcase
-      
-      @ref = GameObj[@id] || (GameObj.inv.find { |obj| obj.name =~ /\b#{Regexp.escape(UserVars.send(setting).strip)}$/i } || GameObj.inv.find { |obj| obj.name =~ /\b#{Regexp.escape(UserVars.send(setting)).sub(' ', ' .*')}$/i } || GameObj.inv.find { |obj| obj.name =~ /\b#{Regexp.escape(UserVars.send(setting)).sub(' ', ' .*')}/i })
+      name       = self.class.name.downcase.split('::').last.strip
+      candidates = Olib.Inventory[Vars[name]]
+      raise Olib::Errors::DoesntExist.new("#{name} could not be initialized are you sure you:\n ;var set #{name}=<something>") if candidates.empty? && id.nil?
 
-      return "error: failed to find your #{setting.to_s}" unless @ref 
+      @ref = GameObj[id] || candidates.first
       
       unless GameObj[@ref.id].contents
         tops = [
@@ -41,15 +37,29 @@ module Olib
          
         fput action
       end
-      _constructor
+      
       super @ref
             
     end
 
-
-    def worn?
-      GameObj.inv.collect { |item| item.id }.include? @ref.id
+    def contents
+      GameObj[@ref.id].contents.map{ |item| Item.new(item) }
     end
+
+    def where(conditions)        
+      contents.select { |item|
+        conditions.keys.map { |key|
+          item.respond_to?(key) ? item.send(key) == conditions[key] : false
+        }.include? false
+      }
+    end
+
+    def find_by_tags(*tags)  
+      contents.select { |item|
+        !tags.map {|tag| item.is?(tag) }.include? false
+      }
+    end
+
 
     def [](query)
       return contents.select do |item| 
@@ -57,49 +67,7 @@ module Olib
       end
     end
 
-    def contents
-      contents = []
-      @types.each do |method, exp| contents.push self.send method.to_sym end
-      return contents.flatten.uniq(&:id)
-    end
-
-   def _constructor
-      singleton  = (class << self; self end)
-      @types    = { 
-                  # method       => /regex/
-                    "gems"        => /gem/, 
-                    "boxes"       => /box/, 
-                    "scrolls"     => /scroll/,
-                    "herbs"       => /herb/,
-                    "jewelry"     => /jewelry/,
-                    "magic"       => /magic/,
-                    "clothing"    => /clothing/,
-                    "uncommons"   => /uncommon/,
-                    "unknowns"    => nil
-                  }
-      @types.each do |method, exp|
-        singleton.send :define_method, method.to_sym do
-
-          matches = exp.nil? ? 
-            GameObj[@id].contents.select do |item| item.type.nil?   end : 
-            GameObj[@id].contents.select do |item| item.type =~ exp end
-
-
-          matches.map! do |item| 
-            klass = "#{method.gsub(/es$/,'').gsub(/s$/, '').capitalize!}"
-            if klass.is_a_defined_class?
-              eval(klass).new(item)
-            else
-              item
-            end 
-
-          end
-          
-          matches
-        end
-      end
-    end
-
+    def 
 
     def __verbs__
       @verbs = 'open close analyze inspect weigh'.split(' ').map(&:to_sym)
@@ -107,21 +75,31 @@ module Olib
       @verbs.each do |verb|
         singleton.send :define_method, verb do
           fput "#{verb.to_s} ##{@id}"
+          self
         end
       end
     end
 
     def full?
-      return @full
+      is? 'full'
     end
 
     def add(item)
-      result = Olib.do "_drag ##{item.id} ##{@id}", /#{[Olib::Gemstone_Regex.put[:success], Olib::Gemstone_Regex.put[:failure].values].flatten.join('|')}/
-      @full = true if result =~ /won't fit in the/
+      result = Olib.do "_drag ##{item.id} ##{@id}", /#{[Olib::Dictionary.put[:success], Olib::Dictionary.put[:failure].values].flatten.join('|')}/
+      tag 'full' if result =~ /won't fit in the/
       self
     end
   end
 
+  class Lootsack < Container
 
+  end
 
+  @@lootsack = nil
+    
+  def Olib.Lootsack
+    return @@lootsack if @@lootsack
+    @@lootsack = Lootsack.new
+    @@lootsack
+  end
 end
