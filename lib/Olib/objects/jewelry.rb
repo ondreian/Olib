@@ -1,5 +1,5 @@
 module Olib
-  class Jewelry < Gameobj_Extender
+  class Jewelry < Item
     attr_accessor :heirloom
     def heirloom?
       result = Library.do "look ##{@id}", /^You see nothing unusual|#{Gemstone_Regex.item[:heirloom]}/

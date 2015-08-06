@@ -1,4 +1,4 @@
 module Olib
-  class Clothing < Gameobj_Extender
+  class Clothing < Item
   end
 end

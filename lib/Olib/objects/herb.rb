@@ -1,4 +1,4 @@
 module Olib
-  class Herb < Gameobj_Extender
+  class Herb < Item
   end
 end

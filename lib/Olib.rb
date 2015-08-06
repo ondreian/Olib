@@ -13,7 +13,7 @@ module Olib
         else
           # check version
           if Gem.loaded_specs["Olib"].version < Gem::Version.new(JSON.parse(response.body)['version'])
-            respond "You need to update the Olib gem with a `gem install Olib`"
+            puts "<pushBold/>You need to update the Olib gem with a `gem install Olib`<popBold/>"
           end
         end
       rescue

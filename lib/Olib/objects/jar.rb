@@ -1,5 +1,5 @@
 module Olib
-  class Jar < Gameobj_Extender
+  class Jar < Item
     attr_accessor :gem, :count, :full, :empty, :pullable, :initial_count, :stacked
 
     def initialize(item)

@@ -1,4 +1,4 @@
 module Olib
-  class Box < Gameobj_Extender
+  class Box < Item
   end
 end

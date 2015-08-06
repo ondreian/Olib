@@ -1,7 +1,7 @@
 # Class to interact with gems
 # overwriting Gem is a bad idea
 module Olib
-  class Jewel < Gameobj_Extender
+  class Jewel < Item
     attr_accessor :quality, :value
     
     def appraise

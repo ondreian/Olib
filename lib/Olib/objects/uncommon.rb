@@ -1,4 +1,4 @@
 module Olib
-  class Uncommon < Gameobj_Extender
+  class Uncommon < Item
   end
 end

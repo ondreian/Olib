@@ -1,11 +1,15 @@
 require 'Olib/core/extender'
 
 module Olib
-  # special item wrapper class to wrap item types with custom, common interactions becoming syntactic sugar
+  # this is the structure for a base Object
+  # wraps an instance of GameObj and adds the ability for tags, queries
   class Item < Olib::Gameobj_Extender
     attr_accessor :props
-
-    def initialize(obj=nil)
+    # When created, it should be passed an instance of GameObj
+    #
+    # Example: 
+    #          Olib::Item.new(GameObj.right_hand)
+    def initialize(obj)
       @props = Hash.new
 
       @props[:name]       = obj.name
@@ -37,6 +41,11 @@ module Olib
       @props.to_s
     end
 
+    # determine if Item is something
+    #
+    # example:
+    #          item.is?("jar")
+    #
     def is?(tag)
       @props[:tags].include?(tag)
     end
