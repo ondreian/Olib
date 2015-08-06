@@ -1,5 +1,7 @@
 # for defining containers ala lootsack and using them across scripts
 
+require 'Olib/core/extender'
+
 class String
   def to_class
     Kernel.const_get self

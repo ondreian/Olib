@@ -22,6 +22,16 @@ module Olib
       end
   end
 
+  # load core first
+  Dir[File.dirname(__FILE__) + '/Olib/core/**/*.rb'].each {|file|
+    require file 
+  }
+
+  # load things that depend on core extensions
+  Dir[File.dirname(__FILE__) + '/Olib/**/*.rb'].each {|file|
+    require file 
+  }
+
   # invoke update notifier immediately
   Olib.update_notifier
 
@@ -31,18 +41,6 @@ module Olib
 
   Vars.Olib ||= Hash.new
 
-  require 'Olib/group'
-  require 'Olib/creature'
-  require 'Olib/creatures'
-  require 'Olib/extender'
-  require 'Olib/transport'
-  require 'Olib/item'
-  require 'Olib/dictionary'
-  require 'Olib/errors'
-  require 'Olib/container'
-  require "Olib/inventory"
-  require "Olib/shops"
-  require 'Olib/help_menu'
-  require "Olib/utils"
+
   
 end

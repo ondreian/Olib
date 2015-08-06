@@ -99,12 +99,12 @@ module Olib
       m = []
       m.push bar
       m.push n
-      m.push "    #{@title}".rjust(40)
+      m.push "#{@title}:"
       m.push n
       m.push n
       m.push bar
       unless @flags.keys.empty?
-        m.push offset 2, *["| flag", "| info"].map(&:upcase)
+        m.push *["global flags:", "", "", ""].map(&:upcase)
         m.push bar
         @flags.each { |flag, info|
           if info.length > @max_column_width

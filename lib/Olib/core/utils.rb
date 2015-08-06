@@ -1,5 +1,3 @@
-require "Olib"
-
 module Olib
   @@debug  = false
   @@xml    = false

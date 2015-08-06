@@ -1,4 +1,3 @@
-require 'Olib/creature'
 # a collection for managing all of the creatures in a room
 module Olib
   class Creatures

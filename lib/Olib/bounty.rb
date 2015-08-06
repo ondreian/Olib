@@ -1,5 +1,3 @@
-require 'Olib/dictionary'
-
 module Olib
   class Bounty
     @@re                    = {}

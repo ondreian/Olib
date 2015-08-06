@@ -5,11 +5,8 @@
 # - add quadrapedal types
 # - add known spells/cmans/manuevers and algorithm for danger level by profession and skills
  
-require 'Olib/extender'
-require 'Olib/dictionary'
- 
 module Olib
-  class Creature < Gameobj_Extender
+  class Creature < Olib::Gameobj_Extender
     def Creature.escortee(name)
       name =~ /^(?:traveller|magistrate|merchant|scribe|dignitary|official)$/
     end

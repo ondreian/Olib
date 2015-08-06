@@ -1,3 +1,4 @@
+
 module Olib
   module Char
     @@routines = {}

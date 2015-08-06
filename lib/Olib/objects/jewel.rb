@@ -1,7 +1,9 @@
 # Class to interact with gems
+# overwriting Gem is a bad idea
 module Olib
-  class Gem < Gameobj_Extender
+  class Jewel < Gameobj_Extender
     attr_accessor :quality, :value
+    
     def appraise
       result = dothistimeout "appraise ##{@id}", 3, /#{Gemstone_Regex.gems[:appraise].values.join('|')}/
       case result
@@ -19,12 +21,15 @@ module Olib
           Client.notify "Error during gem appraisal"
       end
     end
+
     def normalized_name
       Gemstone_Regex.gems[:singularize].call(@name)
     end
+    
     def sell
       result = take
       fput "sell ##{@id}" if result =~ Gemstone_Regex.get[:success]
     end
+  
   end
 end

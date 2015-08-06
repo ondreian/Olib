@@ -1,5 +1,4 @@
-require 'Olib/extender'
-require 'Olib/dictionary'
+require 'Olib/core/extender'
 
 module Olib
   # special item wrapper class to wrap item types with custom, common interactions becoming syntactic sugar
