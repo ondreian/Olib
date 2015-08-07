@@ -113,6 +113,14 @@ module Olib
       self
     end
 
+    def Transport.hide
+      if Spell[916].known? && Spell[916].affordable?
+        Spell[916].cast
+      else
+        fput "hide" until hidden?
+      end
+    end
+
     def Transport.withdraw(amount)
       go2_bank
       result = Olib.do "withdraw #{amount} silvers", /I'm sorry|hands you/
