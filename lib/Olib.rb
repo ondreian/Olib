@@ -39,6 +39,11 @@ module Olib
     dothistimeout action, 5, re
   end
 
+  def Olib.run(script, *args)
+    start_script script, args
+    wait_while { running? script }
+  end
+
   Vars.Olib ||= Hash.new
 
 

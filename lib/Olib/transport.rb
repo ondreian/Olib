@@ -33,6 +33,7 @@ module Olib
       @@origin[:roomid]   = Room.current.id
       @@origin[:hidden]   = hiding?
       @@origin[:location] = Room.current.location
+      Olib.debug "rebasing to #{@@origin}"
       self
     end
 
@@ -163,10 +164,7 @@ module Olib
     end
 
     def Transport.go2_origin
-      if Room.current.id != @@origin[:roomid]
-        start_script 'go2', [@origin[:roomid]]
-        wait_while { running? "go2" };
-      end
+      Transport.go2 @@origin[:roomid]
       hide if @@origin[:hidden]
       return self
     end    

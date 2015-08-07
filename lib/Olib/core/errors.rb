@@ -1,5 +1,14 @@
 module Olib
   module Errors
+    @@padding = 20
+
+    def Errors.padding(n)
+      @@padding = n
+    end
+
+    def Errors.indent(str)
+      str.split("\n").map { |line| [''] * @@padding * " " + line }.join("\n")
+    end
 
     # used internally to handle early thread execution and error bubbling
     class Mundane < Exception
@@ -21,7 +30,7 @@ module Olib
           message.concat "\n\nAn Olib::Errors::Fatal was raised but not rescued in an Olib method"
           message.concat "\nyou should rescue this error if it isn't fatal and you don't want your script to break"
         end
-        super(message)
+        super Errors.indent message
       end
     end 
 
@@ -34,7 +43,7 @@ module Olib
           message.concat "\n\nYou tried to add stuff to a container that was full"
           message.concat "\nyou should rescue this error if it isn't fatal and you don't want your script to break"
         end
-        super(message)
+        super Errors.indent message
       end
     end 
     
@@ -45,7 +54,7 @@ module Olib
           message.concat "\n\nYou tried to do something that costs more money that your character had on them"
           message.concat "\nyou should rescue this error if it isn't fatal and you don't want your script to break"
         end
-        super(message)
+        super Errors.indent message
       end
     end 
 
@@ -54,7 +63,7 @@ module Olib
         message = String.new
         message.concat "\n\nYour hands were full!"
         message.concat "\nyou should rescue this error if you don't want your script to break"
-        super(message)
+        super Errors.indent message
       end
     end
 
@@ -63,7 +72,7 @@ module Olib
         message = String.new
         message.concat "\n\nYou were too heavy to do something!"
         message.concat "\nyou should rescue this error if you don't want your script to break"
-        super(message)
+        super Errors.indent message
       end
     end
 
@@ -74,7 +83,7 @@ module Olib
           message.concat "\n\nYou tried to interact with something that no longer exists"
           message.concat "\nyou should rescue this error if it isn't fatal and you don't want your script to break"
         end
-        super(message)
+        super Errors.indent message
       end
     end
 
