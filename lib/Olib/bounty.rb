@@ -4,7 +4,7 @@ module Olib
 
       @@re                    = {}
       @@re[:herb]             = /requires (?:a|an|some) (?<herb>[a-zA-Z '-]+) found (?:in|on|around) (?<area>[a-zA-Z '-]+).  These samples must be in pristine condition.  You have been tasked to retrieve (?<numer>[0-9]+)/
-      @@re[:escort]           = /Go to the (.*?) and WAIT for (?:him|her|them) to meet you there.  You must guarantee (?:his|her|their) safety to ([a-zA-Z '-]+) as soon as/
+      @@re[:escort]           = /Go to the (.*?) and WAIT for (?:him|her|them) to meet you there.  You must guarantee (?:his|her|their) safety to (?<destiniation>[a-zA-Z '-]+) as soon as/
       @@re[:gem]              = /has received orders from multiple customers requesting (?:a|an|some) (?<gem>[a-zA-Z '-]+).  You have been tasked to retrieve (?<number>[0-9]+)/
       @@re[:heirloom]         = /You have been tasked to recover ([a-zA-Z '-]+) that an unfortunate citizen lost after being attacked by (a|an|some) (?<creature>[a-zA-Z '-]+) (in|on|around|near|by) (?<area>[a-zA-Z '-]+)./
       @@re[:heirloom_found]   = /^You have located the heirloom and should bring it back to/
@@ -28,15 +28,19 @@ module Olib
       end
 
       def Bounty.town
-          checkbounty.match(@@re[ Bounty.type ])[:town]
+        checkbounty.match(@@re[ Bounty.type ])[:town]
       end
 
       def Bounty.area
-          checkbounty.match(@@re[ Bounty.type ])[:area]
+        checkbounty.match(@@re[ Bounty.type ])[:area]
+      end
+
+      def Bounty.destination
+        checkbounty.match(@@re[ Bounty.type ])[:destiniation]
       end
 
       def Bounty.gem
-          checkbounty.match(@@re[ Bounty.type ])[:gem]
+        checkbounty.match(@@re[ Bounty.type ])[:gem]
       end
 
       def Bounty.creature
@@ -118,7 +122,7 @@ module Olib
       end
 
       def Bounty.npc
-        GameObj.npcs.select { |npc| npc.name =~ /guard|taskmaster|gemcutter/i }.first
+        GameObj.npcs.select { |npc| npc.name =~ /guard|taskmaster|gemcutter|jeweler/i }.first
       end
 
     end
