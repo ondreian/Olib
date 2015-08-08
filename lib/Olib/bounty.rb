@@ -122,7 +122,7 @@ module Olib
       end
 
       def Bounty.npc
-        GameObj.npcs.select { |npc| npc.name =~ /guard|taskmaster|gemcutter|jeweler/i }.first
+        GameObj.npcs.select { |npc| npc.name =~ /guard|taskmaster|gemcutter|jeweler|healer/i }.first
       end
 
     end
