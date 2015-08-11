@@ -339,6 +339,12 @@ module Olib
       self
     end
 
+    def drop
+      Script.log("#{Time.now} > dropped #{to_s}")
+      fput action "drop"
+      self
+    end
+
     def _inspect
 
       return self if has? 'inspect'
