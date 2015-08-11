@@ -48,11 +48,15 @@ module Olib
       GameObj[@ref.id].contents.map{ |item| Item.new(item) }
     end
 
-    def where(conditions)        
+    def where(conditions)
       contents.select { |item|
-        conditions.keys.map { |key|
-          item.respond_to?(key) ? item.send(key) == conditions[key] : false
-        }.include? false
+        !conditions.keys.map { |key|
+          if conditions[key].class == Array
+            item.props[key].class == Array && !conditions[key].map { |ele| item.props[key].include? ele }.include?(false)
+          else
+            item.props[key] == conditions[key]
+          end
+        }.include?(false)
       }
     end
 

@@ -74,6 +74,7 @@ module Olib
     end
 
     def buy
+      Char.deplete_wealth cost
       fput action 'buy'
       self
     end
@@ -86,8 +87,18 @@ module Olib
       !has?(key)
     end
 
+    def exists?
+      GameObj[@id].nil?
+    end
+
     def pullable?
       is? 'pullable'
+    end
+
+    def affordable?
+      take
+      return true if pullable?
+      cost <= Char.smart_wealth
     end
 
     def buyable?
@@ -105,7 +116,10 @@ module Olib
       else
         Olib.wrap(action "buy"){ |line|
           raise Olib::Errors::InsufficientFunds if line =~ /The merchant frowns/
-          raise Olib::Errors::Mundane            if line =~ /You hand over/
+          if line =~ /You hand over/
+            Char.deplete_wealth cost
+            raise Olib::Errors::Mundane
+          end
         }
       end
       self
@@ -231,7 +245,12 @@ module Olib
 
     def give(target, onfailure=nil)
       Olib.wrap_stream("give ##{@id} to #{target}", 30) { |line|
-        
+        raise Olib::Errors::Mundane if line=~ /This looks perfect/
+
+        if line =~ /glances at you and moves out of your reach./
+          raise Olib::Errors::Fatal.new "You appear to have an invalid NPC definition"
+        end
+
       }
 
       self

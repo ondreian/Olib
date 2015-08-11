@@ -1,6 +1,7 @@
 
 module Olib
-  module Char
+  class Char
+    @@silvers  = 0
     @@routines = {}
 
     def Char.hide
@@ -31,6 +32,81 @@ module Olib
     def Char.right
       GameObj.right_hand.nil? ? nil : Item.new(GameObj.right_hand)
     end
+
+    def Char.withdraw(amount)
+      Transport.go2_bank
+      result = Olib.do "withdraw #{amount} silvers", /I'm sorry|hands you/
+      if result =~ /I'm sorry/ 
+        Transport.go2_origin
+        echo "Unable to withdraw the amount requested for this script to run from your bank account"
+        exit
+      end
+      wealth
+      return self
+    end
+
+    def Char.deposit_all
+      Transport.go2_bank
+      fput "unhide" if invisible? || hidden?
+      fput "deposit all"
+      @@silvers = 0
+      return self
+    end
+
+    def Char.deposit(amt)
+      wealth
+      if wealth >= amt
+        Transport.go2_bank
+        fput "unhide" if invisible? || hidden?
+        fput "deposit #{amt}"
+      end
+      return self
+    end
+
+    # naive share
+    # does not check if you're actually in a group or not
+    def Char.share
+      wealth
+      fput "share #{@silvers}"
+      wealth
+      self
+    end
+
+    def Char.deplete_wealth(silvers)
+      @@silvers = @@silvers - silvers
+    end
+
+    def Char.smart_wealth
+      return @@silvers if @@silvers 
+      Char.wealth
+    end
+
+    def Char.unhide
+      fput 'unhide' if Spell[916].active? or hidden?
+      self
+    end
+
+    def Char.hide
+      if Spell[916].known? && Spell[916].affordable?
+        Spell[916].cast
+      else
+        fput "hide" until hidden?
+      end
+    end
+
+    def Char.wealth
+      fput "info"
+      while(line=get)
+        next    if line =~ /^\s*Name\:|^\s*Gender\:|^\s*Normal \(Bonus\)|^\s*Strength \(STR\)\:|^\s*Constitution \(CON\)\:|^\s*Dexterity \(DEX\)\:|^\s*Agility \(AGI\)\:|^\s*Discipline \(DIS\)\:|^\s*Aura \(AUR\)\:|^\s*Logic \(LOG\)\:|^\s*Intuition \(INT\)\:|^\s*Wisdom \(WIS\)\:|^\s*Influence \(INF\)\:/
+        if line =~ /^\s*Mana\:\s+\-?[0-9]+\s+Silver\:\s+([0-9]+)/
+          @@silvers= $1.to_i
+          break
+        end
+        sleep 0.1
+      end
+      @@silvers
+    end
+
 
   end
 

@@ -15,6 +15,7 @@ module Olib
       ]
       .flatten
       .compact
+      .select     { |container| !(container.name =~ /^([A-z][a-z]+ disk$)/)}
       .map        { |container| Shop::Container.new(container)  }
 
       @@containers
@@ -135,13 +136,14 @@ module Olib
 
       def Playershop.where(conditions)        
         Playershop.items.select { |item|
-          conditions.keys.map { |key|
-            item.respond_to?(key) ? item.send(key) == conditions[key] : false
-            
-          }.include? false
-          
+          !conditions.keys.map { |key|
+            if conditions[key].class == Array
+              item.props[key].class == Array && !conditions[key].map { |ele| item.props[key].include? ele }.include?(false)
+            else
+              item.props[key] == conditions[key]
+            end
+          }.include?(false)
         }
-        
       end
 
       def Playershop.find_by_tags(*tags)

@@ -3,7 +3,7 @@ module Olib
       @@procedures            = {}
 
       @@re                    = {}
-      @@re[:herb]             = /requires (?:a|an|some) (?<herb>[a-zA-Z '-]+) found (?:in|on|around) (?<area>[a-zA-Z '-]+).  These samples must be in pristine condition.  You have been tasked to retrieve (?<numer>[0-9]+)/
+      @@re[:herb]             = /requires (?:a|an|some) (?<herb>[a-zA-Z '-]+) found (?:in|on|around) (?<area>[a-zA-Z '-]+).  These samples must be in pristine condition.  You have been tasked to retrieve (?<number>[\d]+)/
       @@re[:escort]           = /Go to the (.*?) and WAIT for (?:him|her|them) to meet you there.  You must guarantee (?:his|her|their) safety to (?<destiniation>[a-zA-Z '-]+) as soon as/
       @@re[:gem]              = /has received orders from multiple customers requesting (?:a|an|some) (?<gem>[a-zA-Z '-]+).  You have been tasked to retrieve (?<number>[0-9]+)/
       @@re[:heirloom]         = /You have been tasked to recover ([a-zA-Z '-]+) that an unfortunate citizen lost after being attacked by (a|an|some) (?<creature>[a-zA-Z '-]+) (in|on|around|near|by) (?<area>[a-zA-Z '-]+)./
