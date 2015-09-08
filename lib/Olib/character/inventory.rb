@@ -10,6 +10,9 @@ module Olib
       GameObj.containers
     end
 
+    def Inventory.to_s
+      Inventory.items.map(&:to_s)
+    end
 
     def Inventory.checked?
       @@checked

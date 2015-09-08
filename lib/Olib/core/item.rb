@@ -14,6 +14,8 @@ module Olib
 
       @props[:name]       = obj.name
       @props[:after_name] = obj.after_name
+      @props[:before_name]= obj.before_name
+      @props[:desc]       = [obj.before_name, obj.name, obj.after_name].compact.join(' ')
 
       define :tags, []
       obj.type.split(',').map { |t| tag(t) }
@@ -192,6 +194,17 @@ module Olib
 
     end
 
+    def sell
+      price = 0
+      Olib.wrap( action "sell" ){ |line|
+        raise Olib::Errors::Fatal.new "#{to_s} is not sellable here" if GameObj.right_hand.id == @id
+
+        if line =~ /([\d]+) silver/
+          price = $1.to_i 
+          raise Olib::Errors::Mundane
+        end
+      }
+    end
 
     def turn
       fput action 'turn'
@@ -323,6 +336,14 @@ module Olib
 
         if line =~ Olib::Dictionary.get[:failure][:buy]
           define 'cost', line.match(Olib::Dictionary.get[:failure][:buy])[:cost].to_i
+        end
+
+        if line =~ Olib::Dictionary.get[:failure][:race]
+          define 'cost', line.match(Olib::Dictionary.get[:failure][:race])[:cost].to_i
+        end
+
+        if line =~ /let me help you with that/
+          raise Olib::Errors::Mundane
         end
 
         if line=~ /You'll have to buy it if you want it/

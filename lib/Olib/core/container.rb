@@ -24,7 +24,7 @@ module Olib
       # extract the class name to attempt to lookup the item by your settings
       # ex: class Lootsack
       # ex: class Gemsack
-      name       = self.class.name.downcase.split('::').last.strip
+      name       = if self.class.name.include?("::") then self.class.name.downcase.split('::').last.strip else self.class.name.downcase end 
       candidates = Olib.Inventory[Vars[name]]
       raise Olib::Errors::DoesntExist.new("#{name} could not be initialized are you sure you:\n ;var set #{name}=<something>") if candidates.empty? && id.nil?
 
@@ -86,6 +86,30 @@ module Olib
       end
     end
 
+    def gems
+      find_by_tags('gem')
+    end
+
+    def magic_items
+      find_by_tags('magic')
+    end
+
+    def jewelry
+      find_by_tags('jewelry')
+    end
+
+    def skins
+      find_by_tags('skin')
+    end
+
+    def boxes
+      find_by_tags('boxes')
+    end
+
+    def scrolls
+      find_by_tags('scroll')
+    end
+
     def full?
       is? 'full'
     end
@@ -100,12 +124,26 @@ module Olib
   class Lootsack < Container
 
   end
-
-  @@lootsack = nil
     
   def Olib.Lootsack
     return @@lootsack if @@lootsack
     @@lootsack = Lootsack.new
     @@lootsack
   end
+
+end
+
+module Containers
+  @@containers = {}
+
+  def Containers.define(name)
+    @@containers[name] = Object.const_set(name.capitalize, Class.new(Olib::Container)).new
+    @@containers[name]
+  end
+
+  def Containers.method_missing(name)
+    return @@containers[name] if @@containers[name]
+    return Containers.define(name)
+ end
+
 end
