@@ -319,7 +319,35 @@ module Olib
     end
 
     def analyze
-      # reserved
+      fput "analyze ##{@id}"
+      should_detect = false
+      begin
+        Timeout::timeout(1) do
+          while(line = get)
+            next                        if Olib::Dictionary.ignorable?(line)
+            next                        if line =~ /sense that the item is free from merchant alteration restrictions|and sense that the item is largely free from merchant alteration restrictions|these can all be altered by a skilled merchant|please keep the messaging in mind when designing an alterations|there is no recorded information on that item|The creator has also provided the following information/
+            @props['max_light'] = true  if line =~ /light as it can get/
+            @props['max_deep']  = true  if line =~ /pockets could not possibly get any deeper/
+            @props['max_deep']  = false if line =~ /pockets deepened/
+            @props['max_light'] = false if line =~ /talented merchant lighten/
+            if line =~ /Casting Elemental Detection/
+              should_detect = true 
+              next 
+            end
+            break                       if line =~ /pockets deepened|^You get no sense of whether|light as it can get|pockets could not possibly get any deeper|talented merchant lighten/
+            @props['analyze'] = String.new unless @props['analyze']
+            @props['analyze'].concat line.strip
+            @props['analyze'].concat " "
+          end
+        end
+      
+      rescue Timeout::Error
+        # Silent
+      end
+      detect if should_detect
+      temp_analysis = @props['analyze'].split('.').map(&:strip).map(&:downcase).reject {|ln| ln.empty? }
+      @props['analyze'] = temp_analysis unless temp_analysis.empty?
+      return self
     end
 
     def take
