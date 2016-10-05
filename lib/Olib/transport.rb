@@ -4,17 +4,23 @@ module Olib
     
     @@teleporter = {}
     @@routines   = {}
+    @@tags = [
+      'bank', 'gemshop', 'pawnshop', 'advguild', 'forge', 'inn', 'npchealer',
+      'chronomage', 'town', 'furrier', 'herbalist', 'locksmith', 'alchemist',
+      'fletcher', 'sunfist', 'movers', 'consignment', 'advguard','advguard2',
+      'clericshop', 'warriorguild'
+    ]
+
+    def Transport.tags
+      @@tags
+    end
 
     def Transport.__extend__
       singleton = (class << self; self end)
-      [
-        'bank', 'gemshop', 'pawnshop', 'advguild', 'forge', 'inn', 'npchealer',
-        'chronomage', 'town', 'furrier', 'herbalist', 'locksmith', 'alchemist',
-        'fletcher', 'sunfist', 'movers', 'consignment', 'advguard','advguard2',
-        'clericshop', 'warriorguild'
-      ].each do |target|
-        singleton.send :define_method, "go2_#{target}".to_sym do
+      Transport.tags.each do |target|
+        method = "go2_#{target}".to_sym
 
+        singleton.send :define_method, method do
           Olib.Char.unhide if hidden?
           unless Room.current.tags.include?(target)
             start_script 'go2', [target, '_disable_confirm_']
@@ -22,6 +28,8 @@ module Olib
           end
           return self
         end
+
+        singleton.send :alias_method, target.to_sym, method
       end
     end
 
@@ -113,5 +121,15 @@ module Olib
 
   def Olib.Transport
     Olib::Transport
+  end
+end
+
+class Go2 < Olib::Transport
+  def Go2.room(num)
+    Olib::Transport.go2 num
+  end
+
+  def Go2.origin
+    Olib::Transport.go2_origin
   end
 end

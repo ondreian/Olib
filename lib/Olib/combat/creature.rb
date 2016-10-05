@@ -4,7 +4,7 @@
 # - add corporeal types
 # - add quadrapedal types
 # - add known spells/cmans/manuevers and algorithm for danger level by profession and skills
- 
+
 module Olib
   class Creature < Olib::Gameobj_Extender
     def Creature.escortee(name)
@@ -62,7 +62,7 @@ module Olib
     def initialize(creature)
       @wounds               = {}
       @data                 = {}
- 
+
       tag('trollish') if Creature.self_healing?(creature.name)
       @data[:incapacitated] = false
       @data[:tags]          = Creature.tag(creature.name)
@@ -79,19 +79,19 @@ module Olib
     def tag(tag)
       @data[:tags].push(tag)
     end
- 
+
     def is?(t)
       tags.include?(t)
     end
- 
+
     def bandit?
       tags.include?('bandit')
     end
- 
+
     def grimswarm?
       tags.include('grimswarm')
     end
- 
+
     def heal
       [:right_leg, :left_leg, :right_arm, :left_arm, :head, :neck, :chest, :abdomen, :back, :left_eye, :right_eye, :right_hand, :left_hand, :nerves].each do |location| @wounds[location] = 0 end
       @wounds
@@ -149,7 +149,7 @@ module Olib
     def status
       GameObj[@id].status
     end
- 
+
     def trollish?
       @data[:trollish]
     end
@@ -157,42 +157,42 @@ module Olib
     def ignorable?
       is?('ignoreable')
     end
- 
+
     def legged?
       injuries
       trollish? ? false : @wounds[:right_leg] == 3 || @wounds[:left_leg] == 3 || dead? || gone?
     end
- 
+
     def can_cast?
       injuries
       trollish? ? false : @wounds[:right_arm] == 3 || @wounds[:head] == 3 || dead? || gone?
     end
- 
+
     def limbed?
       injuries
       trollish? ? false : @wounds[:right_leg] == 3 || @wounds[:left_leg] == 3 || @wounds[:right_arm] == 3 || dead? || gone?
     end
- 
+
     def dead?
       status =~ /dead/ ? true : false
     end
- 
+
     def active?
       !stunned?
     end
- 
+
     def gone?
       GameObj[@id].nil? ? true : false
     end
- 
+
     def prone?
       status =~ /lying|prone/ ? true : false
     end
- 
+
     def stunned?
       status =~ /stunned/ ? true : false
     end
- 
+
     def kill_shot
       wounds   = injuries
       location = "left eye"
@@ -202,17 +202,17 @@ module Olib
       location = "back"      if @wounds[:neck]      == 3
       location
     end
- 
+
     def target
       result      = dothistimeout "target ##{@id}", 3, /#{Olib::Dictionary.targetable.values.join('|')}/
       @targetable = result =~ Olib::Dictionary.targetable[:yes] ? true : false
       self
     end
- 
+
     def search
       fput "search ##{@id}" if dead?
     end
- 
+
     def ambush(location=nil)
       until hidden?
         fput "hide"
@@ -223,27 +223,33 @@ module Olib
       waitrt?
       self
     end
- 
+
     def mstrike
       fput "mstrike ##{@id}"
       waitrt?
       self
     end
- 
+
     def kill
       fput "kill ##{@id}"
       waitrt?
       self
     end
- 
+
     def targetable?
       target if @targetable.nil?
       @targetable
     end
- 
+
     def search
       waitrt?
       fput "search ##{id}"
     end
   end
+end
+
+##
+## @brief      alias for internal Olib Creature
+##
+class Creature < Olib::Creature
 end
