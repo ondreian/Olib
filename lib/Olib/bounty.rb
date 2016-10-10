@@ -1,6 +1,6 @@
 module Olib
   class Bounty
-    @@procedures            = {}
+    @@listeners            = {}
     @@re                    = {}
     @@re[:herb]             = /requires (?:a|an|some) (?<herb>[a-zA-Z '-]+) found (?:in|on|around) (?<area>[a-zA-Z '-]+).  These samples must be in pristine condition.  You have been tasked to retrieve (?<number>[\d]+)/
     @@re[:escort]           = /Go to the (.*?) and WAIT for (?:him|her|them) to meet you there.  You must guarantee (?:his|her|their) safety to (?<destiniation>[a-zA-Z '-]+) as soon as/
@@ -20,7 +20,7 @@ module Olib
     @@re[:get_gem_bounty]   = /The local gem dealer, (?<npc>[a-zA-Z ]+), has an order to fill and wants our help/
     @@re[:creature_problem] = /It appears they have a creature problem they\'d like you to solve/
     @@re[:rescue]           = /A local divinist has had visions of the child fleeing from (?:a|an) (?<creature>.*) (?:in|on) (?:the )?(?<area>.*?)(?: near| between| under|\.)/
-    @@re[:failed_bounty]    = /You have failed in your task/
+    @@re[:failed]           = /You have failed in your task/
     @@re[:none]             = /You are not currently assigned a task/
 
     # convenience list to get all types of bounties
@@ -94,15 +94,15 @@ module Olib
     end
 
     def Bounty.to_s
-        @@procedures.to_s
+        @@listeners.to_s
     end
 
     def Bounty.on(namespace, &block)
-      @@procedures[namespace] = block
+      @@listeners[namespace] = block
     end
 
-    def Bounty.procedures
-      @@procedures
+    def Bounty.listeners
+      @@listeners
     end
 
     def Bounty.cooldown?
@@ -117,12 +117,12 @@ module Olib
       return Bounty
     end
 
-    def Bounty.throw_missing_procedure
+    def Bounty.throw_missing_listener
       msg = "\n"
-      msg.concat "\nBounty.exec called for #{Bounty.current} without a defined procedure\n\n"
-      msg.concat "define a procedure with:\n"
+      msg.concat "\nBounty.dispatch called for `:#{Bounty.type}` without a defined listener\n\n"
+      msg.concat "define a listener with:\n"
       msg.concat " \n" 
-      msg.concat "   Bounty.define_procedure(:#{Bounty.current}) {\n" 
+      msg.concat "   Bounty.on(:#{Bounty.type}) {\n" 
       msg.concat "      # do something\n"
       msg.concat "   }\n"
       msg.concat " \n"
@@ -131,28 +131,28 @@ module Olib
       raise Errors::Fatal.new msg
     end
 
-    def Bounty.exec(procedure=nil)
+    def Bounty.dispatch(listener=nil)
 
-      if procedure
-        if @@procedures[procedure]
-          @@procedures[procedure].call
+      if listener
+        if @@listeners[listener]
+          @@listeners[listener].call
           return Bounty
         else 
-          Bounty.throw_missing_procedure
+          Bounty.throw_missing_listener
         end
       end
 
-      if @@procedures[Bounty.type]
-        @@procedures[Bounty.type].call
+      if @@listeners[Bounty.type]
+        @@listeners[Bounty.type].call
         return Bounty
       else
-        Bounty.throw_missing_procedure
+        Bounty.throw_missing_listener
       end
 
     end
 
     def Bounty.npc
-      GameObj.npcs.select { |npc| npc.name =~ /guard|taskmaster|gemcutter|jeweler|akrash|healer/i }.first
+      GameObj.npcs.select { |npc| npc.name =~ /guard|taskmaster|gemcutter|jeweler|akrash|healer|dealer/i }.first
     end
 
   end

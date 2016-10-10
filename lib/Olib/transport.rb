@@ -132,4 +132,8 @@ class Go2 < Olib::Transport
   def Go2.origin
     Olib::Transport.go2_origin
   end
+
+  def Go2.fwi
+    Olib::Transport.fwi_teleport
+  end
 end
