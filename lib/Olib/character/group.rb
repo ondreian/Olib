@@ -1,4 +1,3 @@
-# NEW: Stable
 module Olib
   class Group
     @@characters             = {}
@@ -13,10 +12,10 @@ module Olib
       
       fput "group"
       while line=get
-        break                            if line =~ /You are not currently in a group/
-        Group.define($1)                 if line =~ /([a-zA-Z]+) (is following you|is also a member of your group|is the leader of your group)/
-        @@leader = $1                    if line =~ /([a-zA-Z]+) is the leader of your group/
-        break                            if line =~ /^Your group status is/
+        break            if line =~ /You are not currently in a group/
+        Group.define($1) if line =~ /([a-zA-Z]+) (is following you|is also a member of your group|is the leader of your group)/
+        @@leader = $1    if line =~ /([a-zA-Z]+) is the leader of your group/
+        break            if line =~ /^Your group status is/
       end
       @@checked = true
       @@characters
@@ -63,6 +62,8 @@ module Olib
     def Group.define(name)
       GameObj.pcs.detect do |pc| @@characters[name] = pc.dup if pc.noun == name end
     end
-
   end
+end
+
+class Group < Olib::Group
 end

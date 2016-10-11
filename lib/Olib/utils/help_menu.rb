@@ -7,7 +7,7 @@ module Olib
       @cmds                = {}
       @flags               = {}
       @padding             = 5
-      @max_column_width    = Vars.max_column_width.to_i || 50
+      @max_column_width    = Vars.max_column_width.to_i || 100
       @title  = "#{@script} help menu".upcase
       self
     end

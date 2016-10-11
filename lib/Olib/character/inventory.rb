@@ -24,10 +24,10 @@ module Olib
       }
     end
 
-    def Inventory.teleporter
+    def Inventory.fwi_teleporter
       # check for worn teleporter
       candidates= GameObj.inv.select { |item|
-        item.name == Vars.teleporter
+        item.name == Char.fwi_teleporter
       }
 
       unless candidates.empty?

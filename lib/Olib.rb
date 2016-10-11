@@ -22,6 +22,9 @@ module Olib
       end
   end
 
+  def Olib.methodize(str)
+    str.downcase.strip.gsub(/-|\s+|'|"/, "_")
+  end
 
   def Olib.import(lib)
     if old = $LOADED_FEATURES.find{|path| path=~/#{Regexp.escape lib}(\.rb)?\z/ }
