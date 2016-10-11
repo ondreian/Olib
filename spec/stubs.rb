@@ -2,6 +2,7 @@ require "ostruct"
 
 class Stubs
   @@bounty = nil
+  @@mind   = nil
 
   def Stubs.bounty
     @@bounty
@@ -10,10 +11,22 @@ class Stubs
   def Stubs.bounty=(bounty)
     @@bounty=bounty
   end
+
+  def Stubs.mind
+    @@mind
+  end
+
+  def Stubs.mind=(mind)
+    @@mind=mind
+  end
 end
 
 def checkbounty
   Stubs.bounty
+end
+
+def checkmind
+  Stubs.mind
 end
 
 def fput

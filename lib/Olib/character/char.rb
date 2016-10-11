@@ -1,4 +1,3 @@
-
 class Char
   @@silvers  = 0
   @@routines = {}
@@ -13,6 +12,10 @@ class Char
       end
     end
     Char
+  end
+
+  def Char.fwi_teleporter
+    Vars.teleporter || Vars.mapdb_fwi_trinket
   end
 
   def Char.visible?

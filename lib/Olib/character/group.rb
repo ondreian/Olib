@@ -1,4 +1,3 @@
-# NEW: Stable
 module Olib
   class Group
     @@characters             = {}
@@ -63,6 +62,8 @@ module Olib
     def Group.define(name)
       GameObj.pcs.detect do |pc| @@characters[name] = pc.dup if pc.noun == name end
     end
-
   end
+end
+
+class Group < Olib::Group
 end

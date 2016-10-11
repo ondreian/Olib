@@ -1,3 +1,5 @@
+require "ostruct"
+
 class Mind
   @@states = OpenStruct.new(
     :saturated        => "saturated",
@@ -44,6 +46,14 @@ class Mind
     Mind.define_singleton_method((name.to_s + "?").to_sym) do
       Mind.state == str
     end
+
+    Mind.define_singleton_method("until_not_#{name.to_s}".to_sym) do
+      wait_until { Mind.state != str }
+    end
+
+    Mind.define_singleton_method("until_#{name.to_s}".to_sym) do
+      wait_until { Mind.state == str }
+    end
   }
   ##
   ## @brief      returns you to your current origin and waits 
@@ -53,9 +63,8 @@ class Mind
   ##
   ## @return     nil
   ##
-  def Mind.rest!(state="saturated")
+  def Mind.rest!(state=Mind.states.saturated)
     Go2.origin
     wait_until { Mind.state != state }
   end
-
 end
