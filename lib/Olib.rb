@@ -5,17 +5,12 @@ module Olib
 
   def Olib.update_notifier
     begin
-        request  = Net::HTTP::Get.new('/api/v1/gems/Olib.json', initheader = {'Content-Type' =>'application/json'})
-        response = Net::HTTP.new('rubygems.org').start {|http| http.request(request) }
-        if response.body =~ /error/
-          # silence is golden
-          exit
-        else
-          # check version
-          if Gem.loaded_specs["Olib"].version < Gem::Version.new(JSON.parse(response.body)['version'])
-            puts "<pushBold/>You need to update the Olib gem with a `gem install Olib`<popBold/>"
-          end
+        response  = JSON.parse Net::HTTP.get URI('https://rubygems.org/api/v1/gems/Olib.json')      
+        # check version
+        if Gem.loaded_specs["Olib"].version < Gem::Version.new(response['version'])
+          puts "<pushBold/>You need to update the Olib gem with a `gem install Olib`<popBold/>"
         end
+        
       rescue
         echo $!
         puts $!.backtrace[0..1]
