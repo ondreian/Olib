@@ -14,7 +14,15 @@ module Olib
         (class << self; self end).class_eval do; attr_accessor "#{s}"; end
         instance_variable_set "#{var}", item.send(s)
       }
+    end
 
+    def echo
+      respond self
+      self
+    end
+
+    def at
+      fput "look at ##{@id}"
     end
   end
 end

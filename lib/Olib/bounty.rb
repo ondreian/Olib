@@ -86,19 +86,22 @@ module Olib
 
     def Bounty.ask_for_bounty
       fput "ask ##{Bounty.npc.id} for bounty"
+      Bounty
     end
 
     def Bounty.remove
       Go2.advguild
       2.times do fput "ask ##{Bounty.npc.id} for remove" end
+      Bounty
     end
 
     def Bounty.to_s
-        @@listeners.to_s
+      @@listeners.to_s
     end
 
     def Bounty.on(namespace, &block)
       @@listeners[namespace] = block
+      Bounty
     end
 
     def Bounty.listeners
@@ -114,7 +117,7 @@ module Olib
         Go2.origin
         wait_until { !Bounty.cooldown? }
       end
-      return Bounty
+      Bounty
     end
 
     def Bounty.throw_missing_listener
@@ -132,7 +135,6 @@ module Olib
     end
 
     def Bounty.dispatch(listener=nil)
-
       if listener
         if @@listeners[listener]
           @@listeners[listener].call
@@ -148,7 +150,15 @@ module Olib
       else
         Bounty.throw_missing_listener
       end
+    end
 
+    def Bounty.find_guard
+      Go2.advguard
+      if Bounty.npc.nil? then Go2.advguard2 end
+      if Bounty.npc.nil? then 
+        throw Olib::Errors::Fatal.new "could not find guard"
+      end
+      return Bounty
     end
 
     def Bounty.npc

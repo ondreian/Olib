@@ -48,7 +48,7 @@ module Olib
     end
 
     def Go2.origin
-      Go2.go2 @@origin[:roomid]
+      Go2.room @@origin[:roomid]
       Olib.Char.hide if @@origin[:hidden]
       Go2
     end

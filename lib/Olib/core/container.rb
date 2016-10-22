@@ -18,7 +18,7 @@ end
 
 module Olib
   class Container < Gameobj_Extender
-    attr_accessor :ref
+    attr_accessor :ref, :nested, :containers, :ontop
 
     def initialize(id=nil)
       # extract the class name to attempt to lookup the item by your settings
@@ -28,7 +28,8 @@ module Olib
       candidates = Olib.Inventory[Vars[name]]
       raise Olib::Errors::DoesntExist.new("#{name} could not be initialized are you sure you:\n ;var set #{name}=<something>") if candidates.empty? && id.nil?
 
-      @ref = GameObj[id] || candidates.first
+      @ref   = GameObj[id] || candidates.first
+      @ontop = Array.new
       
       unless GameObj[@ref.id].contents
         tops = [
@@ -45,7 +46,10 @@ module Olib
     end
 
     def contents
-      GameObj[@ref.id].contents.map{ |item| Item.new(item) }
+      [
+        @ontop,
+        GameObj[@ref.id].contents.map { |item| Item.new(item) }
+      ].flatten
     end
 
     def where(conditions)
@@ -84,6 +88,54 @@ module Olib
           self
         end
       end
+    end
+
+    def at
+      Olib.wrap_stream("look at ##{@id}") { |line|
+        if line =~ /You see nothing unusual|prompt time|You gaze through (.*?) and see...|written/
+          raise Olib::Errors::Mundane
+        end
+
+        if line =~ /Looking at the (.*?), you see (?<nested>.*)/
+          @nested = true
+
+          @containers = line
+            .match(/Looking at the (.*?), you see (?<nested>.*)/)[:nested]
+            .scan(/<a exist="(?<id>.*?)" noun="(?<noun>.*?)">(?<name>.*?)<\/a>/)
+            .map {|matches| Container.new GameObj.new *matches }
+          raise Olib::Errors::Mundane
+        end
+        
+      }
+      self
+    end
+
+    def look
+      self
+    end
+
+    def on
+      return self unless @id
+      Olib.wrap_stream("look on ##{@id}") { |line|
+        raise Olib::Errors::Mundane if line =~ /There is nothing on there|prompt time/
+        if line =~ /On the (.*?) you see/
+          @ontop << line.match(Dictionary.contents)[:items]
+            .scan(Dictionary.tag)
+            .map {|matches| Item.new GameObj.new *matches }
+          raise Olib::Errors::Mundane
+        end
+        next
+      }
+      self
+    end
+
+    def in
+      fput "look in ##{@id}"
+      self
+    end
+
+    def nested?
+      @nested
     end
 
     def gems

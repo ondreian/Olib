@@ -4,19 +4,18 @@ module Olib
   # this is the structure for a base Object
   # wraps an instance of GameObj and adds the ability for tags, queries
   class Item < Olib::Gameobj_Extender
-    attr_accessor :props
+    attr_accessor :props, :container
     # When created, it should be passed an instance of GameObj
     #
     # Example: 
     #          Olib::Item.new(GameObj.right_hand)
     def initialize(obj)
-      @props = Hash.new
-
+      @props              = Hash.new
       @props[:name]       = obj.name
       @props[:after_name] = obj.after_name
       @props[:before_name]= obj.before_name
       @props[:desc]       = [obj.before_name, obj.name, obj.after_name].compact.join(' ')
-
+      @props[:noun]       = obj.noun
       define :tags, []
       obj.type.split(',').map { |t| tag(t) }
 
@@ -130,7 +129,9 @@ module Olib
     def in
       return self if has? 'contents'
       Olib.wrap(action 'look in') { |line|
-        raise Olib::Errors::Mundane      if line=~/^There is nothing in there./
+        if line=~/^There is nothing in there.|You gaze through (.*?) and see.../
+          raise Olib::Errors::Mundane
+        end
         
         # handle jar data
         if line =~ /Inside (.*?) you see (?<number>[\d]+) portion(|s) of (?<type>.*?).  It is (more than |less than|)(?<percent>[a-z ]+)./ 
@@ -196,6 +197,7 @@ module Olib
 
     def sell
       price = 0
+      take
       Olib.wrap( action "sell" ){ |line|
         raise Olib::Errors::Fatal.new "#{to_s} is not sellable here" if GameObj.right_hand.id == @id
 
@@ -204,6 +206,7 @@ module Olib
           raise Olib::Errors::Mundane
         end
       }
+      price
     end
 
     def turn
@@ -364,10 +367,7 @@ module Olib
 
         if line =~ Olib::Dictionary.get[:failure][:buy]
           define 'cost', line.match(Olib::Dictionary.get[:failure][:buy])[:cost].to_i
-        end
-
-        if line =~ Olib::Dictionary.get[:failure][:race]
-          define 'cost', line.match(Olib::Dictionary.get[:failure][:race])[:cost].to_i
+          raise Olib::Errors::Mundane
         end
 
         if line =~ /let me help you with that/
@@ -466,8 +466,8 @@ module Olib
     def look
       return self if has? 'show'
       Olib.wrap(action 'look') { |line|
-        raise Olib::Errors::Mundane      if line=~/^You see nothing unusual.|^You can't quite get a good look at/
-        define 'show', line  unless line=~/<prompt|You take a closer look/
+        raise Olib::Errors::Mundane if line=~/^You see nothing unusual.|^You can't quite get a good look at/
+        define 'show', line  unless line=~/prompt time|You take a closer look/
       }
       self
     end
