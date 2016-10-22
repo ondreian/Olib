@@ -3,9 +3,17 @@ module Olib
   class Dictionary
     def Dictionary.heirloom
       re = {}
-      re[:is]       = /are the initials ([A-Z]{2})./
-      re[:give]     = /Excellent.  I'm sure the person who lost this will be quite happy/
+      re[:is]   = /are the initials ([A-Z]{2})./
+      re[:give] = /Excellent.  I'm sure the person who lost this will be quite happy/
       re
+    end
+
+    def Dictionary.tag
+      /<a exist="(?<id>.*?)" noun="(?<noun>.*?)">(?<name>.*?)<\/a>/
+    end
+
+    def Dictionary.contents
+      /(On|In) the (.*?) you see (?<items>.*)/
     end
 
     def Dictionary.ignorable?(line)
@@ -85,7 +93,7 @@ module Olib
       re[:failure][:weight]       = /You are unable to handle the additional load/
       re[:failure][:hands_full]   = /^You need a free hand to pick that up/
       re[:failure][:ne]           = /^Get what/
-      re[:failure][:buy]          = /is (?<cost>[0-9]+) (silvers|coins)/
+      re[:failure][:buy]          = /(is|for|be) (?<cost>[0-9]+) (silvers|coins)/
       re[:failure][:race]         = /be (?<cost>[0-9]+) (silvers|coins) for someone like you/
       re[:failure][:pshop]        = /^Looking closely/
       re[:success]                = /^You pick up|^You remove|^You rummage|^You draw|^You grab|^You reach|^You already/

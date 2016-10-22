@@ -36,10 +36,10 @@ class Char
   end
 
   def Char.withdraw(amount)
-    Transport.go2_bank
+    Go2.bank
     result = Olib.do "withdraw #{amount} silvers", /I'm sorry|hands you/
     if result =~ /I'm sorry/ 
-      Transport.go2_origin
+      Go2.origin
       echo "Unable to withdraw the amount requested for this script to run from your bank account"
       exit
     end

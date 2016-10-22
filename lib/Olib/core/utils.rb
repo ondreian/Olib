@@ -141,11 +141,11 @@ module Olib
     @@xml
   end
 
-  def Olib.wrap(action)
+  def Olib.wrap(action = nil)
     
     begin
       Olib.timeout(3) {
-        put action
+        put action if action
         while (line=get)
           next if Dictionary.ignorable?(line)
           # attempt at removing PC action that turned out to be more harmful than good
@@ -191,12 +191,12 @@ module Olib
     raise Olib::Errors::Mundane
   end
 
-  def Olib.wrap_stream(action, seconds=3)
+  def Olib.wrap_stream(action = nil)
     begin
       Olib.turn_on_xml
 
-      Olib.timeout(seconds) {
-        put action
+      Olib.timeout(3) {
+        if action then fput action end
         while (line=get)
           next if     Olib::Dictionary.ignorable?(line)
           # next if not GameObj.pcs.nil? and line =~ /#{GameObj.pcs.join('|')}/

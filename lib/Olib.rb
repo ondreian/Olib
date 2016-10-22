@@ -5,7 +5,7 @@ module Olib
 
   def Olib.update_notifier
     begin
-        response  = JSON.parse Net::HTTP.get URI('https://rubygems.org/api/v1/gems/Olib.json')      
+        response  = JSON.parse Net::HTTP.get URI('https://rubygems.org/api/v1/gems/Olib.json')
         # check version
         if Gem.loaded_specs["Olib"].version < Gem::Version.new(response['version'])
           puts "<pushBold/>You need to update the Olib gem with a `gem install Olib`<popBold/>"
@@ -21,30 +21,14 @@ module Olib
     str.downcase.strip.gsub(/-|\s+|'|"/, "_")
   end
 
-  def Olib.import(lib)
-    if old = $LOADED_FEATURES.find{|path| path=~/#{Regexp.escape lib}(\.rb)?\z/ }
-      load old
-    else
-      require lib
-    end
-  end
-  ##
-  ## @brief      for dev environments
-  ##
-  ## @return     the require or load statement
-  ##
-  def Olib.reload!
-    Olib.import("Olib")
-  end
-
   # load core first
   Dir[File.dirname(__FILE__) + '/Olib/core/**/*.rb'].each {|file|
-    Olib.import file 
+    require file 
   }
 
   # load things that depend on core extensions
   Dir[File.dirname(__FILE__) + '/Olib/**/*.rb'].each {|file|
-    Olib.import file 
+    require file 
   }
 
   # invoke update notifier immediately
