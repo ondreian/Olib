@@ -4,6 +4,55 @@ module Olib
   # this is the structure for a base Object
   # wraps an instance of GameObj and adds the ability for tags, queries
   class Item < Olib::Gameobj_Extender
+    TYPES = [
+    "reagent",
+    ["spirit beast talismans", true],
+    "alchemy product",
+    ["alchemy equipment", true],
+    "note",
+    ["cursed", true],
+    ["ammo", true],
+    "box",
+    "gem",
+    "herb",
+    ["food", true],
+    ["uncommon", true],
+    "valuable",
+    "plinite",
+    ["ebongate", true],
+    ["quest", true],
+    ["jewelry", true],
+    ["junk", true],
+    "lockpick",
+    "magic",
+    "scroll",
+    "skin",
+    "wand",
+    "toy",
+    ["armor", true],
+    "weapon",
+    ["clothing", true],
+    "instrument",
+    "jar",
+    "lm trap",
+    "lm tool",
+    "scarab",
+    #"consignment",
+    #"gemshop",
+    #"pawnshop",
+    #"furrier"
+  ]
+
+  def self.type_methods
+    TYPES.map { |type|
+      if type.class == Array then
+        [ Olib.methodize(type.first).to_sym, type.first ]
+      else
+        [ Olib.methodize(type + "s").to_sym, type ]
+      end
+    }
+  end
+
     attr_accessor :props, :container
     # When created, it should be passed an instance of GameObj
     #

@@ -75,7 +75,7 @@ class Char
   end
 
   def Char.deplete_wealth(silvers)
-    @@silvers = @@silvers - silvers
+    #@@silvers = @@silvers - silvers
   end
 
   def Char.smart_wealth
@@ -108,6 +108,4 @@ class Char
     end
     @@silvers
   end
-
-
 end
