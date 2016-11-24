@@ -18,23 +18,22 @@ module Olib
     ##
     ## dynamically assign all of our Go2#methods
     ##
-    Go2.tags
-      .each { |tag|
-        method  = Olib.methodize tag
-        go2_dep = "go2_#{method}"
-        
-        Go2.define_singleton_method(method.to_sym) do
-          Go2.room tag
-        end
+    Go2.tags.each { |tag|
+      method  = Olib.methodize tag
+      go2_dep = "go2_#{method}"
+      
+      Go2.define_singleton_method(method.to_sym) do
+        Go2.room tag
+      end
 
-        Go2.define_singleton_method(go2_dep.to_sym) do
-          respond "[deprecation warning] Go2.#{go2_dep} => Go2.#{method}"
-          Go2.room tag
-        end
-      }
+      Go2.define_singleton_method(go2_dep.to_sym) do
+        respond "[deprecation warning] Go2.#{go2_dep} => Go2.#{method}"
+        Go2.room tag
+      end
+    }
 
     def Go2.room(roomid)
-      Olib.Char.unhide if hidden
+      Char.unhide if hidden
       unless Room.current.id == roomid
         start_script "go2", [roomid, "_disable_confirm_"]
         wait_while { running? "go2" };
@@ -49,7 +48,7 @@ module Olib
 
     def Go2.origin
       Go2.room @@origin[:roomid]
-      Olib.Char.hide if @@origin[:hidden]
+      Char.hide if @@origin[:hidden]
       Go2
     end
 

@@ -23,7 +23,10 @@ class Area < Olib::Container
       .reject { |container| container.name =~ /[A-Z][a-z]+ disk/ }
       .each { |container|
         check_container container
-        unless container.nested?
+        item = Olib::Item.new container
+        if (item.tags & TYPES).any?
+          items << item
+        elsif container.nested?
           container.contents.each { |item|
             item.container = container
             items << item
