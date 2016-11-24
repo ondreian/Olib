@@ -1,6 +1,26 @@
 class Area < Olib::Container
+  def self.contents
+    GameObj.loot.map { |obj| Olib::Item.new(obj) }
+  end
 
-  def Area.current
+  def each
+    self.contents.each { |item|
+      yield item
+    }
+  end
+
+  class << self
+    Olib::Item.type_methods.each { |method, tag|
+      exp = /#{tag}/
+      define_method(method.to_sym) do
+        GameObj.loot
+          .select { |obj| obj.type =~ exp }
+          .map { |obj| Olib::Item.new(obj) }
+      end
+    }
+  end
+
+  def Area.deep
     Area.new
   end
 
