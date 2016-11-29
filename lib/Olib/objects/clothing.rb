@@ -1,4 +1,2 @@
-module Olib
-  class Clothing < Item
-  end
+class Clothing < Olib::Item
 end

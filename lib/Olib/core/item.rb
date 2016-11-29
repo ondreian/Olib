@@ -1,9 +1,59 @@
-require 'Olib/core/extender'
+require "ostruct"
+require "Olib/core/extender"
 
 module Olib
   # this is the structure for a base Object
   # wraps an instance of GameObj and adds the ability for tags, queries
   class Item < Olib::Gameobj_Extender
+    TYPES = [
+    "reagent",
+    ["spirit beast talismans", true],
+    "alchemy product",
+    ["alchemy equipment", true],
+    "note",
+    ["cursed", true],
+    ["ammo", true],
+    "box",
+    "gem",
+    "herb",
+    ["food", true],
+    ["uncommon", true],
+    "valuable",
+    "plinite",
+    ["ebongate", true],
+    ["quest", true],
+    ["jewelry", true],
+    ["junk", true],
+    "lockpick",
+    "magic",
+    "scroll",
+    "skin",
+    "wand",
+    "toy",
+    ["armor", true],
+    "weapon",
+    ["clothing", true],
+    "instrument",
+    "jar",
+    "lm trap",
+    "lm tool",
+    "scarab",
+    #"consignment",
+    #"gemshop",
+    #"pawnshop",
+    #"furrier"
+  ]
+
+  def self.type_methods
+    TYPES.map { |type|
+      if type.class == Array then
+        [ Olib.methodize(type.first).to_sym, type.first ]
+      else
+        [ Olib.methodize(type + "s").to_sym, type ]
+      end
+    }
+  end
+
     attr_accessor :props, :container
     # When created, it should be passed an instance of GameObj
     #
@@ -14,25 +64,25 @@ module Olib
       @props[:name]       = obj.name
       @props[:after_name] = obj.after_name
       @props[:before_name]= obj.before_name
-      @props[:desc]       = [obj.before_name, obj.name, obj.after_name].compact.join(' ')
+      @props[:desc]       = [obj.before_name, obj.name, obj.after_name].compact.join(" ")
       @props[:noun]       = obj.noun
       define :tags, []
-      obj.type.split(',').map { |t| tag(t) }
+      obj.type.split(",").map { |t| tag(t) }
 
-      if is?('jar') && @props[:after_name] =~ /containing (.*+?)/
-        tag Dictionary.gems[:singularize].call @props[:after_name].gsub('containing', '').strip
+      if is?("jar") && @props[:after_name] =~ /containing (.*+?)/
+        tag Dictionary.gems[:singularize].call @props[:after_name].gsub("containing", "").strip
       end
 
-      if is?('gem')
+      if is?("gem")
         tag Dictionary.gems[:singularize].call @props[:name]
       end
 
-      if is?('jar') && @props[:after_name].nil?
-        tag('empty')
+      if is?("jar") && @props[:after_name].nil?
+        tag("empty")
       end
 
       if Vars.teleporter && Vars.teleporter == @props[:name]
-        tag('teleporter')
+        tag("teleporter")
       end
 
       super(obj)
@@ -76,7 +126,7 @@ module Olib
 
     def buy
       Char.deplete_wealth cost
-      fput action 'buy'
+      fput action "buy"
       self
     end
 
@@ -93,7 +143,7 @@ module Olib
     end
 
     def pullable?
-      is? 'pullable'
+      is? "pullable"
     end
 
     def affordable?
@@ -103,11 +153,11 @@ module Olib
     end
 
     def buyable?
-      is? 'buyable'
+      is? "buyable"
     end
 
     def cost
-      @props['cost']
+      @props["cost"]
     end
 
     def acquire_from_shop
@@ -127,8 +177,8 @@ module Olib
     end
 
     def in
-      return self if has? 'contents'
-      Olib.wrap(action 'look in') { |line|
+      return self if has? "contents"
+      Olib.wrap(action "look in") { |line|
         if line=~/^There is nothing in there.|You gaze through (.*?) and see.../
           raise Olib::Errors::Mundane
         end
@@ -136,14 +186,14 @@ module Olib
         # handle jar data
         if line =~ /Inside (.*?) you see (?<number>[\d]+) portion(|s) of (?<type>.*?).  It is (more than |less than|)(?<percent>[a-z ]+)./ 
           data = line.match(/Inside (.*?) you see (?<number>[\d]+) portion(|s) of (?<type>.*?).  It is (more than |less than|)(?<percentage>[a-z ]+)./)
-          tag data[:percentage] == 'full' ? "full" : "partial"
+          tag data[:percentage] == "full" ? "full" : "partial"
           define :number, data[:number].to_i
           raise Olib::Errors::Mundane
         end
 
         #handle empty jars
         if line =~ /The (.*?) is empty./
-          tag 'empty'
+          tag "empty"
           raise Olib::Errors::Mundane
         end
       }
@@ -157,7 +207,7 @@ module Olib
         raise Olib::Errors::Mundane              if line =~ Dictionary.put[:success]
         
         if line =~ Dictionary.put[:failure][:full]
-          tag 'full'
+          tag "full"
           raise Olib::Errors::ContainerFull
         end
       }
@@ -165,12 +215,12 @@ module Olib
     end
 
     def stash
-      _drag GameObj[props['container']]
+      _drag GameObj[props["container"]]
     end
 
     def shake
       # make sure we have a count so we need to match fewer lines
-      self.in if is? 'jar' and missing? :number
+      self.in if is? "jar" and missing? :number
       
       Olib.wrap(action "shake"){ |line|
         raise Olib::Errors::Fatal    if line =~ /you realize that it is empty/
@@ -190,7 +240,7 @@ module Olib
 
       Olib.wrap("shop sell #{amt}") {|line|
         raise Olib::Errors::Mundane if line =~ /^You place your/
-        raise Olib::Errors::Fatal   if line =~ /There's no more room for anything else right now./
+        raise Olib::Errors::Fatal   if line =~ /There"s no more room for anything else right now./
       }
 
     end
@@ -210,7 +260,7 @@ module Olib
     end
 
     def turn
-      fput action 'turn'
+      fput action "turn"
       self
     end
 
@@ -243,7 +293,7 @@ module Olib
           raise Olib::Errors::Mundane
         end
 
-        if line =~ /I'm afraid that you can't pull that./
+        if line =~ /I"m afraid that you can"t pull that./
           if onfailure
             onfailure.call(self)
           else 
@@ -307,7 +357,7 @@ module Olib
       end
 
       Olib.wrap(action "wear") { |line|        
-        if line =~ /You can't wear that.|You can only wear/
+        if line =~ /You can"t wear that.|You can only wear/
           if onfailure
             onfailure.call(self)
           else 
@@ -329,18 +379,18 @@ module Olib
           while(line = get)
             next                        if Olib::Dictionary.ignorable?(line)
             next                        if line =~ /sense that the item is free from merchant alteration restrictions|and sense that the item is largely free from merchant alteration restrictions|these can all be altered by a skilled merchant|please keep the messaging in mind when designing an alterations|there is no recorded information on that item|The creator has also provided the following information/
-            @props['max_light'] = true  if line =~ /light as it can get/
-            @props['max_deep']  = true  if line =~ /pockets could not possibly get any deeper/
-            @props['max_deep']  = false if line =~ /pockets deepened/
-            @props['max_light'] = false if line =~ /talented merchant lighten/
+            @props["max_light"] = true  if line =~ /light as it can get/
+            @props["max_deep"]  = true  if line =~ /pockets could not possibly get any deeper/
+            @props["max_deep"]  = false if line =~ /pockets deepened/
+            @props["max_light"] = false if line =~ /talented merchant lighten/
             if line =~ /Casting Elemental Detection/
               should_detect = true 
               next 
             end
             break                       if line =~ /pockets deepened|^You get no sense of whether|light as it can get|pockets could not possibly get any deeper|talented merchant lighten/
-            @props['analyze'] = String.new unless @props['analyze']
-            @props['analyze'].concat line.strip
-            @props['analyze'].concat " "
+            @props["analyze"] = String.new unless @props["analyze"]
+            @props["analyze"].concat line.strip
+            @props["analyze"].concat " "
           end
         end
       
@@ -348,15 +398,15 @@ module Olib
         # Silent
       end
       detect if should_detect
-      temp_analysis = @props['analyze'].split('.').map(&:strip).map(&:downcase).reject {|ln| ln.empty? }
-      @props['analyze'] = temp_analysis unless temp_analysis.empty?
+      temp_analysis = @props["analyze"].split(".").map(&:strip).map(&:downcase).reject {|ln| ln.empty? }
+      @props["analyze"] = temp_analysis unless temp_analysis.empty?
       return self
     end
 
     def take
-      return self if has? 'cost'
+      return self if has? "cost"
 
-      Olib.wrap(action 'get') { |line|
+      Olib.wrap(action "get") { |line|
         raise Errors::DoesntExist    if line=~ Olib::Dictionary.get[:failure][:ne]
         raise Errors::HandsFull      if line=~ Olib::Dictionary.get[:failure][:hands_full]
         raise Errors::TooHeavy       if line=~ Olib::Dictionary.get[:failure][:weight]
@@ -366,7 +416,7 @@ module Olib
         end  
 
         if line =~ Olib::Dictionary.get[:failure][:buy]
-          define 'cost', line.match(Olib::Dictionary.get[:failure][:buy])[:cost].to_i
+          define "cost", line.match(Olib::Dictionary.get[:failure][:buy])[:cost].to_i
           raise Olib::Errors::Mundane
         end
 
@@ -374,13 +424,13 @@ module Olib
           raise Olib::Errors::Mundane
         end
 
-        if line=~ /You'll have to buy it if you want it/
-          tag 'buyable'
+        if line=~ /You"ll have to buy it if you want it/
+          tag "buyable"
           raise Olib::Errors::Mundane
         end
 
         if line=~ /You can PULL/
-          tag 'pullable'
+          tag "pullable"
           raise Olib::Errors::Mundane
         end
 
@@ -396,15 +446,15 @@ module Olib
 
     def _inspect
 
-      return self if has? 'inspect'
+      return self if has? "inspect"
 
       in_inspect = false
 
-      Olib.wrap_stream(action 'inspect') { |line|
+      Olib.wrap_stream(action "inspect") { |line|
 
         raise Olib::Errors::Mundane  if line =~ /^<prompt/ and in_inspect
 
-        # skip first inspect line because it's useless for info
+        # skip first inspect line because it"s useless for info
         if line =~ /You carefully inspect|You carefully count|goat/
           in_inspect = true
         end
@@ -413,47 +463,47 @@ module Olib
         if in_inspect
           
           if line =~ /^You estimate that (?:.*?) can store (?:a|an|some) ([a-zA-Z -]+) amount with enough space for ([a-zA-Z ]+)/
-            @props['space']           = $1
-            @props['number_of_items'] = $2
+            @props["space"]           = $1
+            @props["number_of_items"] = $2
           end
             
 
           
           if line =~ /^You determine that you could wear the (.*?) ([a-zA-Z ]+)/
-            @props['location']= $2
+            @props["location"]= $2
           end
           
           if line =~ /allows you to conclude that it is ([a-zA-Z ]+)/
 
             if line =~ Dictionary.size
-              @props['shield_type'] = $1
+              @props["shield_type"] = $1
             else
-              Dictionary.armors.each do |type, re| @props['armor_type'] = type if line =~ re end
+              Dictionary.armors.each do |type, re| @props["armor_type"] = type if line =~ re end
             end
             
           end
 
           if line =~ /suitable for use in unarmed combat/
-            @props['weapon_type']= "uac"
+            @props["weapon_type"]= "uac"
           end
 
           if line =~ /requires skill in ([a-zA-Z ]+) to use effectively/
         
-            @props['weapon_type']= $1
+            @props["weapon_type"]= $1
             if line =~ /It appears to be a modified ([a-zA-Z -]+)/
-              @props['weapon_base']= $1
+              @props["weapon_base"]= $1
             else
-              @props['weapon_base']= @noun
+              @props["weapon_base"]= @noun
             end
           end            
           
           if line =~ /^It looks like this item has been mainly crafted out of ([a-zA-Z -]+)./
-            @props['material']= $1
+            @props["material"]= $1
             raise Olib::Errors::Mundane
           end
           
           if line =~ /can hold liquids/
-            @props['liquid_container']=true
+            @props["liquid_container"]=true
           end
 
         end
@@ -464,34 +514,34 @@ module Olib
     end
 
     def look
-      return self if has? 'show'
-      Olib.wrap(action 'look') { |line|
-        raise Olib::Errors::Mundane if line=~/^You see nothing unusual.|^You can't quite get a good look at/
-        define 'show', line  unless line=~/prompt time|You take a closer look/
+      return self if has? "show"
+      Olib.wrap(action "look") { |line|
+        raise Olib::Errors::Mundane if line=~/^You see nothing unusual.|^You can"t quite get a good look at/
+        define "show", line  unless line=~/prompt time|You take a closer look/
       }
       self
     end
 
     def tap
-      return self if has? 'description'
-      Olib.wrap(action 'tap') { |line|
+      return self if has? "description"
+      Olib.wrap(action "tap") { |line|
         next unless line=~ /You tap (.*?) (on|in)/
-        define 'description', $1 
+        define "description", $1 
         raise Olib::Errors::Mundane         
       }
       self
     end
 
     def price
-      return self if(has? 'price' or has? 'info')
-      Olib.wrap(action 'get') { |line|
+      return self if(has? "price" or has? "info")
+      Olib.wrap(action "get") { |line|
 
         if line =~ /(\d+) silvers/
-          define 'price', line.match(/(?<price>\d+) silvers/)[:price]
+          define "price", line.match(/(?<price>\d+) silvers/)[:price]
           raise Olib::Errors::Mundane
         end
 
-        if line =~ /You can't pick that up/
+        if line =~ /You can"t pick that up/
           define "info", true
           raise Olib::Errors::Mundane
         end
@@ -503,38 +553,36 @@ module Olib
     end
 
     def read
-      return self if has? 'read'
+      return self if has? "read"
       scroll    = false
       multiline = false
-      Olib.wrap_stream(action 'read') {  |line|
+      Olib.wrap_stream(action "read") {  |line|
 
         raise Olib::Errors::Mundane  if line =~ /^<prompt/ and (multiline or scroll)
-        raise Olib::Errors::Mundane if line =~ /There is nothing there to read|You can't do that./
+        raise Olib::Errors::Mundane if line =~ /There is nothing there to read|You can"t do that./
 
         # if we are in a multiline state
-        @props['read'] = @props['read'].concat line if multiline
+        @props["read"] = @props["read"].concat line if multiline
 
         # capture spell
-        if scroll && line =~ /\(([0-9]+)\) ([a-zA-Z'\s]+)/
-            n    = $1
-            name = $2
-            spell = {'n' => $1, 'name' => $2}
+        if scroll && line =~ /\(([0-9]+)\) ([a-zA-Z"\s]+)/
+            spell = OpenStruct.new(name: $2, num: $1.to_i)
             #Client.notify "Spell detected ... (#{$1}) #{$2}"
-            @props['spells'].push spell
+            @props["spells"].push spell
 
         # begin scroll
         elsif line =~ /It takes you a moment to focus on the/
           scroll = true
-          @props['spells'] = Array.new 
+          @props["spells"] = Array.new 
 
         # open multiline
         elsif line =~ /^In the (.*?) language, it reads/
           multiline          = true
-          @props['read']     = "#{line}\n"
-          @props['language'] = $1
+          @props["read"]     = "#{line}\n"
+          @props["language"] = $1
 
         # alert to unknown
-        elsif line =~ /but the language is not one you know.  It looks like it's written in (.*?)./
+        elsif line =~ /but the language is not one you know.  It looks like it"s written in (.*?)./
           Script.log "Please find a friend that can read for #{$1} in #{XMLData.room_title}"
           echo "Please find a friend that can read for #{$1} in #{XMLData.room_title}"
           raise Olib::Errors::Mundane

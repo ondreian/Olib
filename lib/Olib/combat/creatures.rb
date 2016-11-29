@@ -5,11 +5,16 @@ module Olib
       all.first
     end
 
+    def Creatures.list
+      GameObj.npcs.map { |creature| 
+        Creature.new(creature) 
+      }
+    end
+
     def Creatures.all
-      GameObj.npcs
-        .map    { |creature| Creature.new(creature) }
-        .select { |creature| !creature.dead?              }
-        .select { |creature| !creature.ignorable?         }
+      Creatures.list
+        .select { |creature| !creature.dead?      }
+        .select { |creature| !creature.ignorable? }
         .select { |creature| !creature.tags.include?('animate') }
         .select { |creature| !creature.gone? } || []
     end

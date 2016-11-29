@@ -1,13 +1,32 @@
 class Area < Olib::Container
+  def self.contents
+    GameObj.loot.map { |obj| Olib::Item.new(obj) }
+  end
 
-  def Area.current
+  def each
+    self.contents.each { |item|
+      yield item
+    }
+  end
+
+  class << self
+    Olib::Item.type_methods.each { |method, tag|
+      exp = /#{tag}/
+      define_method(method.to_sym) do
+        GameObj.loot
+          .select { |obj| obj.type =~ exp }
+          .map { |obj| Olib::Item.new(obj) }
+      end
+    }
+  end
+
+  def Area.deep
     Area.new
   end
 
-  attr_accessor :room, :contents, :objects
+  attr_accessor :room, :objects
 
   def initialize
-    @contents = []
     @room     = Room.current
     @objects  = [ GameObj.loot, GameObj.room_desc ]
       .flatten
@@ -23,6 +42,7 @@ class Area < Olib::Container
       .reject { |container| container.name =~ /[A-Z][a-z]+ disk/ }
       .each { |container|
         check_container container
+        item = Olib::Item.new container
         unless container.nested?
           container.contents.each { |item|
             item.container = container
