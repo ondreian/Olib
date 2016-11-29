@@ -1,4 +1,2 @@
-module Olib
-  class Wand < Item
-  end
+class Wand < Olib::Item
 end

@@ -24,10 +24,9 @@ class Area < Olib::Container
     Area.new
   end
 
-  attr_accessor :room, :contents, :objects
+  attr_accessor :room, :objects
 
   def initialize
-    @contents = []
     @room     = Room.current
     @objects  = [ GameObj.loot, GameObj.room_desc ]
       .flatten
@@ -44,9 +43,7 @@ class Area < Olib::Container
       .each { |container|
         check_container container
         item = Olib::Item.new container
-        if (item.tags & TYPES).any?
-          items << item
-        elsif container.nested?
+        unless container.nested?
           container.contents.each { |item|
             item.container = container
             items << item
