@@ -3,18 +3,17 @@
 require "Olib/core/extender"
 require "Olib/core/item"
 
-class String
-  def to_class
-    Kernel.const_get self
-  rescue NameError 
-    nil
+class Regexp
+  def or(re)
+    Regexp.new self.to_s + "|" + re.to_s
   end
+end
 
-  def is_a_defined_class?
-    true if self.to_class
-  rescue NameError
-    false
-  end
+def class_exists?(class_name)
+  klass = Module.const_get(class_name)
+  return klass.is_a?(Class)
+rescue NameError
+  return false
 end
 
 module Olib
@@ -57,7 +56,9 @@ module Olib
     def contents
       [
         @ontop,
-        GameObj[@ref.id].contents.map { |item| Item.new(item) }
+        GameObj[@ref.id].contents.map { |item| 
+          Item.new(item) 
+        }
       ].flatten
     end
 
@@ -143,6 +144,10 @@ module Olib
       self
     end
 
+    def rummage
+      Rummage.new(self)
+    end
+
     def nested?
       @nested
     end
@@ -163,17 +168,48 @@ module Olib
       self
     end
   end
+end
 
-  class Lootsack < Container
+class Rummage
+  SUCCESS = /and remove/
+  FAIL    = /but can't seem|^But your hands are full|^You can only rummage for|^What/
 
+  @@message = OpenStruct.new(
+    success: SUCCESS,
+    fail: FAIL,
+    either: SUCCESS.or(FAIL)
+  )
+
+  def Rummage.message
+    @@message
   end
-    
-  def Olib.Lootsack
-    return @@lootsack if @@lootsack
-    @@lootsack = Lootsack.new
-    @@lootsack
+
+  attr_accessor :container
+
+  def initialize(container)
+    @container = container
   end
 
+  def perform(mod, query)
+    res = Olib.do "rummage ##{@container.id} #{mod} #{query}", Rummage.message.either
+    [!res.match(FAIL), res]
+  end
+
+  def spell(number)
+    perform "spell", number
+  end
+
+  def runestone(rune)
+    perform "runestone", rune
+  end
+
+  def ingredient(str)
+    perform "ingredient", str
+  end
+
+  def holy(tier)
+    perform "holy", tier
+  end
 end
 
 module Containers
@@ -187,6 +223,6 @@ module Containers
   def Containers.method_missing(name)
     return @@containers[name] if @@containers[name]
     return Containers.define(name)
- end
+  end
 
 end

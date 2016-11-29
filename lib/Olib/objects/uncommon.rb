@@ -1,4 +1,2 @@
-module Olib
-  class Uncommon < Item
-  end
+class Uncommon < Olib::Item
 end

@@ -1,4 +1,2 @@
-module Olib
-  class Herb < Item
-  end
+class Herb < Olib::Item
 end
