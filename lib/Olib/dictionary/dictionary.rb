@@ -105,7 +105,7 @@ module Olib
       re[:failure]        = {}    
       re[:failure][:full] = /^won't fit in the|is full!|filling it./
       re[:failure][:ne]   = /^I could not find what you were referring to/
-      re[:success]        = /^You untie your|^You put|^You absent|^You tuck|^You sheathe|^You slip|^You roll up|^You tuck|^You add|^You place/
+      re[:success]        = /^You give|^You untie your|^You put|^You absent|^You tuck|^You sheathe|^You slip|^You roll up|^You tuck|^You add|^You place/
       re
     end
     

@@ -212,6 +212,10 @@ class Rummage
   end
 end
 
+# globalize
+class Container < Olib::Container
+end
+
 module Containers
   @@containers = {}
 
@@ -225,4 +229,11 @@ module Containers
     return Containers.define(name)
   end
 
+  def Containers.right_hand
+    Olib::Container.new(GameObj.right_hand.id)
+  end
+
+  def Containers.left_hand
+    Olib::Container.new(GameObj.left_hand.id)
+  end
 end
