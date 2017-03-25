@@ -1,5 +1,6 @@
-load "lib/Olib/bounty.rb"
 load "stubs.rb"
+load "lib/Olib/combat/creature.rb"
+load "lib/Olib/bounty.rb"
 
 RSpec.describe Bounty do
   it "handles no task" do
@@ -58,6 +59,12 @@ RSpec.describe Bounty do
       expect(Bounty.type).to be :cull
     end
 
+    it "can tell we have an undead task" do
+      Stubs.bounty = "You have been tasked to hunt down and kill a particularly dangerous crazed zombie that has established a territory in the Lunule Weald near Ta'Vaalor.  You can get its attention by killing other creatures of the same type in its territory."
+      expect(Bounty.type).to be :dangerous
+      expect(Bounty.tags.include?(:undead)).to be true
+    end
+
     it "can tell we have a bandit task" do
       tasks = [
         "You have been tasked to suppress bandit activity on the old Logging Road near Kharam-Dzu.  You need to kill 19 of them to complete your task.",
@@ -65,7 +72,7 @@ RSpec.describe Bounty do
 
       tasks.each do |task|
         Stubs.bounty = task
-        expect(Bounty.type).to be :bandit
+        expect(Bounty.type).to be :bandits
       end
     end
 

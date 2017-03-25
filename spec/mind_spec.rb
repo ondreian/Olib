@@ -1,5 +1,4 @@
 load "lib/Olib/character/mind.rb"
-load "stubs.rb"
 
 RSpec.describe Mind do
   ##
