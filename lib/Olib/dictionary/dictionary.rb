@@ -1,6 +1,7 @@
-module Olib
+require "ostruct"
 
-  class Dictionary
+module Olib
+  class Dictionary < OpenStruct
     def Dictionary.heirloom
       re = {}
       re[:is]   = /are the initials ([A-Z]{2})./
@@ -96,7 +97,7 @@ module Olib
       re[:failure][:buy]          = /(is|for|be) (?<cost>[0-9]+) (silvers|coins)/
       re[:failure][:race]         = /be (?<cost>[0-9]+) (silvers|coins) for someone like you/
       re[:failure][:pshop]        = /^Looking closely/
-      re[:success]                = /^You pick up|^You remove|^You rummage|^You draw|^You grab|^You reach|^You already|^You gather/
+      re[:success]                = /^You shield|^You discreetly|^You gather|^You pick up|^You remove|^You rummage|^You draw|^You grab|^You reach|^You already|^You gather/
       re
     end
   
@@ -105,7 +106,7 @@ module Olib
       re[:failure]        = {}    
       re[:failure][:full] = /^won't fit in the|is full!|filling it./
       re[:failure][:ne]   = /^I could not find what you were referring to/
-      re[:success]        = /^You give|^You untie your|^You put|^You absent|^You tuck|^You sheathe|^You slip|^You roll up|^You tuck|^You add|^You place/
+      re[:success]        = /^You discreetly|^You toss|^You carefully|^You give|^You untie your|^You put|^You absent|^You tuck|^You sheathe|^You slip|^You roll up|^You tuck|^You add|^You place/
       re
     end
     
@@ -161,6 +162,5 @@ module Olib
     def Dictionary.fusion
       /(?<orbs>.*?) spherical depressions adorn the (.*?), approximately the size and shape of a small gem/
     end
-
   end
 end

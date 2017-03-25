@@ -27,6 +27,10 @@ class Char
     Char
   end
 
+  def Char.in_town?
+    Room.current.location =~ /the Adventurer's Guild|kharam|teras|landing|sol|icemule trace|mist|vaalor|illistim|rest|cysaegir|logoth/i
+  end
+
   def Char.left
     GameObj.left_hand.name == "Empty" ? nil : Olib::Item.new(GameObj.left_hand)
   end
@@ -107,5 +111,26 @@ class Char
       sleep 0.1
     end
     @@silvers
+  end
+
+  def Char.total_wound_severity
+    Wounds.singleton_methods
+      .map(&:to_s)
+      .select do |m| m.downcase == m && m !~ /_/ end.map(&:to_sym)
+      .reduce(0) do |sum, method| sum + Wounds.send(method) end
+  end
+
+  def Char.wounded?
+    total_wound_severity.gt(0)
+  end
+
+  def Char.empty_hands
+    hands = [Char.left, Char.right].compact
+
+    hands.each do |hand| Containers.Lootsack.add hand end
+
+    yield
+
+    hands.each(&:take)
   end
 end
