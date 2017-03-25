@@ -1,3 +1,5 @@
+require "ostruct"
+
 module Olib
   class Bounty
     NPCS = /guard|sergeant|clerk|taskmaster|gemcutter|jeweler|akrash|kris|Furryback|healer|dealer|Maraene|Kelph|Areacne|Jhiseth|Gaedrein/i
