@@ -1,5 +1,40 @@
 require 'net/http'
 require 'json'
+require "ostruct"
+
+class String
+  def is_i?
+    !!(self =~ /\A[-+]?[0-9]+\z/)
+  end
+end
+
+class MatchData
+  def to_struct
+    OpenStruct.new to_hash
+  end
+
+  def to_hash
+    Hash[self.names.zip(self.captures.map(&:strip).map do |capture|  
+      if capture.is_i? then capture.to_i else capture end
+    end)]
+  end
+end
+
+class Hash
+  def to_struct
+    OpenStruct.new self
+  end
+end
+
+class Regexp
+  def or(re)
+    Regexp.new self.to_s + "|" + re.to_s
+  end
+  # define union operator for regex instance
+  def |(re)
+    self.or(re)
+  end
+end
 
 module Olib
 
@@ -9,8 +44,7 @@ module Olib
         # check version
         if Gem.loaded_specs["Olib"].version < Gem::Version.new(response['version'])
           puts "<pushBold/>You need to update the Olib gem with a `gem install Olib`<popBold/>"
-        end
-        
+        end    
       rescue
         echo $!
         puts $!.backtrace[0..1]
@@ -18,7 +52,7 @@ module Olib
   end
 
   def Olib.methodize(str)
-    str.downcase.strip.gsub(/-|\s+|'|"/, "_")
+    str.to_s.downcase.strip.gsub(/-|\s+|'|"/, "_").to_sym
   end
 
   # load core first
@@ -41,46 +75,6 @@ module Olib
   def Olib.run(script, *args)
     start_script script, args
     wait_while { running? script }
-  end
-
-  def Olib.install(g, v=nil)
-    if !which("gem") then
-      echo "Olib could not detect the `gem` executable in your $PATH"
-      echo "when you installed Ruby did you forget to click the `modify $PATH` box?"
-      raise Exception
-    end
-
-    begin
-      unless v.nil?
-        # make it a true instance of Gem::Version so we can compare
-        raise UpdateGemError if Gem.loaded_specs[g].version <  Gem::Version.new(v)
-        gem g, v
-      end
-
-      Olib.reload g
-
-    ##
-    ## rescue missing gem and reload after install
-    ##
-    rescue LoadError
-      echo "installing #{g}..."
-      version = "--version '#{v}'" unless v.nil?
-      worked = system("gem install #{g} #{version} --no-ri --no-rdoc")
-      unless worked then raise "Could not install #{g} gem" end
-      Olib.reload g
-      echo "... installed #{g}!"
-
-    ##
-    ## rescue from too old of a gem version for a Ruby environment
-    ##
-    rescue UpdateGemError
-      echo "updating #{g}@#{Gem.loaded_specs[g].version} => #{v}..."
-      version = "--version '#{v}'" unless v.nil?
-      worked = system("gem install #{g} #{version} --no-ri --no-rdoc")
-      unless worked then raise "Could not install #{g} gem" end
-      Olib.reload g
-      echo "... updated #{g} to #{v}!"
-    end
   end
 
   Vars.Olib ||= Hash.new

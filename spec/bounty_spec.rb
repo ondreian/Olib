@@ -48,11 +48,26 @@ RSpec.describe Bounty do
       expect(Bounty.type).to be :get_rescue
     end
 
-    it "can tell we were assigned a bandit task" do
+    it "can tell we were assigned get a bandit task" do
       Stubs.bounty ="The taskmaster told you:  \"Hmm, I've got a task here from the town of Ta'Illistim.  It appears they have a bandit problem they'd like you to solve.  Go report to one of the guardsmen just inside the Ta'Illistim City Gate to find out more.  Be sure to ASK about BOUNTIES.\""
       expect(Bounty.type).to be :get_bandits
     end
-  end
 
-  
+    it "can tell we have a culling task" do
+      Stubs.bounty = "You have been tasked to suppress nedum vereri activity in the Abbey near Icemule Trace.  You need to kill 21 of them to complete your task."
+      expect(Bounty.type).to be :cull
+    end
+
+    it "can tell we have a bandit task" do
+      tasks = [
+        "You have been tasked to suppress bandit activity on the old Logging Road near Kharam-Dzu.  You need to kill 19 of them to complete your task.",
+      ]
+
+      tasks.each do |task|
+        Stubs.bounty = task
+        expect(Bounty.type).to be :bandit
+      end
+    end
+
+  end
 end

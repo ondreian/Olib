@@ -1,3 +1,15 @@
+class Integer
+  def go2
+    Go2.room self
+  end  
+end
+
+class String
+  def go2
+    Go2.room self
+  end  
+end
+
 module Olib
   ##
   ## @brief      ;go2 wrapper class
@@ -20,30 +32,19 @@ module Olib
     ##
     Go2.tags.each { |tag|
       method  = Olib.methodize tag
-      go2_dep = "go2_#{method}"
       
       Go2.define_singleton_method(method.to_sym) do
-        Go2.room tag
-      end
-
-      Go2.define_singleton_method(go2_dep.to_sym) do
-        respond "[deprecation warning] Go2.#{go2_dep} => Go2.#{method}"
         Go2.room tag
       end
     }
 
     def Go2.room(roomid)
-      Char.unhide if hidden
-      unless Room.current.id == roomid
+      unless Room.current.id == roomid || Room.current.tags.include?(roomid)
+        Char.unhide if hidden
         start_script "go2", [roomid, "_disable_confirm_"]
         wait_while { running? "go2" };
       end
       Go2
-    end
-
-    def Go2.go2(roomid)
-      respond "[deprecation warning] Go2.go2 => Go2.room"
-      Go2.room(roomid)
     end
 
     def Go2.origin
@@ -110,7 +111,6 @@ module Olib
     # use the teleporter variable to locate your teleporter and teleport
     # naive of where you are
     def Go2.fwi_teleport
-      respond "[deprecation warning] Go2.fwi_teleport => Go2.fwi"
       Go2.fwi
     end
 
@@ -121,26 +121,12 @@ module Olib
       echo "the go2_locker method currently does not function properly..."
       self
     end
-    ##
-    ## @brief      returns to the rebased room
-    ## @deprecated
-    ##
-    ## @return     Go2
-    ##
-    def Go2.go2_origin
-      respond "[deprecation warning] Go2.go2_origin => Go2.origin"
-      Go2.fwi
-    end    
+  
 
   end
 
   def Olib.Go2
     Olib::Go2
-  end
-
-  class Transport < Go2
-    respond "[deprecation warning] Olib::Transport => Olib::Go2 on next major release"
-    # backwards compat
   end
 
 end

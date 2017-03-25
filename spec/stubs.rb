@@ -55,7 +55,14 @@ end
 
 def start_script(*); end
 
-class GameObj ; end
+class GameObj
+  def self.npcs
+    []
+  end
+  def self.pcs
+    []
+  end
+end
 class Spell ; end
 
 UserVars = {}

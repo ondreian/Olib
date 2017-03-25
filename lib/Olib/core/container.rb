@@ -1,5 +1,4 @@
 # for defining containers ala lootsack and using them across scripts
-
 require "Olib/core/extender"
 require "Olib/core/item"
 
@@ -14,6 +13,12 @@ def class_exists?(class_name)
   return klass.is_a?(Class)
 rescue NameError
   return false
+end
+
+class GameObj
+  def to_container
+    Olib::Container.new self.id
+  end
 end
 
 module Olib
@@ -33,9 +38,9 @@ module Olib
       # ex: class Lootsack
       # ex: class Gemsack
       name       = if self.class.name.include?("::") then self.class.name.downcase.split("::").last.strip else self.class.name.downcase end 
-      candidates = Olib.Inventory[Vars[name]]
+      candidates = Inventory[Vars[name]]
       raise Olib::Errors::DoesntExist.new("#{name} could not be initialized are you sure you:\n ;var set #{name}=<something>") if candidates.empty? && id.nil?
-
+      @id    = id
       @ref   = GameObj[id] || candidates.first
       @ontop = Array.new
       
@@ -159,13 +164,22 @@ module Olib
     def add(*items)
       _id = @id
       items.each { |item|
-        result = Olib.do "_drag ##{item.id} ##{_id}", /#{[Olib::Dictionary.put[:success], Olib::Dictionary.put[:failure].values].flatten.join("|")}/
+
+        result = Olib.do "_drag ##{item.class == String ? item : item.id} ##{_id}", /#{[Olib::Dictionary.put[:success], Olib::Dictionary.put[:failure].values].flatten.join("|")}/
         if result =~ /won"t fit in the/
           tag "full"
           raise Errors::ContainerFull
         end
       }
       self
+    end
+
+    def method_missing(name, *args)
+      where(noun: name.to_s)
+    end
+
+    def to_s
+      "<Container:#{@id} @name=#{@name} @contents=[#{contents}]>"
     end
   end
 end
