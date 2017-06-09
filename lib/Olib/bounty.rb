@@ -1,7 +1,7 @@
 require "ostruct"
 
 class Bounty
-  NPCS = /guard|sergeant|clerk|taskmaster|gemcutter|jeweler|akrash|kris|Furryback|healer|dealer|Maraene|Kelph|Areacne|Jhiseth|Gaedrein/i
+  NPCS = /guard|sergeant|clerk|taskmaster|gemcutter|jeweler|akrash|kris|Ghaerdish|Furryback|healer|dealer|Ragnoz|Maraene|Kelph|Areacne|Jhiseth|Gaedrein/i
   HERBALIST_AREAS = /illistim|vaalor|legendary rest|solhaven/i
   @@listeners = {}
   # this should be refactored to use CONST
@@ -23,7 +23,7 @@ class Bounty
     get_herb_bounty: /local herbalist|local healer|local alchemist/,
     get_gem_bounty:  /The local gem dealer, (?<npc>[a-zA-Z ]+), has an order to fill and wants our help/,
 
-    herb:   /requires (?:a|an|some) (?<herb>.*?) found (?:in|on|around) (?<area>.*?)(| (near|between) (?<realm>.*?)).  These samples must be in pristine condition.  You have been tasked to retrieve (?<number>[\d]+)/,
+    herb:   /requires (?:a |an |)(?<herb>.*?) found (?:in|on|around|near) (?<area>.*?)(| (near|between) (?<realm>.*?)).  These samples must be in pristine condition.  You have been tasked to retrieve (?<number>[\d]+)/,
     escort: /Go to the (.*?) and WAIT for (?:him|her|them) to meet you there.  You must guarantee (?:his|her|their) safety to (?<destination>.*?) as soon as/,
     gem:    /has received orders from multiple customers requesting (?:a|an|some) (?<gem>[a-zA-Z '-]+).  You have been tasked to retrieve (?<number>[0-9]+)/,
 
@@ -130,6 +130,8 @@ class Bounty
     else
       raise Exception.new "could not find Bounty.npc here"
     end
+    # give the XML parser time to update
+    sleep 0.2
   end
 
   def Bounty.herbalist
@@ -179,7 +181,7 @@ class Bounty
     msg.concat " \n"
     msg.concat "or rescue this error (Olib::Errors::Fatal) gracefully\n"
     msg.concat " \n"
-    raise Errors::Fatal.new msg
+    raise Olib::Errors::Fatal.new msg
   end
 
   def Bounty.dispatch(listener=nil)

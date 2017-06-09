@@ -44,6 +44,11 @@ RSpec.describe Bounty do
       expect(Bounty.type).to be :get_herb_bounty
     end
 
+    it "can tell we were assigned a herb task" do
+      Stubs.bounty ="The healer in Wehnimer's Landing, Surtey Akrash, is working on a concoction that requires some pennyroyal stem found near Darkstone Castle near Wehnimer's Landing.  These samples must be in pristine condition.  You have been tasked to retrieve 9 samples."
+      expect(Bounty.type).to be :herb
+    end
+
     it "can tell we were assigned a rescue task" do
       Stubs.bounty ="It appears that a local resident urgently needs our help in some matter"
       expect(Bounty.type).to be :get_rescue
