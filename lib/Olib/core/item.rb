@@ -1,5 +1,6 @@
 require "ostruct"
 require "Olib/core/extender"
+require "Olib/core/use"
 
 class GameObj
   def to_item
@@ -54,6 +55,8 @@ module Olib
     TYPES.map { |type|
       if type.class == Array then
         [ Olib.methodize(type.first).to_sym, type.first ]
+      elsif ["x"].include?(type.chars.last)
+        [ Olib.methodize(type + "es").to_sym, type ]
       else
         [ Olib.methodize(type + "s").to_sym, type ]
       end
@@ -65,7 +68,8 @@ module Olib
     #
     # Example: 
     #          Olib::Item.new(GameObj.right_hand)
-    def initialize(obj)
+    def initialize(obj, container = nil)
+      @container          = container
       @props              = Hash.new
       @props[:name]       = obj.name
       @props[:after_name] = obj.after_name
@@ -74,6 +78,8 @@ module Olib
       @props[:noun]       = obj.noun
       define :tags, []
       obj.type.split(",").map { |t| tag(t) }
+
+      #tag @props[:name]
 
       if is?("jar") && @props[:after_name] =~ /containing (.*+?)/
         tag Dictionary.gems[:singularize].call @props[:after_name].gsub("containing", "").strip
@@ -120,6 +126,10 @@ module Olib
       @props[:tags]
     end
 
+    def use(&block)
+      Use.new(self, &block)
+    end
+
     def worn?
       GameObj.inv.collect { |item| item.id }.include? @id
     end
@@ -146,6 +156,10 @@ module Olib
 
     def exists?
       GameObj[@id].nil?
+    end
+
+    def ==(other)
+      @id == other.id
     end
 
     def pullable?
@@ -251,18 +265,18 @@ module Olib
 
     end
 
-    def sell
-      price = 0
-      take
-      Olib.wrap( action "sell" ){ |line|
-        raise Olib::Errors::Fatal.new "#{to_s} is not sellable here" if GameObj.right_hand.id == @id
+    SOLD        = /([\d]+) silver/
+    WRONG_SHOP  = /That's not quite my field/
+    WORTHLESS   = /worthless/
 
-        if line =~ /([\d]+) silver/
-          price = $1.to_i 
-          raise Olib::Errors::Mundane
-        end
-      }
-      price
+    def sell
+      take
+      case result = dothistimeout("sell ##{@id}", 3, (SOLD | WRONG_SHOP | WORTHLESS))
+      when SOLD        then [:sold, OpenStruct.new(name: self.name, price: $1.to_i)]
+      when WRONG_SHOP  then [:wrong_shop, self]
+      when WORTHLESS   then [:worthless, self]
+      else                  [:unhandled_case, result]
+      end
     end
 
     def turn
@@ -275,9 +289,9 @@ module Olib
     end
 
     def add(*items)
-      items.each { |item|
+      items.each do |item|
         item._drag(self)
-      }
+      end
       self
     end
 

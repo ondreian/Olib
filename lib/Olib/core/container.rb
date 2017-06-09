@@ -26,11 +26,18 @@ module Olib
     attr_accessor :ref, :nested, :containers, :ontop
 
     
-    Item.type_methods.each { |method, tag|
-      define_method(method.to_sym) do
-        find_by_tags(tag)
+    Item.type_methods.each do |method, tag|
+      type =tag.split.map(&:capitalize).join('_')
+      if class_exists?(type)
+        define_method(method.to_sym) do 
+          find_by_tags(tag).map do |item|
+            Kernel.const_get(type).new item
+          end
+        end
+      else
+        define_method(method.to_sym) do find_by_tags(tag) end
       end
-    }
+    end
 
 
     def initialize(id=nil)
@@ -59,11 +66,8 @@ module Olib
     end
 
     def contents
-      [
-        @ontop,
-        GameObj[@ref.id].contents.map { |item| 
-          Item.new(item) 
-        }
+      [ @ontop,
+        GameObj[@ref.id].contents.map do |item| Item.new(item, self) end
       ].flatten
     end
 
@@ -234,13 +238,22 @@ module Containers
   @@containers = {}
 
   def Containers.define(name)
-    @@containers[name] = Object.const_set(name.capitalize, Class.new(Olib::Container)).new
+    container = Class.new(Olib::Container)
+    @@containers[name] = Object.const_set(name.capitalize, container).new
     @@containers[name]
   end
 
   def Containers.method_missing(name)
     return @@containers[name] if @@containers[name]
     return Containers.define(name)
+  end
+
+  def Containers.[](name)
+    begin
+      Containers.define(name)
+    rescue Exception => e
+      nil
+    end
   end
 
   def Containers.right_hand

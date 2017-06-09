@@ -1,4 +1,5 @@
-# used to wrap and extend a GameObj item
+# TODO:
+# this should be refactored to use a mixin pattern
 module Olib
   class Gameobj_Extender
     attr_accessor :type
