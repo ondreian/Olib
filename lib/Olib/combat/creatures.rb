@@ -5,7 +5,7 @@ require 'json'
 
 class Creatures < Interface::Queryable
 
-  METADATA_URL = "https://rawgit.com/ondreian/gemstone_data_project/master/creatures.json"
+  METADATA_URL = "https://cdn.rawgit.com/ondreian/gemstone_data_project/c40a5dfb/creatures.json"
   
   ARCHETYPES = [
     :undead, :living, :weak, :grimswarm,
@@ -30,13 +30,26 @@ class Creatures < Interface::Queryable
   end
 
   METADATA = fetch_metadata!
+  BY_NAME  = METADATA.reduce(Hash.new) do |by_name, record|
+    by_name[record["name"]] = record
+    by_name
+  end
 
-  def Creatures.fetch
+  def Creatures.unsafe
     (GameObj.npcs || [])
       .map do |obj| Creature.new obj end
-      .select do |creature| 
-        creature.aggressive? && !creature.tags.include?(:companion) && !creature.tags.include?(:familiar)
-      end
+      .reject do |creature| creature.gone? end
+  end
+
+  def Creatures.fetch
+    unsafe.select do |creature| 
+      creature.aggressive?
+    end.reject do |creature| 
+        creature.tags.include?(:companion) || 
+        creature.tags.include?(:familiar)  || 
+        creature.gone?                     || 
+        creature.name =~ /nest/
+    end
   end
 
   [ARCHETYPES, STATES].flatten.each do |state|

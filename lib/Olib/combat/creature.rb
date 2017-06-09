@@ -55,7 +55,7 @@ class Creature
     antimagic: /construct|Vvrael/,
     grimswarm: /grimswarm/,
     lowly:     /kobold|rolton|velnalin|urgh/,
-    trollish:  /troll|csetari/,
+    trollish:  /troll|csetari/
   )
 
   def self.tags(name)
@@ -72,11 +72,19 @@ class Creature
     @id     = creature.id
     @name   = creature.name
     @wounds = {}
-    @tags   = (creature.type || "").gsub(",", " ").split(" ").map(&:to_sym)
+    @tags   = ((creature.type || "").gsub(",", " ").split(" ") + (metadata["tags"] || []) ).map(&:to_sym)
     TAGS.each_pair do |tag, pattern|
       @tags << tag if @name =~ pattern
     end
     heal
+  end
+
+  def level
+    metadata["level"]
+  end
+
+  def metadata
+    Creatures::BY_NAME[@name] || {}
   end
 
   def fetch
@@ -197,7 +205,7 @@ class Creature
     status.include?(:stunned) ? true : false
   end
 
-  def kill_shot(order = [:left_eye, :right_eye, :head, :neck, :back], default = :back)
+  def kill_shot(order = [:left_eye, :right_eye, :head, :neck, :back], default = :chest)
     wounds   = injuries
     return (order
       .drop_while do |area| @wounds[area] == 3 end
@@ -227,30 +235,39 @@ class Creature
       fput "hide"
       waitrt?
     end
-    fput "aim #{location}" if location
+    Char.aim(location) if location
     fput "ambush ##{@id}"
     waitrt?
     self
   end
 
   def mstrike
-    fput "mstrike ##{@id}"
-    waitrt?
+    unless dead?
+      fput "mstrike ##{@id}"  
+    end
     self
   end
 
   def kill
-    fput "kill ##{@id}"
-    waitrt?
+    unless dead?
+      fput "kill ##{@id}"
+    end
+    self
+  end
+
+  def fire(location=nil)
+    unless dead?
+      Char.aim(location) if location
+      fput "fire ##{@id}"
+    end
     self
   end
 
   def hurl(location=nil)
-    if location
-      fput "aim #{location}"
+    unless dead?
+      Char.aim(location) if location
+      fput "hurl ##{@id}"
     end
-    fput "hurl ##{@id}"
-    waitrt?
     self
   end
 
