@@ -66,7 +66,7 @@ module Olib
   }
 
   # invoke update notifier immediately
-  Olib.update_notifier
+  # Olib.update_notifier
 
   def Olib.do(action, re)
     dothistimeout action, 5, re
