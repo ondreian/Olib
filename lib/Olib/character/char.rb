@@ -1,6 +1,13 @@
 class Char
+  EMPATH     = "Empath"
+  Duration   = Struct.new(:seconds, :minutes, :hours)
+  INJURIES   = Wounds.singleton_methods
+    .map(&:to_s)
+    .select do |m| m.downcase == m && m !~ /_/ end.map(&:to_sym)
+
   @@silvers  = 0
   @@routines = {}
+  @@aiming   = nil
 
   def Char.hide
     while not hiding?
@@ -12,6 +19,48 @@ class Char
       end
     end
     Char
+  end
+
+  def Char.arm
+    fput "gird"
+    self
+  end
+
+  def Char.unarm
+    fput "store both"
+    self
+  end
+
+  def Char.swap
+    fput "swap"
+    self
+  end
+
+  def Char.stand
+    unless standing?
+      fput "stand"
+      waitrt?
+    end
+    self
+  end
+
+  def Char.spell(num)
+    hour, minutes, seconds = Spell[num].remaining.split(":").map(&:to_f)
+    total_seconds = seconds + (minutes * 60.00) + (hour * 60.00 * 60.00)
+
+    Duration.new(
+      total_seconds,
+      total_seconds/60,
+      total_seconds/60/60,
+    )
+  end
+
+  def Char.aim(location)
+    unless @@aiming == location
+      fput "aim #{location}"
+      @@aiming = location
+    end
+    self
   end
 
   def Char.fwi_teleporter
@@ -114,9 +163,7 @@ class Char
   end
 
   def Char.total_wound_severity
-    Wounds.singleton_methods
-      .map(&:to_s)
-      .select do |m| m.downcase == m && m !~ /_/ end.map(&:to_sym)
+    INJURIES
       .reduce(0) do |sum, method| sum + Wounds.send(method) end
   end
 

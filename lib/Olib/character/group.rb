@@ -41,6 +41,10 @@ module Group
       @leader  = nil
     end
 
+    def size
+      @members.size
+    end
+
     def empty?
       @members.empty?
     end
@@ -90,7 +94,7 @@ module Group
     end
 
     def name
-      ref.name
+      ref.name.split.pop
     end
 
     def status
