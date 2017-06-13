@@ -1,69 +1,206 @@
-module Olib
-  class Group
-    @@characters             = {}
-    @@checked                = false
-    @@characters[Char.name]  = true  # YOU CAN NEVER ESCAPE YOURSELF (so your own disk won't fuck up)
-    @@leader                 = Char.name
+require "ostruct"
 
-    # ran at the initialization of a script
-    def Group.check
-      @@characters             = {}
-      
-      
-      fput "group"
-      while line=get
-        break            if line =~ /You are not currently in a group/
-        Group.define($1) if line =~ /([a-zA-Z]+) (is following you|is also a member of your group|is the leader of your group)/
-        @@leader = $1    if line =~ /([a-zA-Z]+) is the leader of your group/
-        break            if line =~ /^Your group status is/
-      end
-      @@checked = true
-      @@characters
-    end
 
-    def Group.leader
-      @@leader
-    end
-
-    def Group.leader?
-      Group.check unless @@checked
-      @@leader == Char.name
-    end
-
-    def Group.whisper(msg)
-      fput "whisper group #{msg}" unless Group.members.empty?
-    end
-    
-    def Group.add(char)
-      fput "group #{char}"
-      Group.define(char)
-      self
-    end
-
-    def Group.remove(char)
-      fput "remove #{char}"
-      @@characters.delete(char)
-      self
-    end
-
-    def Group.nonmembers
-      Group.check unless @@checked
-      others      = GameObj.pcs.map! {|char| char.noun } || []
-      # find all the disks/hidden players too
-      disk_owners = GameObj.loot.find_all { |obj| (obj.noun == 'disk') }.map{|disk| /([A-Z](?:[a-z]+))/.match(disk.name)[0].strip } || []
-      [others, disk_owners].flatten.reject(&:nil?).uniq - @@characters.keys
-    end
-
-    def Group.members
-      Group.check unless @@checked
-      @@characters.keys
-    end
-
-    def Group.define(name)
-      GameObj.pcs.detect do |pc| @@characters[name] = pc.dup if pc.noun == name end
-    end
+class String
+  def is_i?
+    !!(self =~ /\A[-+]?[0-9]+\z/)
   end
 end
 
-class Group < Olib::Group
+
+class MatchData
+  def to_struct
+    OpenStruct.new to_hash
+  end
+
+  def to_hash
+    Hash[self.names.zip(self.captures.map(&:strip).map do |capture|  
+      if capture.is_i? then capture.to_i else capture end
+    end)]
+  end
+end
+
+class Hash
+  def to_struct
+    OpenStruct.new self
+  end
+end
+
+module Group
+  class Members
+    include Enumerable
+    attr_accessor :leader, :members, :birth
+    def initialize
+      @birth   = Time.now
+      @members = []
+    end
+
+    def clear!
+      @members = []
+      @birth   = Time.now
+      @leader  = nil
+    end
+
+    def size
+      @members.size
+    end
+
+    def empty?
+      @members.empty?
+    end
+
+    def add(pc, leader = false)      
+      member = Member.new pc, leader
+      if leader
+        @leader = member
+      end
+      @members << member
+      self
+    end
+
+    def each(&block)
+      @members.each { |char| yield char }
+      self
+    end
+
+    def include?(pc)
+      select { |char| char.name == pc }
+    end
+
+    def nonmembers
+      (GameObj.pcs || []).reject do |pc|
+        @members.include?(pc)
+      end
+    end
+
+    def to_s
+      "<Members: [#{@members.join(" ")}]>"
+    end
+  end
+
+  class Member
+    attr :id, :leader
+    def initialize(pc, leader = false)
+      @id     = pc.id
+      @leader = leader
+    end
+
+    private def ref
+      GameObj[@id]
+    end
+
+    def leader?
+      @leader
+    end
+
+    def name
+      ref.name.split.pop
+    end
+
+    def status
+      (ref.status.split(" ") || []).map(&:to_sym)
+    end
+
+    def is(state)
+      status =~ state
+    end
+
+    def ==(other)
+      @id == other.id
+    end
+
+    def to_s
+      "<#{name}: @leader=#{leader?} @status=#{status}>"
+    end
+  end
+
+  MEMBERS    = Members.new
+  OPEN       = :open
+  CLOSED     = :closed
+  CHECK_HOOK = self.name.to_s
+  NO_GROUP   = /You are not currently in a group/
+  MEMBER     = /<a exist="(?<id>.*?)" noun="(?<name>.*?)">(.*?)<\/a> is (?<type>(the leader|also a member) of your group|following you)\./
+  STATE      = /^Your group status is currently (?<state>open|closed)\./
+  END_GROUP  = /list of other options\./
+
+  PARSER = Proc.new do |line|
+    
+    if line.strip.empty? || line =~ NO_GROUP
+      nil
+    elsif line =~ STATE
+      nil
+    elsif line =~ END_GROUP
+      Group.checked!
+      DownstreamHook.remove(CHECK_HOOK)
+      nil
+    elsif line =~ MEMBER
+      begin
+        pc = line.match(MEMBER).to_struct
+        Group::MEMBERS.add GameObj[pc.name], (line =~ /leader/ ? true : false)
+        if line =~ /following/
+          Group::MEMBERS.leader = OpenStruct.new(name: Char.name, leader: true)
+        end
+        nil 
+      rescue Exception => e
+        respond e
+        respond e.backtrace
+      end
+    else
+      line
+    end
+  end
+
+  @@checked  = false
+
+  def Group.checked?
+    @@checked
+  end
+
+  def Group.checked!
+    @@checked = true
+    self
+  end
+
+  def Group.empty?
+    MEMBERS.empty?
+  end
+
+  def Group.exists?
+    !empty?
+  end
+
+  def Group.members
+    maybe_check
+    MEMBERS
+  end
+
+  def Group.to_s
+    MEMBERS.to_s
+  end
+
+  # ran at the initialization of a script
+  def Group.check
+    @@checked = false
+    MEMBERS.clear!
+    DownstreamHook.add(CHECK_HOOK, PARSER)
+    Game._puts "<c>group\r\n"
+    wait_until { Group.checked? }
+    MEMBERS
+  end
+
+  def Group.maybe_check
+    Group.check unless checked?
+  end
+
+  def Group.nonmembers
+    members.nonmembers
+  end
+
+  def Group.leader
+    members.leader
+  end
+
+  def Group.leader?
+    leader && leader.name == Char.name
+  end
 end

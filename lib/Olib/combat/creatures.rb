@@ -1,62 +1,74 @@
+require 'Olib/interface/queryable'
+require 'net/http'
+require 'json'
 # a collection for managing all of the creatures in a room
-module Olib
-  class Creatures
-    def Creatures.first
-      all.first
-    end
 
-    def Creatures.all
-      GameObj.npcs
-        .map    { |creature| Creature.new(creature) }
-        .select { |creature| !creature.dead?              }
-        .select { |creature| !creature.ignorable?         }
-        .select { |creature| !creature.tags.include?('animate') }
-        .select { |creature| !creature.gone? } || []
-    end
+class Creatures < Interface::Queryable
 
-    def Creatures.each(&block)
-      all.each(&block)
-    end
+  METADATA_URL = "https://cdn.rawgit.com/ondreian/gemstone_data_project/c40a5dfb/creatures.json"
+  
+  ARCHETYPES = [
+    :undead, :living, :weak, :grimswarm,
+    :antimagic, :flying, :lowly, :bandit,
+    :aggressive,
+  ]
 
-    def Creatures.[](exp)
-      regexp = exp.class == String ? /#{exp}/ : exp
+  STATES = [
+    :dead, :sleeping, :webbed, :immobile,  
+    :stunned, :prone, :sitting, 
+    :kneeling, :flying
+  ]
 
-      filter { |creature| creature.name =~ regexp || creature.id == exp }
-    end
-    
-    def Creatures.filter(&block); 
-      all.select(&block)                                
-    end
-
-    def Creatures.bandits;    filter { |creature| creature.is?('bandit') }    ;end;
-    def Creatures.ignoreable; filter { |creature| creature.is?('ignoreable') };end;
-    def Creatures.flying;     filter { |creature| creature.is?('flying') }    ;end;
-    def Creatures.living;     filter { |creature| creature.is?('living') }    ;end;
-    def Creatures.antimagic;  filter { |creature| creature.is?('antimagic') } ;end;
-    def Creatures.undead;     filter { |creature| creature.is?('undead') }    ;end;
-
-    def Creatures.grimswarm;  filter { |creature| creature.is?('grimswarm') } ;end;
-    def Creatures.invasion;   filter { |creature| creature.is?('invasion')  } ;end;
-    
-    def Creatures.escortees
-      GameObj.npcs
-        .map {|creature| Creature.new(creature) }
-        .select {|creature| creature.is?('escortee') } 
-    end
-
-    def Creatures.stunned;     all.select(&:stunned?)   ;end;
-    def Creatures.active;      all.select(&:active?)    ;end;
-    def Creatures.dead;        all.select(&:dead?)      ;end;
-    def Creatures.prone;       all.select(&:prone?)     ;end;
-    
-    def Creatures.ambushed?
-      last_line = $_SERVERBUFFER_.reverse.find { |line| line =~ /<pushStream id='room'\/>|An? .*? fearfully exclaims, "It's an ambush!"|#{Olib::Dictionary.bandit_traps.values.join('|')}/ }
-      echo "detected ambush..." if !last_line.nil? && last_line !~ /pushStream id='room'/
-
-      !last_line.nil? && last_line !~ /pushStream id='room'/
+  def Creatures.fetch_metadata!
+    begin
+      JSON.parse Net::HTTP.get URI METADATA_URL
+    rescue
+      puts $!
+      puts $!.backtrace[0..1]
+      []
     end
   end
-end
 
-class Creatures < Olib::Creatures
+  METADATA = fetch_metadata!
+  BY_NAME  = METADATA.reduce(Hash.new) do |by_name, record|
+    by_name[record["name"]] = record
+    by_name
+  end
+
+  def Creatures.unsafe
+    (GameObj.npcs || [])
+      .map do |obj| Creature.new obj end
+      .reject do |creature| creature.gone? end
+  end
+
+  def Creatures.fetch
+    unsafe.select do |creature| 
+      creature.aggressive?
+    end.reject do |creature| 
+        creature.tags.include?(:companion) || 
+        creature.tags.include?(:familiar)  || 
+        creature.gone?                     || 
+        creature.name =~ /nest/
+    end
+  end
+
+  [ARCHETYPES, STATES].flatten.each do |state|
+    Creatures.define_singleton_method(state) do
+      select do |creature|
+        [creature.tags, creature.status].flatten.include?(state)
+      end
+    end
+  end
+
+  def self.living
+    reject do |creature|
+      creature.undead?
+    end
+  end
+
+  def self.bounty
+    select do |creature|
+      creature.name.include?(Bounty.creature)
+    end
+  end
 end

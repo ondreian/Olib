@@ -1,4 +1,3 @@
-module Olib
-  class Box < Item
-  end
+
+class Box < Olib::Item
 end

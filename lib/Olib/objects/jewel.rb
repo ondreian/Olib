@@ -1,35 +1,32 @@
 # Class to interact with gems
 # overwriting Gem is a bad idea
-module Olib
-  class Jewel < Item
-    attr_accessor :quality, :value
-    
-    def appraise
-      result = dothistimeout "appraise ##{@id}", 3, /#{Gemstone_Regex.gems[:appraise].values.join('|')}/
-      case result
-        when Gemstone_Regex.gems[:appraise][:gemshop]
-          # handle gemshop appraisal
-          @value = $1
-        when Gemstone_Regex.gems[:appraise][:player]
-          @value = $3
-          @quality = $2
-        when Gemstone_Regex.gems[:appraise][:failure]
-          waitrt?
-          self.appraise
-        else
-          respond result
-          Client.notify "Error during gem appraisal"
-      end
-    end
-
-    def normalized_name
-      Gemstone_Regex.gems[:singularize].call(@name)
-    end
-    
-    def sell
-      result = take
-      fput "sell ##{@id}" if result =~ Gemstone_Regex.get[:success]
-    end
+class Jewel < Olib::Item
+  attr_accessor :quality, :value
   
+  def appraise
+    result = dothistimeout "appraise ##{@id}", 3, /#{Olib::Dictionary.gems[:appraise].values.join('|')}/
+    case result
+      when Olib::Dictionary.gems[:appraise][:gemshop]
+        # handle gemshop appraisal
+        @value = $1.to_i
+      when Olib::Dictionary.gems[:appraise][:player]
+        @value = $3.to_i
+        @quality = $2
+      when Olib::Dictionary.gems[:appraise][:failure]
+        waitrt?
+        self.appraise
+      else
+        respond result
+        Client.notify "Error during gem appraisal"
+    end
+  end
+
+  def normalized_name
+    Olib::Dictionary.gems[:singularize].call(@name)
+  end
+  
+  def sell
+    result = take
+    fput "sell ##{@id}" if result =~ Olib::Dictionary.get[:success]
   end
 end

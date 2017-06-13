@@ -1,18 +1,23 @@
 # for defining containers ala lootsack and using them across scripts
+require "Olib/core/extender"
+require "Olib/core/item"
 
-require 'Olib/core/extender'
-
-class String
-  def to_class
-    Kernel.const_get self
-  rescue NameError 
-    nil
+class Regexp
+  def or(re)
+    Regexp.new self.to_s + "|" + re.to_s
   end
+end
 
-  def is_a_defined_class?
-    true if self.to_class
-  rescue NameError
-    false
+def class_exists?(class_name)
+  klass = Module.const_get(class_name)
+  return klass.is_a?(Class)
+rescue NameError
+  return false
+end
+
+class GameObj
+  def to_container
+    Olib::Container.new self.id
   end
 end
 
@@ -20,20 +25,35 @@ module Olib
   class Container < Gameobj_Extender
     attr_accessor :ref, :nested, :containers, :ontop
 
+    
+    Item.type_methods.each do |method, tag|
+      type =tag.split.map(&:capitalize).join('_')
+      if class_exists?(type)
+        define_method(method.to_sym) do 
+          find_by_tags(tag).map do |item|
+            Kernel.const_get(type).new item
+          end
+        end
+      else
+        define_method(method.to_sym) do find_by_tags(tag) end
+      end
+    end
+
+
     def initialize(id=nil)
       # extract the class name to attempt to lookup the item by your settings
       # ex: class Lootsack
       # ex: class Gemsack
-      name       = if self.class.name.include?("::") then self.class.name.downcase.split('::').last.strip else self.class.name.downcase end 
-      candidates = Olib.Inventory[Vars[name]]
+      name       = if self.class.name.include?("::") then self.class.name.downcase.split("::").last.strip else self.class.name.downcase end 
+      candidates = Inventory[Vars[name]]
       raise Olib::Errors::DoesntExist.new("#{name} could not be initialized are you sure you:\n ;var set #{name}=<something>") if candidates.empty? && id.nil?
-
+      @id    = id
       @ref   = GameObj[id] || candidates.first
       @ontop = Array.new
       
       unless GameObj[@ref.id].contents
         tops = [
-          'table'
+          "table"
         ]
 
         action = tops.include?(@ref.noun) ? "look on ##{@ref.id}" : "look in ##{@ref.id}"
@@ -46,9 +66,8 @@ module Olib
     end
 
     def contents
-      [
-        @ontop,
-        GameObj[@ref.id].contents.map { |item| Item.new(item) }
+      [ @ontop,
+        GameObj[@ref.id].contents.map do |item| Item.new(item, self) end
       ].flatten
     end
 
@@ -66,7 +85,7 @@ module Olib
 
     def find_by_tags(*tags)  
       contents.select { |item|
-        !tags.map {|tag| item.is?(tag) }.include? false
+        !tags.map {|tag| item.is?(tag) }.include?(false)
       }
     end
 
@@ -80,7 +99,7 @@ module Olib
     def 
 
     def __verbs__
-      @verbs = 'open close analyze inspect weigh'.split(' ').map(&:to_sym)
+      @verbs = "open close analyze inspect weigh".split(" ").map(&:to_sym)
       singleton = (class << self; self end)
       @verbs.each do |verb|
         singleton.send :define_method, verb do
@@ -134,68 +153,114 @@ module Olib
       self
     end
 
+    def rummage
+      Rummage.new(self)
+    end
+
     def nested?
       @nested
     end
 
-    def gems
-      find_by_tags('gem')
-    end
-
-    def magic_items
-      find_by_tags('magic')
-    end
-
-    def jewelry
-      find_by_tags('jewelry')
-    end
-
-    def skins
-      find_by_tags('skin')
-    end
-
-    def boxes
-      find_by_tags('boxes')
-    end
-
-    def scrolls
-      find_by_tags('scroll')
-    end
-
     def full?
-      is? 'full'
+      is? "full"
     end
 
-    def add(item)
-      result = Olib.do "_drag ##{item.id} ##{@id}", /#{[Olib::Dictionary.put[:success], Olib::Dictionary.put[:failure].values].flatten.join('|')}/
-      tag 'full' if result =~ /won't fit in the/
+    def add(*items)
+      _id = @id
+      items.each { |item|
+
+        result = Olib.do "_drag ##{item.class == String ? item : item.id} ##{_id}", /#{[Olib::Dictionary.put[:success], Olib::Dictionary.put[:failure].values].flatten.join("|")}/
+        if result =~ /won"t fit in the/
+          tag "full"
+          raise Errors::ContainerFull
+        end
+      }
       self
     end
+
+    def method_missing(name, *args)
+      where(noun: name.to_s)
+    end
+
+    def to_s
+      "<Container:#{@id} @name=#{@name} @contents=[#{contents}]>"
+    end
+  end
+end
+
+class Rummage
+  SUCCESS = /and remove/
+  FAIL    = /but can't seem|^But your hands are full|^You can only rummage for|^What/
+
+  @@message = OpenStruct.new(
+    success: SUCCESS,
+    fail: FAIL,
+    either: SUCCESS.or(FAIL)
+  )
+
+  def Rummage.message
+    @@message
   end
 
-  class Lootsack < Container
+  attr_accessor :container
 
-  end
-    
-  def Olib.Lootsack
-    return @@lootsack if @@lootsack
-    @@lootsack = Lootsack.new
-    @@lootsack
+  def initialize(container)
+    @container = container
   end
 
+  def perform(mod, query)
+    res = Olib.do "rummage ##{@container.id} #{mod} #{query}", Rummage.message.either
+    [!res.match(FAIL), res]
+  end
+
+  def spell(number)
+    perform "spell", number
+  end
+
+  def runestone(rune)
+    perform "runestone", rune
+  end
+
+  def ingredient(str)
+    perform "ingredient", str
+  end
+
+  def holy(tier)
+    perform "holy", tier
+  end
+end
+
+# globalize
+class Container < Olib::Container
 end
 
 module Containers
   @@containers = {}
 
   def Containers.define(name)
-    @@containers[name] = Object.const_set(name.capitalize, Class.new(Olib::Container)).new
+    container = Class.new(Olib::Container)
+    @@containers[name] = Object.const_set(name.capitalize, container).new
     @@containers[name]
   end
 
   def Containers.method_missing(name)
     return @@containers[name] if @@containers[name]
     return Containers.define(name)
- end
+  end
 
+  def Containers.[](name)
+    begin
+      Containers.define(name)
+    rescue Exception => e
+      nil
+    end
+  end
+
+  def Containers.right_hand
+    Olib::Container.new(GameObj.right_hand.id)
+  end
+
+  def Containers.left_hand
+    Olib::Container.new(GameObj.left_hand.id)
+  end
 end

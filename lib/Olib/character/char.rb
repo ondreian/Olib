@@ -1,6 +1,13 @@
 class Char
+  EMPATH     = "Empath"
+  Duration   = Struct.new(:seconds, :minutes, :hours)
+  INJURIES   = Wounds.singleton_methods
+    .map(&:to_s)
+    .select do |m| m.downcase == m && m !~ /_/ end.map(&:to_sym)
+
   @@silvers  = 0
   @@routines = {}
+  @@aiming   = nil
 
   def Char.hide
     while not hiding?
@@ -14,6 +21,48 @@ class Char
     Char
   end
 
+  def Char.arm
+    fput "gird"
+    self
+  end
+
+  def Char.unarm
+    fput "store both"
+    self
+  end
+
+  def Char.swap
+    fput "swap"
+    self
+  end
+
+  def Char.stand
+    unless standing?
+      fput "stand"
+      waitrt?
+    end
+    self
+  end
+
+  def Char.spell(num)
+    hour, minutes, seconds = Spell[num].remaining.split(":").map(&:to_f)
+    total_seconds = seconds + (minutes * 60.00) + (hour * 60.00 * 60.00)
+
+    Duration.new(
+      total_seconds,
+      total_seconds/60,
+      total_seconds/60/60,
+    )
+  end
+
+  def Char.aim(location)
+    unless @@aiming == location
+      fput "aim #{location}"
+      @@aiming = location
+    end
+    self
+  end
+
   def Char.fwi_teleporter
     Vars.teleporter || Vars.mapdb_fwi_trinket
   end
@@ -25,6 +74,10 @@ class Char
   def Char.hiding_routine(procedure)
     @@routines[:hiding] = procedure
     Char
+  end
+
+  def Char.in_town?
+    Room.current.location =~ /the Adventurer's Guild|kharam|teras|landing|sol|icemule trace|mist|vaalor|illistim|rest|cysaegir|logoth/i
   end
 
   def Char.left
@@ -75,7 +128,7 @@ class Char
   end
 
   def Char.deplete_wealth(silvers)
-    @@silvers = @@silvers - silvers
+    #@@silvers = @@silvers - silvers
   end
 
   def Char.smart_wealth
@@ -109,5 +162,22 @@ class Char
     @@silvers
   end
 
+  def Char.total_wound_severity
+    INJURIES
+      .reduce(0) do |sum, method| sum + Wounds.send(method) end
+  end
 
+  def Char.wounded?
+    total_wound_severity.gt(0)
+  end
+
+  def Char.empty_hands
+    hands = [Char.left, Char.right].compact
+
+    hands.each do |hand| Containers.Lootsack.add hand end
+
+    yield
+
+    hands.each(&:take)
+  end
 end

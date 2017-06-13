@@ -1,6 +1,7 @@
-module Olib
+require "ostruct"
 
-  class Dictionary
+module Olib
+  class Dictionary < OpenStruct
     def Dictionary.heirloom
       re = {}
       re[:is]   = /are the initials ([A-Z]{2})./
@@ -82,7 +83,9 @@ module Olib
       re[:appraise][:gemshop]    = /inspects it carefully before saying, "I'll give you ([0-9]+) for it if you want to sell/
       re[:appraise][:player]     = /You estimate that the ([a-zA-Z '-]+) is of ([a-zA-Z '-]+) quality and worth approximately ([0-9]+) silvers/
       re[:appraise][:failure]    = /As best you can tell, the ([a-zA-Z '-]+) is of average quality/
-      re[:singularize]           = proc{ |str| str.gsub(/ies$/, 'y').gsub(/zes$/,'z').gsub(/s$/,'').gsub(/large |medium |containing |small |tiny |some /, '').strip }
+      re[:singularize]           = Proc.new do |str| 
+        str.gsub(/ies$/, 'y').gsub(/zes$/,'z').gsub(/s$/,'').gsub(/large |medium |containing |small |tiny |some /, '').strip 
+      end
       re
     end
   
@@ -96,7 +99,7 @@ module Olib
       re[:failure][:buy]          = /(is|for|be) (?<cost>[0-9]+) (silvers|coins)/
       re[:failure][:race]         = /be (?<cost>[0-9]+) (silvers|coins) for someone like you/
       re[:failure][:pshop]        = /^Looking closely/
-      re[:success]                = /^You pick up|^You remove|^You rummage|^You draw|^You grab|^You reach|^You already/
+      re[:success]                = /^You carefully|^You unsheathe|^You shield|^You discreetly|^You gather|^You pick up|^You remove|^You rummage|^You draw|^You grab|^You reach|^You already|^You gather/
       re
     end
   
@@ -105,7 +108,7 @@ module Olib
       re[:failure]        = {}    
       re[:failure][:full] = /^won't fit in the|is full!|filling it./
       re[:failure][:ne]   = /^I could not find what you were referring to/
-      re[:success]        = /^You put|^You tuck|^You sheathe|^You slip|^You roll up|^You tuck|^You add|^You place/
+      re[:success]        = /^Your bundle|^You attempt to shield|^As you place|^You wipe off the blade|^You discreetly|^You toss|^You carefully|^You give|^You untie your|^You put|^You absent|^You tuck|^You sheathe|^You slip|^You roll up|^You tuck|^You add|^You place/
       re
     end
     
@@ -161,6 +164,5 @@ module Olib
     def Dictionary.fusion
       /(?<orbs>.*?) spherical depressions adorn the (.*?), approximately the size and shape of a small gem/
     end
-
   end
 end
