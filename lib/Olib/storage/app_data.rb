@@ -2,23 +2,24 @@ require 'fileutils'
 
 module Olib
   class App
-    APP_DIR = Dir.home + "/." + self.name.downcase
+    FOLDER  = ".olib"
+    APP_DIR = File.join Dir.home, FOLDER
     ##
     ## setup app dir
     ##
     FileUtils.mkdir_p APP_DIR
 
     def self.app_file(path)
-      APP_DIR + "/" + path
+      File.join APP_DIR, path
     end
 
     def self.open(file)
       File.open(app_file(file), 'a', &block)
     end
 
-    def self.write(file, data)
+    def self.write_json(file, data)
       open(file) do |f|
-        JSON.stringify(data)
+        JSON.dump(data)
       end
     end
 
