@@ -1,7 +1,7 @@
 require "ostruct"
 
 class Bounty
-  NPCS = /guard|sergeant|clerk|taskmaster|gemcutter|jeweler|akrash|kris|Ghaerdish|Furryback|healer|dealer|Ragnoz|Maraene|Kelph|Areacne|Jhiseth|Gaedrein/i
+  NPCS = /guard|sergeant|Felinium|clerk|purser|taskmaster|gemcutter|jeweler|akrash|kris|Ghaerdish|Furryback|healer|dealer|Ragnoz|Maraene|Kelph|Areacne|Jhiseth|Gaedrein/i
   HERBALIST_AREAS = /illistim|vaalor|legendary rest|solhaven/i
   @@listeners = {}
   # this should be refactored to use CONST
@@ -212,6 +212,7 @@ class Bounty
   end
 
   def Bounty.npc
-    GameObj.npcs.select { |npc| npc.name =~ NPCS }.first
+    GameObj.npcs.find { |npc| npc.name =~ NPCS } ||
+    GameObj.room_desc.find { |npc| npc.name =~ NPCS }
   end
 end
