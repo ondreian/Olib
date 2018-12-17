@@ -1,2 +1,2 @@
-class Wand < Olib::Item
+class Wand < Item
 end

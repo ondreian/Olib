@@ -1,2 +1,2 @@
-class Uncommon < Olib::Item
+class Uncommon < Item
 end

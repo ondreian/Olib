@@ -1,16 +1,14 @@
 class Use
-  
   attr_accessor :item
   
   def initialize(item, &block)
+    fail Exception, "Use(#{item}) did not have a container" if item.container.nil?
     @item = item
     both(&block) if block
   end
 
   def run(&block)
-    Try.new do
-      yield @item
-    end
+    yield @item
     @item.container.add(@item)
   end
 
@@ -35,5 +33,4 @@ class Use
     run &block
     fill_hands
   end
-
 end
