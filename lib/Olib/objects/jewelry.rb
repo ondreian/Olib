@@ -1,4 +1,4 @@
-class Jewelry < Olib::Item
+class Jewelry < Item
   HEIRLOOM = /are the initials ([A-Z]{2})./
 
   attr_accessor :heirloom

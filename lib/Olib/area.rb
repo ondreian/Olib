@@ -1,48 +1,35 @@
-class Area < Olib::Container
-  def self.contents
-    GameObj.loot.map { |obj| Olib::Item.new(obj) }
+class Area
+  include Enumerable
+  def self.method_missing(method, *args, &block)
+    if respond_to?(method)
+      Area.new.send(method, *args, &block)
+    else
+      super(method, *args, &block)
+    end
   end
 
-  def each
-    self.contents.each { |item|
-      yield item
-    }
+  def self.respond_to?(method)
+    return super(method) unless Area.new.respond_to?(method)
+    return true
   end
 
-  class << self
-    Olib::Item.type_methods.each { |method, tag|
-      exp = /#{tag}/
-      define_method(method.to_sym) do
-        GameObj.loot
-          .select { |obj| obj.type =~ exp }
-          .map { |obj| Olib::Item.new(obj) }
-      end
-    }
-  end
-
-  def Area.deep
-    Area.new
-  end
-
-  attr_accessor :room, :objects
+  attr_reader :room, :autoid, :objects
 
   def initialize
     @room     = Room.current
-    @objects  = [ GameObj.loot, GameObj.room_desc ]
-      .flatten
-      .compact
-      .map { |thing| thing.id }
-      .uniq # sometimes objects exist in both loot & room_desc
-      .map { |id| Olib::Container.new id }
+    @auto     = XMLData.room_count
+    @objects  = [ GameObj.loot, GameObj.room_desc ].map(&:to_a).flatten.compact.map(&:to_container)
   end
 
-  def contents
+  def each(&block)
+    @objects.each(&block)
+  end
+
+  def deep
     items = []
-    @objects
-      .reject { |container| container.name =~ /[A-Z][a-z]+ disk/ }
-      .each { |container|
+    @objects.reject { |container| container.name =~ /[A-Z][a-z]+ disk/ }.each { |container|
         check_container container
-        item = Olib::Item.new container
+        item = Item.new container
         unless container.nested?
           container.contents.each { |item|
             item.container = container
@@ -58,7 +45,7 @@ class Area < Olib::Container
           end
         end
       }
-    items.compact
+    items.compact.each do |item| yield(item) end
   end
 
   def check_container(container)
@@ -66,6 +53,4 @@ class Area < Olib::Container
       container.look.at.on
     end
   end
-
-
 end

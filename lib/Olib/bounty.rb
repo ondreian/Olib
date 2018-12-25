@@ -35,7 +35,7 @@ class Bounty
     none:    /You are not currently assigned a task/,
     skin:    /^You have been tasked to retrieve (?<number>\d+) (?<skin>.*?) of at least (?<quality>.*?) quality for (?<buyer>.*?) in (?<realm>.*?)\.\s+You can SKIN them off the corpse of (a|an|some) (?<creature>.*?) or/,
     
-    help_bandits: /You have been tasked to help (?<partner>.*?) suppress bandit activity (in|on|around) (?<area>.*?)(| near (?<realm>.*?)).  You need to kill (?<number>[0-9]+)/
+    help_bandits: /You have been tasked to help (?<partner>.*?) suppress bandit activity (?:in|on|around) (?<area>.*?) (?:near|between|under) (?<realm>.*?).  You need to kill (?<number>[0-9]+)/
   )
   
   # convenience list to get all types of bounties
@@ -59,7 +59,7 @@ class Bounty
   def Bounty.parse(str)
     type, patt = Bounty.match str
     unless patt
-      raise Exception.new "could not match Bounty: #{str}\nplease notify Ondreian"
+      return OpenStruct.new
     else
       bounty = patt.match(str).to_struct
       bounty[:type] = type
@@ -159,13 +159,13 @@ class Bounty
   end
 
   def Bounty.cooldown?
-    Spell[9003].active?
+    not XMLData.active_spells["Next Bounty"].nil?
   end
 
   def Bounty.cooldown!
     if Bounty.cooldown?
       Go2.origin
-      wait_until { !Bounty.cooldown? }
+      wait_while { Bounty.cooldown? }
     end
     Bounty
   end
@@ -179,9 +179,9 @@ class Bounty
     msg.concat "      # do something\n"
     msg.concat "   }\n"
     msg.concat " \n"
-    msg.concat "or rescue this error (Olib::Errors::Fatal) gracefully\n"
+    msg.concat "or rescue this error (Errors::Fatal) gracefully\n"
     msg.concat " \n"
-    raise Olib::Errors::Fatal.new msg
+    raise Errors::Fatal.new msg
   end
 
   def Bounty.dispatch(listener=nil)
@@ -205,14 +205,12 @@ class Bounty
   def Bounty.find_guard
     Go2.advguard
     if Bounty.npc.nil? then Go2.advguard2 end
-    if Bounty.npc.nil? then 
-      throw Olib::Errors::Fatal.new "could not find guard"
-    end
+    throw Errors::Fatal.new "could not find guard" if Bounty.npc.nil?  
     return Bounty
   end
 
   def Bounty.npc
-    GameObj.npcs.find { |npc| npc.name =~ NPCS } ||
+    GameObj.npcs.find { |npc| npc.name =~ NPCS } or
     GameObj.room_desc.find { |npc| npc.name =~ NPCS }
   end
 end

@@ -1,48 +1,8 @@
 class Char
-  EMPATH     = "Empath"
+  INJURIES = Wounds.singleton_methods.map(&:to_s).select do |m| m.downcase == m and not m.include?("_") end.map(&:to_sym)
   Duration   = Struct.new(:seconds, :minutes, :hours)
-  INJURIES   = Wounds.singleton_methods
-    .map(&:to_s)
-    .select do |m| m.downcase == m && m !~ /_/ end.map(&:to_sym)
-
   @@silvers  = 0
-  @@routines = {}
   @@aiming   = nil
-
-  def Char.hide
-    while not hiding?
-      waitrt?
-      if @@routines[:hiding]
-        @@routines[:hiding].call
-      else
-        fput 'hide'
-      end
-    end
-    Char
-  end
-
-  def Char.arm
-    fput "gird"
-    self
-  end
-
-  def Char.unarm
-    fput "store both"
-    self
-  end
-
-  def Char.swap
-    fput "swap"
-    self
-  end
-
-  def Char.stand
-    unless standing?
-      fput "stand"
-      waitrt?
-    end
-    self
-  end
 
   def Char.spell(num)
     hour, minutes, seconds = Spell[num].remaining.split(":").map(&:to_f)
@@ -55,7 +15,44 @@ class Char
     )
   end
 
-  def Char.aim(location)
+  def self.hide()
+    return unless visible?
+    fput "hide"
+    waitrt?
+    self
+  end
+
+  def self.unhide()
+    return if visible?
+    fput "unhide"
+    wait_until do visible? end
+    self
+  end
+
+  def self.arm
+    fput "gird"
+    self
+  end
+
+  def self.unarm
+    fput "store both"
+    self
+  end
+
+  def self.swap
+    fput "swap"
+    self
+  end
+
+  def self.stand
+    unless standing?
+      fput "stand"
+      waitrt?
+    end
+    self
+  end
+
+  def self.aim(location)
     unless @@aiming == location
       fput "aim #{location}"
       @@aiming = location
@@ -63,32 +60,24 @@ class Char
     self
   end
 
-  def Char.fwi_teleporter
-    Vars.teleporter || Vars.mapdb_fwi_trinket
+
+  def self.visible?
+    hiding? or invisible?
   end
 
-  def Char.visible?
-    hiding? || invisible?
-  end
-  
-  def Char.hiding_routine(procedure)
-    @@routines[:hiding] = procedure
-    Char
-  end
-
-  def Char.in_town?
+  def self.in_town?
     Room.current.location =~ /the Adventurer's Guild|kharam|teras|landing|sol|icemule trace|mist|vaalor|illistim|rest|cysaegir|logoth/i
   end
 
-  def Char.left
-    GameObj.left_hand.name == "Empty" ? nil : Olib::Item.new(GameObj.left_hand)
+  def self.left
+    GameObj.left_hand.name == "Empty" ? nil : Item.new(GameObj.left_hand)
   end
 
-  def Char.right
-    GameObj.right_hand.name == "Empty" ? nil : Olib::Item.new(GameObj.right_hand)
+  def self.right
+    GameObj.right_hand.name == "Empty" ? nil : Item.new(GameObj.right_hand)
   end
 
-  def Char.withdraw(amount)
+  def self.withdraw(amount)
     Go2.bank
     result = Olib.do "withdraw #{amount} silvers", /I'm sorry|hands you/
     if result =~ /I'm sorry/ 
@@ -100,15 +89,15 @@ class Char
     return self
   end
 
-  def Char.deposit_all
+  def self.deposit_all
     Go2.bank
-    fput "unhide" if invisible? || hidden?
+    fput "unhide" unless visible?
     fput "deposit all"
     @@silvers = 0
     return self
   end
 
-  def Char.deposit(amt)
+  def self.deposit(amt)
     wealth
     if wealth >= amt
       Go2.bank
@@ -120,28 +109,28 @@ class Char
 
   # naive share
   # does not check if you're actually in a group or not
-  def Char.share
+  def self.share
     wealth
     fput "share #{@silvers}"
     wealth
     self
   end
 
-  def Char.deplete_wealth(silvers)
+  def self.deplete_wealth(silvers)
     #@@silvers = @@silvers - silvers
   end
 
-  def Char.smart_wealth
+  def self.smart_wealth
     return @@silvers if @@silvers 
     Char.wealth
   end
 
-  def Char.unhide
+  def self.unhide
     fput 'unhide' if Spell[916].active? or hidden?
     self
   end
 
-  def Char.hide
+  def self.hide
     if Spell[916].known? && Spell[916].affordable?
       Spell[916].cast
     else
@@ -149,29 +138,36 @@ class Char
     end
   end
 
-  def Char.wealth
-    fput "info"
-    while(line=get)
-      next    if line =~ /^\s*Name\:|^\s*Gender\:|^\s*Normal \(Bonus\)|^\s*Strength \(STR\)\:|^\s*Constitution \(CON\)\:|^\s*Dexterity \(DEX\)\:|^\s*Agility \(AGI\)\:|^\s*Discipline \(DIS\)\:|^\s*Aura \(AUR\)\:|^\s*Logic \(LOG\)\:|^\s*Intuition \(INT\)\:|^\s*Wisdom \(WIS\)\:|^\s*Influence \(INF\)\:/
-      if line =~ /^\s*Mana\:\s+\-?[0-9]+\s+Silver\:\s+([0-9]+)/
-        @@silvers= $1.to_i
-        break
+  def self.wealth
+    silvers = nil
+    DownstreamHook.add("Olib_check_silvers", Proc.new do |server_string|
+      if server_string =~ /^\s*Name\:|^\s*Gender\:|^\s*Normal \(Bonus\)|^\s*Strength \(STR\)\:|^\s*Constitution \(CON\)\:|^\s*Dexterity \(DEX\)\:|^\s*Agility \(AGI\)\:|^\s*Discipline \(DIS\)\:|^\s*Aura \(AUR\)\:|^\s*Logic \(LOG\)\:|^\s*Intuition \(INT\)\:|^\s*Wisdom \(WIS\)\:|^\s*Influence \(INF\)\:/
+        nil
+      elsif server_string =~ /^\s*Mana\:\s+\-?[0-9]+\s+Silver\:\s+([0-9]+)/
+        silvers = $1.to_i
+        DownstreamHook.remove("Olib_check_silvers")
+        nil
+      else
+        server_string
       end
-      sleep 0.1
-    end
+    end)
+    $_SERVER_.puts "#{$cmd_prefix}info\n"
+    wait_until { silvers }
+    silvers
+    @@silvers = silvers
     @@silvers
   end
 
-  def Char.total_wound_severity
+  def self.total_wound_severity
     INJURIES
       .reduce(0) do |sum, method| sum + Wounds.send(method) end
   end
 
-  def Char.wounded?
+  def self.wounded?
     total_wound_severity.gt(0)
   end
 
-  def Char.empty_hands
+  def self.empty_hands
     hands = [Char.left, Char.right].compact
 
     hands.each do |hand| Containers.Lootsack.add hand end

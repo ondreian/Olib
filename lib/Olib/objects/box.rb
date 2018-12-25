@@ -1,3 +1,3 @@
 
-class Box < Olib::Item
+class Box < Item
 end
