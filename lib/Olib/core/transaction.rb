@@ -2,10 +2,11 @@ require "Olib/pattern_matching/rill"
 
 class Transaction < Exist
   Appraise = Rill.new(
-    start: %[You ask (?<merchant>.*?) to appraise (?:a |an )<a exist="{{id}}"],
+    start: %[to appraise (?:a |an |)<a exist="{{id}}"],
     close: Regexp.union(
       %r[I already appraised that],
-      %r[I'll give you (?<value>\d+)])
+      %r[(I'll give you|How's|I'll offer you|worth at least) (?<value>\d+)],
+      %r[(?<value>\d+) silvers])
     )
   
   Sell = Rill.new(
@@ -32,7 +33,7 @@ class Transaction < Exist
   def appraise()
     return self unless @value.nil?
     take
-    (match, lines) = Appraise.capture(self.to_h, 
+    (match, _lines) = Appraise.capture(self.to_h, 
       "appraise \#{{id}}")
     @value = match[:value].to_i
     self
@@ -45,7 +46,7 @@ class Transaction < Exist
         transaction: self,
         reason:      "Value[#{@value}] is over Threshold[#{@threshold}]"] 
     end
-    (match, lines) = Sell.capture(self.to_h, 
+    (match, _lines) = Sell.capture(self.to_h, 
       "sell \#{{id}}")
     Ok[**match]
   end

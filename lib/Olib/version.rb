@@ -1,3 +1,3 @@
 module Olib
-  VERSION = "0.1.3"
+  VERSION = "2.0.0-rc.1"
 end
