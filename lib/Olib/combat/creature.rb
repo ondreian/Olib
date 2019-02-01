@@ -7,6 +7,7 @@
 require "ostruct"
 require "Olib/combat/creatures"
 require "Olib/core/exist"
+require "Olib/pattern_matching/rill"
 
 class Creature < Exist
   include Comparable
@@ -28,25 +29,17 @@ class Creature < Exist
                       %[What were you referring to?])
   )
 
-  WOUNDS = [
-    :right_leg, :left_leg, :right_arm, 
-    :left_arm, :head, :neck, :chest, 
-    :abdomen, :back, :left_eye, :right_eye, 
-    :right_hand, :left_hand, :nerves,
+  WOUNDS = %i[
+    right_leg left_leg right_arm 
+    left_arm head neck chest 
+    abdomen back left_eye right_eye 
+    right_hand left_hand nerves
   ]
 
   TAGS = OpenStruct.new(
-    antimagic: /construct|Vvrael/,
-    grimswarm: /grimswarm/,
-    lowly:     /kobold|rolton|velnalin|urgh/,
-    trollish:  /troll|csetari/,
-    undead:    Regexp.union(
-      /zombie|ghost|skele|ghoul|spectral|wight|shade/,
-      /spectre|revenant|apparition|bone|were|rotting/,
-      /spirit|soul|barghest|vruul|night|phant|naisirc/,
-      /shrickhen|seraceris|n'ecare|vourkha|bendith/,
-      /baesrukha|lich|dybbuk|necrotic|flesh|waern|banshee/,
-      /seeker|eidolon|decay|putrefied|vaespilon/),
+    antimagic: %r[construct|Vvrael],
+    lowly:     %r[kobold|rolton|velnalin|urgh],
+    trollish:  %r[troll|csetari],
   )
 
   def self.tags(name)
@@ -219,31 +212,36 @@ class Creature < Exist
   end
 
   def block(method)
-    return [:err, :dead] if dead?
+    return {err: :dead} if dead?
     Kernel.send(method)
-    return [:err, :dead] if dead?
+    return {err: :dead} if dead?
+    yield if block_given?
   end
 
   def kill
-    block(:waitrt?)
-    Attack.capture(self.to_h, %[kill \#{{id}}])
+    block(:waitrt?) do
+      Attack.capture(self.to_h, %[kill \#{{id}}])
+    end
   end
 
   def cast
-    block(:waitcastrt?)
-    Attack.capture(self.to_h, %[cast \#{{id}}])
+    block(:waitcastrt?) do
+      Attack.capture(self.to_h, %[cast \#{{id}}])
+    end
   end
 
   def fire(location=nil)
     Char.aim(location) if location
-    block(:waitrt?)
-    Attack.capture(self.to_h, %[fire \#{{id}}])
+    block(:waitrt?) do
+      Attack.capture(self.to_h, %[fire \#{{id}}])
+    end
   end
 
   def hurl(location=nil)
     Char.aim(location) if location
-    block(:waitrt?)
-    Attack.capture(self.to_h, %[hurl \#{{id}}])
+    block(:waitrt?) do
+      Attack.capture(self.to_h, %[hurl \#{{id}}])
+    end
   end
 
   def search()

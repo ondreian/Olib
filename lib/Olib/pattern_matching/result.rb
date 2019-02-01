@@ -32,7 +32,9 @@ class Result
     expected.all? do |k, v|
       if this.respond_to?(k.to_sym)
         _compare_values(v, this.send(k.to_sym))
-      elsif this.respond_to?(:[])
+      elsif this.is_a?(Array) and k.is_a?(Fixnum)
+        _compare_values(v, this[k.to_i])
+      elsif this.respond_to?(:[]) and not this.is_a?(Array)
         _compare_values(v, this[k.to_s]) or _compare_values(v, this[k.to_sym])
       else
         false
