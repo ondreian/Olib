@@ -1,3 +1,6 @@
+
+require "Olib/pattern_matching/any"
+
 class Result
   def self.included(ctx)
     ctx.include(Result::Constructors)
