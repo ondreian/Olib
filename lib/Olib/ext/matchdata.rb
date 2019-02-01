@@ -3,7 +3,7 @@ require "Olib/ext/string"
 
 class MatchData
   def to_struct
-    OpenStruct.new to_hash
+    OpenStruct.new to_h
   end
 
   def to_h

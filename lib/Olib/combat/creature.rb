@@ -11,6 +11,23 @@ require "Olib/core/exist"
 class Creature < Exist
   include Comparable
 
+  Search = Rill.new(
+    start: Rill.union(%(You search the <pushBold/><a exist="{{id}}"),)
+  )
+
+  Skin = Rill.new(
+    start: Rill.union(%[You skinned the <pushBold/><a exist="{{id}}"],
+                      %[You botched],
+                      %[has already"])
+  )
+
+  Attack = Rill.new(
+    start: Rill.union(%[You (.*?) at <pushBold/>(a|an|some) <a exist="{{id}}],
+                      %[A little bit late],
+                      %[already dead], 
+                      %[What were you referring to?])
+  )
+
   WOUNDS = [
     :right_leg, :left_leg, :right_arm, 
     :left_arm, :head, :neck, :chest, 
@@ -201,38 +218,51 @@ class Creature < Exist
     status.include?(:dead)
   end
 
+  def block(method)
+    return [:err, :dead] if dead?
+    Kernel.send(method)
+    return [:err, :dead] if dead?
+  end
+
   def kill
-    unless dead?
-      fput "kill ##{@id}"
-    end
-    self
+    block(:waitrt?)
+    Attack.capture(self.to_h, %[kill \#{{id}}])
+  end
+
+  def cast
+    block(:waitcastrt?)
+    Attack.capture(self.to_h, %[cast \#{{id}}])
   end
 
   def fire(location=nil)
-    unless dead?
-      Char.aim(location) if location
-      fput "fire ##{@id}"
-    end
-    self
+    Char.aim(location) if location
+    block(:waitrt?)
+    Attack.capture(self.to_h, %[fire \#{{id}}])
   end
 
   def hurl(location=nil)
-    unless dead?
-      Char.aim(location) if location
-      fput "hurl ##{@id}"
-    end
-    self
+    Char.aim(location) if location
+    block(:waitrt?)
+    Attack.capture(self.to_h, %[hurl \#{{id}}])
   end
 
-  def search
+  def search()
     waitrt?
-    fput "search ##{@id}" if dead?
+    return unless dead?
+    (_, lines) = Search.capture(self.to_h, %[search \#{{id}}])
+    # the first line containers a creature id we want to avoid capturing
+    lines[1..-1]
+    .map do |line| Exist.scan(line) end
+    .flatten.compact.reject(&:gone?)
   end
 
-  def skin
+  def skin()
     waitrt?
-    fput "skin ##{@id}" if dead?
-    self
+    return unless dead?
+    (_, lines) = Skin.capture(self.to_h, %[skin \#{{id}}])
+    lines
+    .map do |line| Exist.scan(line.split("yielding").last) end
+    .flatten.compact.reject(&:gone?)
   end
 end
 
