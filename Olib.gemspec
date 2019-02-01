@@ -5,7 +5,7 @@ require "Olib/version"
 Gem::Specification.new do |s|
   s.name          = "Olib"
   s.version       = Olib::VERSION
-  s.date          = "2014-09-12"
+  s.date          = "2018-01-04"
   s.summary       = "Useful Lich extensions for Gemstone IV"
   s.description   = "Useful Lich extensions for Gemstone IV including hostile creature management, group management, syntactically pleasing movement, locker management, etc"
   s.authors       = ["Ondreian Shamsiel"]

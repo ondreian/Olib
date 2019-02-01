@@ -1,2 +1,2 @@
-class Herb < Olib::Item
+class Herb < Item
 end

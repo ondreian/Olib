@@ -1,4 +1,4 @@
-class Scroll < Olib::Item
+class Scroll < Item
   @@whitelist = [ 
     101, 102, 103, 107, 116, 120, 
     202, 211, 215, 219,
