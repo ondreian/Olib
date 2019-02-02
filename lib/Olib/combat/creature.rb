@@ -7,29 +7,39 @@
 require "ostruct"
 require "Olib/combat/creatures"
 require "Olib/core/exist"
+require "Olib/pattern_matching/rill"
 
 class Creature < Exist
   include Comparable
 
-  WOUNDS = [
-    :right_leg, :left_leg, :right_arm, 
-    :left_arm, :head, :neck, :chest, 
-    :abdomen, :back, :left_eye, :right_eye, 
-    :right_hand, :left_hand, :nerves,
+  Search = Rill.new(
+    start: Rill.union(%(You search the <pushBold/><a exist="{{id}}"),)
+  )
+
+  Skin = Rill.new(
+    start: Rill.union(%[You skinned the <pushBold/><a exist="{{id}}"],
+                      %[You botched],
+                      %[has already"])
+  )
+
+  Attack = Rill.new(
+    start: Rill.union(%[You (.*?) at <pushBold/>(a|an|some) <a exist="{{id}}],
+                      %[A little bit late],
+                      %[already dead], 
+                      %[What were you referring to?])
+  )
+
+  WOUNDS = %i[
+    right_leg left_leg right_arm 
+    left_arm head neck chest 
+    abdomen back left_eye right_eye 
+    right_hand left_hand nerves
   ]
 
   TAGS = OpenStruct.new(
-    antimagic: /construct|Vvrael/,
-    grimswarm: /grimswarm/,
-    lowly:     /kobold|rolton|velnalin|urgh/,
-    trollish:  /troll|csetari/,
-    undead:    Regexp.union(
-      /zombie|ghost|skele|ghoul|spectral|wight|shade/,
-      /spectre|revenant|apparition|bone|were|rotting/,
-      /spirit|soul|barghest|vruul|night|phant|naisirc/,
-      /shrickhen|seraceris|n'ecare|vourkha|bendith/,
-      /baesrukha|lich|dybbuk|necrotic|flesh|waern|banshee/,
-      /seeker|eidolon|decay|putrefied|vaespilon/),
+    antimagic: %r[construct|Vvrael],
+    lowly:     %r[kobold|rolton|velnalin|urgh],
+    trollish:  %r[troll|csetari],
   )
 
   def self.tags(name)
@@ -201,38 +211,56 @@ class Creature < Exist
     status.include?(:dead)
   end
 
+  def block(method)
+    return {err: :dead} if dead?
+    Kernel.send(method)
+    return {err: :dead} if dead?
+    yield if block_given?
+  end
+
   def kill
-    unless dead?
-      fput "kill ##{@id}"
+    block(:waitrt?) do
+      Attack.capture(self.to_h, %[kill \#{{id}}])
     end
-    self
+  end
+
+  def cast
+    block(:waitcastrt?) do
+      Attack.capture(self.to_h, %[cast \#{{id}}])
+    end
   end
 
   def fire(location=nil)
-    unless dead?
-      Char.aim(location) if location
-      fput "fire ##{@id}"
+    Char.aim(location) if location
+    block(:waitrt?) do
+      Attack.capture(self.to_h, %[fire \#{{id}}])
     end
-    self
   end
 
   def hurl(location=nil)
-    unless dead?
-      Char.aim(location) if location
-      fput "hurl ##{@id}"
+    Char.aim(location) if location
+    block(:waitrt?) do
+      Attack.capture(self.to_h, %[hurl \#{{id}}])
     end
-    self
   end
 
-  def search
+  def search()
     waitrt?
-    fput "search ##{@id}" if dead?
+    return unless dead?
+    (_, lines) = Search.capture(self.to_h, %[search \#{{id}}])
+    # the first line containers a creature id we want to avoid capturing
+    lines[1..-1]
+    .map do |line| Exist.scan(line) end
+    .flatten.compact.reject(&:gone?)
   end
 
-  def skin
+  def skin()
     waitrt?
-    fput "skin ##{@id}" if dead?
-    self
+    return unless dead?
+    (_, lines) = Skin.capture(self.to_h, %[skin \#{{id}}])
+    lines
+    .map do |line| Exist.scan(line.split("yielding").last) end
+    .flatten.compact.reject(&:gone?)
   end
 end
 

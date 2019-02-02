@@ -17,11 +17,15 @@ module XML
     result
   end
 
-  def self.cmd(cmd)
+  def self.cmd(cmd, timeout: 5, pattern:)
     XML.tap do 
-      fput(cmd)
+      result = dothistimeout(cmd, timeout, pattern)
+      return nil if result.nil?
+      yield(result)
+      ttl = Time.now + timeout
       while line = get
         yield(line)
+        break if Time.now > ttl
       end
     end
   end

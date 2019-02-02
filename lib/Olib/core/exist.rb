@@ -2,7 +2,8 @@
 require "Olib/core/action"
 
 class Exist
-  GETTER = %r[\w$]
+  GETTER  = %r[\w$]
+  PATTERN = %r(<a exist=(?:'|")(?<id>.*?)(?:'|") noun=(?:'|")(?<noun>.*?)(?:'|")>(?<name>.*?)</a>)
 
   def self.fetch(id)
     [ GameObj.inv, GameObj.containers.values, 
@@ -12,8 +13,12 @@ class Exist
                                              .find do |item| item.id.to_s.eql?(id.to_s) end
   end
 
+  def self.scan(str)
+    str.scan(PATTERN).map do |matches| Item.new(GameObj.new(*matches)) end
+  end
+
   def self.normalize_type_data(type)
-    (type or "").gsub(",", " ").split(" ")
+    (type or "").gsub(",", " ").split(" ").compact
   end
 
   attr_reader :id, :gameobj
@@ -35,6 +40,8 @@ class Exist
   end
 
   def method_missing(method, *args)
+    return nil if fetch.nil?
+
     if respond_to_missing?(method)
       fetch.send(method, *args)
     else
@@ -51,7 +58,7 @@ class Exist
   end
 
   def tags
-    Exist.normalize_type_data(type).map(&:to_sym)
+    Exist.normalize_type_data("#{type},#{sellable}").map(&:to_sym)
   end
 
   def effects

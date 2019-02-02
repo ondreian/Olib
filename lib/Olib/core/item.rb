@@ -53,6 +53,10 @@ class Item < Exist
     Transaction.new(take, **args)
   end
 
+  def appraise(**args)
+    transaction(**args).appraise()
+  end
+
   def sell(**args)
     transaction(**args).sell()
   end

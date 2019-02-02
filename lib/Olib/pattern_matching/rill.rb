@@ -3,6 +3,10 @@ require "Olib/pattern_matching/outcome"
 require "Olib/ext/matchdata"
 
 class Rill
+  def self.union(*patterns)
+    patterns.join("|")
+  end
+
   PROMPT = /<prompt/
 
   include Enumerable
@@ -27,13 +31,13 @@ class Rill
     state         = :start
     lines         = []
     matches       = {}
-    XML.cmd(command) do |line|
+    XML.cmd(command, pattern: begin_pattern) do |line|
       state = :open  if line.match(begin_pattern)
       lines  << line if state.eql?(:open)
-      if (result = (line.match(begin_pattern) || line.match(end_pattern)))
+      if (result = (line.match(begin_pattern) or line.match(end_pattern)))
         matches.merge!(result.to_h)
       end
-      return [matches, lines] if (line.match(end_pattern) and state.eql?(:open))
+      return {ok: 1, matches: matches, lines: lines} if (line.match(end_pattern) and state.eql?(:open))
     end
   end
 
