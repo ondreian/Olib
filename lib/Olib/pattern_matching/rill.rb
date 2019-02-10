@@ -10,13 +10,14 @@ class Rill
   PROMPT = /<prompt/
 
   include Enumerable
-  attr_reader :close, :start, :mode
+  attr_reader :close, :start, :mode, :timeout
 
-  def initialize(start: nil, close: PROMPT, mode: :xml)
+  def initialize(start: nil, close: PROMPT, mode: :xml, timeout: 5)
     fail "Rill.new() requires :start argument" if start.nil?
     @mode    = mode
     @close   = Outcome.new(close)
     @start   = Outcome.new(start)
+    @timeout = timeout
   end
 
   def capture(obj, command_template)
@@ -31,7 +32,7 @@ class Rill
     state         = :start
     lines         = []
     matches       = {}
-    XML.cmd(command, pattern: begin_pattern) do |line|
+    XML.cmd(command, pattern: begin_pattern, timeout: @timeout) do |line|
       state = :open  if line.match(begin_pattern)
       lines  << line if state.eql?(:open)
       if (result = (line.match(begin_pattern) or line.match(end_pattern)))

@@ -83,3 +83,13 @@ class Result
     end
   end
 end
+
+class Any < Result
+  def self.===(*args)
+    true
+  end
+
+  def ===(other)
+    true
+  end
+end

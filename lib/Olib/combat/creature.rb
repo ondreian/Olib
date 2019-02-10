@@ -13,21 +13,21 @@ class Creature < Exist
   include Comparable
 
   Search = Rill.new(
-    start: Rill.union(%(You search the <pushBold/><a exist="{{id}}"),)
-  )
+    timeout: 1,
+    start:   Rill.union(%(You search the <pushBold/><a exist="{{id}}"),))
 
   Skin = Rill.new(
     start: Rill.union(%[You skinned the <pushBold/><a exist="{{id}}"],
                       %[You botched],
-                      %[has already"])
-  )
+                      %[has already"]))
 
   Attack = Rill.new(
-    start: Rill.union(%[You (.*?) at <pushBold/>(a|an|some) <a exist="{{id}}],
+    timeout: 2,
+    start:   Rill.union(%[You (.*?) at <pushBold/>(a|an|some) <a exist="{{id}}],
                       %[A little bit late],
                       %[already dead], 
-                      %[What were you referring to?])
-  )
+                      %[I could not find what you were referring to],
+                      %[What were you referring to?]))
 
   WOUNDS = %i[
     right_leg left_leg right_arm 
