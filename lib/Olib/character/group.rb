@@ -95,6 +95,7 @@ module Group
       "<#{name}: @leader=#{leader?} @status=#{status}>"
     end
   end
+
   MEMBERS    = Members.new
   OPEN       = :open
   CLOSED     = :closed
@@ -156,9 +157,7 @@ module Group
 
   def Group.disks
     return [Disk.find_by_name(Char.name)].compact unless Group.leader?
-    members.map(&:name).map do |name| 
-      Disk.find_by_name(name) 
-    end.compact
+    members.map(&:name).map do |name|  Disk.find_by_name(name) end.compact
   end
   
   def Group.to_s
@@ -199,13 +198,15 @@ module Group
     # <a exist="-10467645" noun="Oreh">Oreh</a> joins your group.
     # You add <a exist="-10467645" noun="Oreh">Oreh</a> to your group.
     # You remove <a exist="-10467645" noun="Oreh">Oreh</a> from the group.
-    JOIN   = %r{^<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> joins your group.$}
-    LEAVE  = %r{^<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> leaves your group.$}
-    ADD    = %r{^You add <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> to your group.$}
-    REMOVE = %r{^You remove <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> from the group.$}
-    NOOP   = %r{^But <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> is already a member of your group!$}
-    EXIST  = %r{<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a>}
-    ANY    = Regexp.union(JOIN, LEAVE, ADD, REMOVE, NOOP)
+    # You disband your group.
+    JOIN    = %r{^<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> joins your group.$}
+    LEAVE   = %r{^<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> leaves your group.$}
+    ADD     = %r{^You add <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> to your group.$}
+    REMOVE  = %r{^You remove <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> from the group.$}
+    NOOP    = %r{^But <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> is already a member of your group!$}
+    EXIST   = %r{<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a>}
+    DISBAND = %r{^You disband your group}
+    ANY     = Regexp.union(JOIN, LEAVE, ADD, REMOVE, NOOP)
   end
 
   GROUP_OBSERVER = -> line {
@@ -283,6 +284,10 @@ module Group
   end
 
   def self.broken?
-    (GameObj.pcs.to_a.map(&:noun) & Group.members.map(&:noun)).size.eql?(Group.members.size)
-  end   
+    if Group.leader?
+      (GameObj.pcs.map(&:noun) & Group.members.map(&:noun)).size < Group.members.size
+    else
+      GameObj.pcs.find do |pc| pc.noun.eql?(Group.leader.noun) end.nil?
+    end
+  end
 end
