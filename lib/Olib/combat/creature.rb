@@ -49,12 +49,25 @@ class Creature < Exist
     end
   end
 
+  def self.stem_name(foe)
+    foe.name.split(" ").slice(1..-1).join(" ")
+  end
+
+  def self.add_boss_type(foe)
+    return if foe.tags.include?(:aggressive)  
+    if GameObj.type_data["aggressive npc"][:name].match stem_name(foe)
+      foe.tags << :aggressive
+      foe.tags << :npc
+    end
+  end
+
   attr_accessor :wounds, :tags
   def initialize(creature)
     super(creature)
     @wounds = {}
     @tags   = (Exist.normalize_type_data(creature.type) + (metadata["tags"] || []) ).map(&:to_sym)
     TAGS.each_pair do |tag, pattern| @tags << tag if @name =~ pattern end
+    Creature.add_boss_type(self)
     heal
   end
 

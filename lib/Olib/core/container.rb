@@ -26,6 +26,10 @@ class Container < Exist
     GameObj.containers.fetch(id, []).map do |item| Item.new(item, self) end
   end
 
+  def closed?
+    not GameObj.containers[id]
+  end
+
   def each(&block)
     contents.each(&block)
   end

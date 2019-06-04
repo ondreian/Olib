@@ -15,7 +15,6 @@ class Creatures
 
   STATES = %i[
     prone sitting kneeling
-    dead 
     sleeping webbed immobile
     stunned 
     flying
@@ -48,9 +47,9 @@ class Creatures
   end
 
   def each()    
-    GameObj.npcs.to_a.map do |obj| Creature.new(obj) end
+    GameObj.targets.to_a.map do |obj| Creature.new(obj) end
       .select(&@predicate)
-      .each do |creature| yield(creature) if GameObj[creature.id] and creature.aggressive? end
+      .each do |creature| yield(creature) if GameObj[creature.id] end
   end
 
   def respond_to_missing?(method, include_private = false)
@@ -73,6 +72,12 @@ class Creatures
 
   def bounty
     Creatures.new do |creature| creature.name.include?(Bounty.creature) end
+  end
+
+  def dead
+    GameObj.npcs.to_a
+      .select do |c| c.status.include?("dead") end
+      .map do |obj| Creature.new(obj) end
   end
 
   def self.method_missing(method, *args, &block)
