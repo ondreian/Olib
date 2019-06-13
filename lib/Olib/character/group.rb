@@ -39,7 +39,7 @@ module Group
 
   def self.disks
     return [Disk.find_by_name(Char.name)].compact unless Group.leader?
-    members.map(&:name).map do |name|  Disk.find_by_name(name) end.compact
+    members.map(&:noun).map do |noun|  Disk.find_by_name(noun) end.compact
   end
   
   def self.to_s
@@ -81,7 +81,7 @@ module Group
   end
 
   def self.nonmembers
-    GameObj.pcs.reject {|pc| ids.include?(pc.id) }
+    GameObj.pcs.to_a.reject {|pc| ids.include?(pc.id) }
   end
 
   def self.leader=(char)
@@ -101,19 +101,22 @@ module Group
       if member.is_a?(Array)
         Group.add(*member)
       else
+        member = GameObj.pcs.find {|pc| pc.noun.eql?(member)} if member.is_a?(String)
+
+        return if member.nil?
+
         result = dothistimeout("group ##{member.id}", 3, Regexp.union(
           %r{You add #{member.noun} to your group},
           %r{#{member.noun}'s group status is closed},
           %r{But #{member.noun} is already a member of your group}))
         
         case result
-        when %r{You add}
+        when %r{You add}, %r{already a member}
           Group.push(member)
-          [:ok, member]
-        when %r{already a member}
-          [:noop, member]
+          {ok: member}
         when %r{closed}
-          [:err, member]
+          Group.delete(member)
+          {err: member}
         else
         end
       end
@@ -158,9 +161,6 @@ module Group
       NOOP    = %r{^But <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> is already a member of your group!$}
       # <a exist="-10488845" noun="Etanamir">Etanamir</a> designates you as the new leader of the group.
       HAS_LEADER = %r{<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> designates you as the new leader of the group\.$}
-      # You designate <a exist="-10488845" noun="Etanamir">Etanamir</a> as the new leader of the group. 
-      GAVE_LEADER = %r{You designate <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> as the new leader of the group\.$}
-      
       SWAP_LEADER = %r{<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> designates <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> as the new leader of the group.}
       
       # You designate <a exist="-10778599" noun="Ondreian">Ondreian</a> as the new leader of the group.
@@ -198,7 +198,6 @@ module Group
         MEMBER,
         
         HAS_LEADER,
-        GAVE_LEADER,
         SWAP_LEADER,
 
         LEADER_ADDED_MEMBER,
@@ -214,8 +213,12 @@ module Group
 
     CALLBACK = -> line {
       begin
-        if match_data = Observer.wants?(line)
-          Observer.consume(line.strip, match_data)
+        # fast first-pass
+        if line.include?("group") or line.include?("following you") or line.include?("IconJOINED")
+          # more detailed pass
+          if match_data = Observer.wants?(line)
+            Observer.consume(line.strip, match_data)
+          end
         end
       rescue => exception
         respond(exception)
