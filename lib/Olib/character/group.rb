@@ -1,258 +1,99 @@
 require "ostruct"
+require "benchmark"
 require "Olib/character/disk"
 
 module Group
-  class Members
-    include Enumerable
-    attr_accessor :leader, :members, :birth
-    def initialize
-      @birth   = Time.now
-      @members = []
-    end
+  @@members ||= []
+  @@leader  ||= nil
+  @@checked ||= false
+  @@status  ||= :closed
 
-    def clear!
-      @members = []
-      @birth   = Time.now
-      @leader  = nil
-    end
-
-    def size
-      @members.size
-    end
-
-    def empty?
-      @members.empty?
-    end
-
-    def add(pc, leader = false)      
-      member = Member.new pc, leader
-      if leader
-        @leader = member
-      end
-      @members << member
-      self
-    end
-
-    def each(&block)
-      @members.each do |char| yield char end
-      self
-    end
-
-    def include?(pc)
-      return true if pc.is_a?(String) and Char.name.eql?(pc)
-      return true if pc.respond_to?(:noun) and Char.name.eql?(pc.noun)
-      return true if pc.respond_to?(:name) and Char.name.eql?(pc.name)
-      !find do |char|
-        if pc.is_a?(String)
-          char.noun.eql?(pc)
-        else
-          char.noun.eql?(pc.noun) || char.noun.eql?(pc.name)
-        end
-      end.nil?
-    end
-
-    def nonmembers
-      ((GameObj.pcs || []) + Disk.all()).reject do |pc|
-        include?(pc)
-      end 
-    end
-
-    def to_s
-      "<Members: [#{@members.join(" ")}]>"
-    end
+  def self.clear()
+    @@members = []
+    @@checked = false
   end
 
-  class Member
-    attr_reader :id, :leader, :name, :noun
-    def initialize(pc, leader = false)
-      @id     = pc.id
-      @leader = leader
-      @name   = pc.name
-      @noun   = pc.noun
-    end
-
-    def ref
-      GameObj[@id]
-    end
-
-    def leader?
-      @leader
-    end
-
-    def status
-      (ref.status.split(" ") || []).map(&:to_sym)
-    end
-
-    def is(state)
-      status =~ state
-    end
-
-    def ==(other)
-      @id == other.id
-    end
-
-    def to_s
-      "<#{name}: @leader=#{leader?} @status=#{status}>"
-    end
-  end
-
-  MEMBERS    = Members.new
-  OPEN       = :open
-  CLOSED     = :closed
-  CHECK_HOOK = self.name.to_s
-  NO_GROUP   = /You are not currently in a group/
-  MEMBER     = /<a exist="(?<id>.*?)" noun="(?<name>.*?)">(.*?)<\/a> is (?<type>(the leader|also a member) of your group|following you)\./
-  STATE      = /^Your group status is currently (?<state>open|closed)\./
-  END_GROUP  = /list of other options\./
-
-  PARSER = Proc.new do |line|  
-    if line.strip.empty? || line =~ NO_GROUP
-      nil
-    elsif line =~ STATE
-      nil
-    elsif line =~ END_GROUP
-      Group.checked!
-      DownstreamHook.remove(CHECK_HOOK)
-      nil
-    elsif line =~ MEMBER
-      begin
-        pc = line.match(MEMBER).to_struct
-        Group::MEMBERS.add GameObj[pc.name], (line =~ /leader/ ? true : false)
-        if line =~ /following/
-          Group::MEMBERS.leader = OpenStruct.new(name: Char.name, leader: true)
-        end
-        nil 
-      rescue Exception => e
-        respond e
-        respond e.backtrace
-      end
-    else
-      line
-    end
-  end
-
-  @@checked  = false
-
-  def Group.checked?
+  def self.checked?
     @@checked
   end
 
-  def Group.checked!
-    @@checked = true
-    self
+  def self.push(*members)
+    members.each do |member|
+      @@members.push(member) unless include?(member)
+    end
   end
 
-  def Group.empty?
-    MEMBERS.empty?
+  def self.delete(*members)
+    gone = members.map(&:id)
+    @@members.reject! do |m| gone.include?(m.id) end
   end
 
-  def Group.exists?
-    !empty?
-  end
-
-  def Group.members
+  def self.members
     maybe_check
-    MEMBERS
+    @@members.dup
   end
 
-  def Group.disks
+  def self._members
+    @@members
+  end
+
+  def self.disks
     return [Disk.find_by_name(Char.name)].compact unless Group.leader?
     members.map(&:name).map do |name|  Disk.find_by_name(name) end.compact
   end
   
-  def Group.to_s
-    MEMBERS.to_s
+  def self.to_s
+    @@members.to_s
+  end
+
+  def self.checked=(flag)
+    @@checked = flag
+  end
+
+  def self.status=(state)
+    @@status = state
+  end
+
+  def self.status()
+    @@status
+  end
+
+  def self.open?
+    maybe_check
+    @@status.eql?(:open)
+  end
+
+  def self.closed?
+    not open?
   end
 
   # ran at the initialization of a script
-  def Group.check
-    Group.unobserve()
-    @@checked = false
-    MEMBERS.clear!
-    DownstreamHook.add(CHECK_HOOK, PARSER)
+  def self.check
+    Group.clear()
+    ttl = Time.now + 3
     Game._puts "<c>group\r\n"
-    wait_until { Group.checked? }
-    Group.observe()
-    MEMBERS
+    wait_until { Group.checked? or Time.now > ttl }
+    @@members.dup
   end
 
-  def Group.maybe_check
+  def self.maybe_check
     Group.check unless checked?
   end
 
-  def Group.nonmembers
-    members.nonmembers
+  def self.nonmembers
+    GameObj.pcs.reject {|pc| ids.include?(pc.id) }
   end
 
-  def Group.leader
-    members.leader
+  def self.leader=(char)
+    @@leader = char
   end
 
-  def Group.leader?
-    leader && leader.name == Char.name
+  def self.leader
+    @@leader
   end
 
-
-  module Term
-    # <a exist="-10467645" noun="Oreh">Oreh</a> leaves your group
-    # <a exist="-10467645" noun="Oreh">Oreh</a> joins your group.
-    # You add <a exist="-10467645" noun="Oreh">Oreh</a> to your group.
-    # You remove <a exist="-10467645" noun="Oreh">Oreh</a> from the group.
-    # You disband your group.
-    JOIN    = %r{^<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> joins your group.$}
-    LEAVE   = %r{^<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> leaves your group.$}
-    ADD     = %r{^You add <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> to your group.$}
-    REMOVE  = %r{^You remove <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> from the group.$}
-    NOOP    = %r{^But <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> is already a member of your group!$}
-    EXIST   = %r{<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a>}
-    DISBAND = %r{^You disband your group}
-    ANY     = Regexp.union(JOIN, LEAVE, ADD, REMOVE, NOOP)
-  end
-
-  GROUP_OBSERVER = -> line {
-    begin
-      return line if DownstreamHook.list.include?(CHECK_HOOK)
-      Group.consume(line.strip)
-    rescue => exception
-      respond exception
-      respond exception.backtrace
-    end
-    line
-  }
-
-  def self.observe()
-    wait_while do DownstreamHook.list.include?(CHECK_HOOK) end
-    DownstreamHook.add("__group_observer", GROUP_OBSERVER)
-  end
-
-  def self.unobserve()
-    DownstreamHook.remove("__group_observer")
-  end
-
-  Group.observe()
-
-  def self.consume(line)
-    return unless line.match(Group::Term::ANY)
-    person = GameObj[Term::EXIST.match(line)[:id]]
-    case line
-    when Term::JOIN
-      Group.members.add(person) unless Group.members.include?(person)
-    when Term::ADD
-      Group.members.add(person) unless Group.members.include?(person)
-    when Term::NOOP
-      Group.members.add(person) unless Group.members.include?(person)
-    when Term::LEAVE
-      Group.members.members.delete(Group.members.find do |member|
-        member.id.eql?(person.id)
-      end)
-    when Term::REMOVE
-      Group.members.members.delete(Group.members.find do |member|
-        member.id.eql?(person.id)
-      end)
-    else
-      # silence is golden
-    end
-    Group.persist()
+  def self.leader?
+    @@leader.eql?(:self)
   end
 
   def self.add(*members)
@@ -267,7 +108,7 @@ module Group
         
         case result
         when %r{You add}
-          Group.members.add(member)
+          Group.push(member)
           [:ok, member]
         when %r{already a member}
           [:noop, member]
@@ -279,15 +120,179 @@ module Group
     end
   end
 
-  def self.persist()
-    return
+  def self.ids
+    @@members.map(&:id)
+  end
+
+  def self.include?(*members)
+    members.all? { |m| ids.include?(m.id) }
   end
 
   def self.broken?
     if Group.leader?
-      (GameObj.pcs.map(&:noun) & Group.members.map(&:noun)).size < Group.members.size
+      (GameObj.pcs.map(&:noun) & @@members.map(&:noun)).size < @@members.size
     else
       GameObj.pcs.find do |pc| pc.noun.eql?(Group.leader.noun) end.nil?
     end
   end
+
+  def self.method_missing(method, *args, &block)
+    @@members.send(method, *args, &block)
+  end
+end
+
+module Group
+  module Observer
+    module Term
+      ##
+      ## passive messages
+      ##
+      # <a exist="-10467645" noun="Oreh">Oreh</a> joins your group.
+      JOIN    = %r{^<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> joins your group.$}
+      # <a exist="-10467645" noun="Oreh">Oreh</a> leaves your group
+      LEAVE   = %r{^<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> leaves your group.$}
+      # You add <a exist="-10467645" noun="Oreh">Oreh</a> to your group.
+      ADD     = %r{^You add <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> to your group.$}
+      # You remove <a exist="-10467645" noun="Oreh">Oreh</a> from the group.
+      REMOVE  = %r{^You remove <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> from the group.$}
+      NOOP    = %r{^But <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> is already a member of your group!$}
+      # <a exist="-10488845" noun="Etanamir">Etanamir</a> designates you as the new leader of the group.
+      HAS_LEADER = %r{<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> designates you as the new leader of the group\.$}
+      # You designate <a exist="-10488845" noun="Etanamir">Etanamir</a> as the new leader of the group. 
+      GAVE_LEADER = %r{You designate <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> as the new leader of the group\.$}
+      
+      SWAP_LEADER = %r{<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> designates <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> as the new leader of the group.}
+      
+      # You designate <a exist="-10778599" noun="Ondreian">Ondreian</a> as the new leader of the group.
+      GAVE_LEADER_AWAY = %r{You designate <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> as the new leader of the group\.$} 
+      # You disband your group.
+      DISBAND = %r{^You disband your group}
+      # <a exist="-10488845" noun="Etanamir">Etanamir</a> adds you to <a exist="-10488845" noun="Etanamir">his</a> group.
+      ADDED_TO_NEW_GROUP = %r{<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> adds you to <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> group.}
+      # You join <a exist="-10488845" noun="Etanamir">Etanamir</a>.
+      JOINED_NEW_GROUP = %r{You join <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a>\.$}
+      # <a exist="-10488845" noun="Etanamir">Etanamir</a> adds <a exist="-10974229" noun="Szan">Szan</a> to <a exist="-10488845" noun="Etanamir">his</a> group.
+      LEADER_ADDED_MEMBER = %r{<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> adds <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> to <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> group\.$}
+      # <a exist="-10488845" noun="Etanamir">Etanamir</a> removes <a exist="-10974229" noun="Szan">Szan</a> from the group.
+      LEADER_REMOVED_MEMBER = %r{<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> removes <a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a> from the group\.$}
+      ##
+      ## active messages
+      ##
+      NO_GROUP = /You are not currently in a group/
+      MEMBER   = /<a exist="(?<id>.*?)" noun="(?<name>.*?)">(.*?)<\/a> is (?<type>(the leader|also a member) of your group|following you)\./
+      STATUS   = /^Your group status is currently (?<status>open|closed)\./ 
+
+      GROUP_EMPTIED    = %[<indicator id='IconJOINED' visible='n'/>]
+      GROUP_EXISTS     = %[<indicator id='IconJOINED' visible='y'/>]
+      GIVEN_LEADERSHIP = %[designates you as the new leader of the group.]
+
+      ANY = Regexp.union(
+        JOIN, 
+        LEAVE, 
+        ADD, 
+        REMOVE, 
+        DISBAND,
+        NOOP,
+        STATUS,
+        NO_GROUP,
+        MEMBER,
+        
+        HAS_LEADER,
+        GAVE_LEADER,
+        SWAP_LEADER,
+
+        LEADER_ADDED_MEMBER,
+        LEADER_REMOVED_MEMBER,
+
+        ADDED_TO_NEW_GROUP,
+        JOINED_NEW_GROUP,
+        GAVE_LEADER_AWAY,
+        )
+
+      EXIST   = %r{<a exist="(?<id>[\d-]+)" noun="(?<noun>[A-Za-z]+)">(?<name>\w+?)</a>}
+    end
+
+    CALLBACK = -> line {
+      begin
+        if match_data = Observer.wants?(line)
+          Observer.consume(line.strip, match_data)
+        end
+      rescue => exception
+        respond(exception)
+        respond(exception.backtrace)
+      ensure
+        return line  
+      end
+    }
+
+    def self.exist(xml)
+      xml.scan(Group::Observer::Term::EXIST).map { |id, noun, name| GameObj[id] }
+    end
+
+    def self.wants?(line)
+      line.strip.match(Term::ANY) or 
+      line.include?(Term::GROUP_EMPTIED)
+    end
+
+    def self.consume(line, match_data)
+      if line.include?(Term::GIVEN_LEADERSHIP)
+        return Group.leader = :self
+      end
+
+      ## Group indicator changed!
+      if line.include?(Term::GROUP_EMPTIED)
+        Group.leader = :self
+        return Group._members.clear
+      end
+
+      people = exist(line)
+
+      if line.include?("is following you")
+        Group.leader = :self
+      elsif line.include?("is the leader of your group")
+        Group.leader = people.first
+      end
+      
+      case line
+      when Term::NO_GROUP, Term::DISBAND
+        Group.leader = :self
+        return Group._members.clear
+      when Term::STATUS
+        Group.status  = match_data[:status].to_sym
+        return Group.checked = true
+      when Term::GAVE_LEADER_AWAY
+        Group.push(people.first)
+        return Group.leader = people.first
+      when Term::ADDED_TO_NEW_GROUP, Term::JOINED_NEW_GROUP
+        Group.push(people.first)
+        return Group.leader = people.first
+      when Term::SWAP_LEADER
+        (old_leader, new_leader) = people
+        Group.push(*people) if Group.include?(old_leader) or Group.include?(new_leader)
+        return Group.leader = new_leader
+      when Term::LEADER_ADDED_MEMBER
+        (leader, added) = people
+        Group.push(added) if Group.include?(leader)
+      when Term::LEADER_REMOVED_MEMBER
+        (leader, removed) = people
+        return Group.delete(removed) if Group.include?(leader)
+      when Term::JOIN, Term::ADD, Term::NOOP, Term::MEMBER
+        return Group.push(*people)
+      when Term::LEAVE, Term::REMOVE
+        return Group.delete(*people)
+      end
+    end
+
+  
+    def self.attach()
+      remove() if DownstreamHook.list.include?(self.name)
+      DownstreamHook.add(self.name, CALLBACK)
+    end
+
+    def self.remove()
+      DownstreamHook.remove(self.name)
+    end
+  end
+
+  Observer.attach()
 end
