@@ -10,8 +10,9 @@ class Loot
   end
 
   def each()    
-    GameObj.loot.to_a.map do |obj| Item.new(obj) end
+    GameObj.loot.to_a
       .reject(&Where[noun: "disk"])
+      .map do |obj| Item.new(obj) end
       .select(&@predicate)
       .each do |item| yield(item) end
   end

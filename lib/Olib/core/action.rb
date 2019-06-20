@@ -1,4 +1,10 @@
 module Action
+  LOCK = Mutex.new
+
+  def self.lock()
+    LOCK.synchronize { yield }
+  end
+
   def self.try_or_fail(seconds: 5, command: nil)
     fput(command)
     expiry = Time.now + seconds
