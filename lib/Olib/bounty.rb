@@ -6,7 +6,7 @@ class Bounty
   @@listeners = {}
   # this should be refactored to use CONST
   REGEX = OpenStruct.new(
-    creature_problem: /It appears they have a creature problem they\'d like you to solve/,
+    creature_problem: /"Hmm, I've got a task here from (?<town>.*?)\.  It appears they have a creature problem they\'d like you to solve/,
     report_to_guard:  /^You succeeded in your task and should report back to/,
     get_skin_bounty:  /The local furrier/,
     heirloom_found:   /^You have located the heirloom and should bring it back to/,
@@ -17,16 +17,15 @@ class Bounty
     heirloom:  /^You have been tasked to recover (a|an|some) (?<heirloom>.*?) that an unfortunate citizen lost after being attacked by (a|an|some) (?<creature>.*?) (?:in|on|around|near|by) (?<area>.*?)(| near (?<realm>.*?))\./,
 
 
-    get_rescue:      /It appears that a local resident urgently needs our help in some matter/,
-    get_bandits:     /It appears they have a bandit problem they'd like you to solve./,
-    get_heirloom:    /It appears they need your help in tracking down some kind of lost heirloom/,
+    get_rescue:      /"Hmm, I've got a task here from (?<town>.*?)\.  It appears that a local resident urgently needs our help in some matter/,
+    get_bandits:     /"Hmm, I've got a task here from (?<town>.*?)\.  It appears they have a bandit problem they'd like you to solve./,
+    get_heirloom:    /"Hmm, I've got a task here from (?<town>.*?)\.  It appears they need your help in tracking down some kind of lost heirloom/,
     get_herb_bounty: /local herbalist|local healer|local alchemist/,
-    get_gem_bounty:  /The local gem dealer, (?<npc>[a-zA-Z ]+), has an order to fill and wants our help/,
+    get_gem_bounty:  /"Hmm, I've got a task here from (?<town>.*?)\.  The local gem dealer, (?<npc>[a-zA-Z ]+), has an order to fill and wants our help/,
 
     herb:   /requires (?:a |an |)(?<herb>.*?) found (?:in|on|around|near) (?<area>.*?)(| (near|between) (?<realm>.*?)).  These samples must be in pristine condition.  You have been tasked to retrieve (?<number>[\d]+)/,
     escort: /Go to the (.*?) and WAIT for (?:him|her|them) to meet you there.  You must guarantee (?:his|her|their) safety to (?<destination>.*?) as soon as/,
-    gem:    /has received orders from multiple customers requesting (?:a|an|some) (?<gem>[a-zA-Z '-]+).  You have been tasked to retrieve (?<number>[0-9]+)/,
-
+    gem:    /The gem dealer in (?<town>.*?), (?<npc>.*?), has received orders from multiple customers requesting (?:a|an|some) (?<gem>[a-zA-Z '-]+).  You have been tasked to retrieve (?<number>[0-9]+)/,
     cull:    /^You have been tasked to suppress (?<creature>(?!bandit).*) activity (?:in|on|around) (?<area>.*?)(| (near|between) (?<realm>.*?)).  You need to kill (?<number>[0-9]+)/,
     bandits: /^You have been tasked to suppress bandit activity (?:in|on|around) (?<area>.*?) (?:near|between|under) (?<realm>.*?).  You need to kill (?<number>[0-9]+)/,
 
@@ -35,7 +34,9 @@ class Bounty
     none:    /You are not currently assigned a task/,
     skin:    /^You have been tasked to retrieve (?<number>\d+) (?<skin>.*?) of at least (?<quality>.*?) quality for (?<buyer>.*?) in (?<realm>.*?)\.\s+You can SKIN them off the corpse of (a|an|some) (?<creature>.*?) or/,
     
-    help_bandits: /You have been tasked to help (?<partner>.*?) suppress bandit activity (?:in|on|around) (?<area>.*?) (?:near|between|under) (?<realm>.*?).  You need to kill (?<number>[0-9]+)/
+    help_bandits: /You have been tasked to help (?<partner>.*?) suppress bandit activity (?:in|on|around) (?<area>.*?) (?:near|between|under) (?<realm>.*?).  You need to kill (?<number>[0-9]+)/,
+    help_creatures: /You have been tasked to help (?<partner>.*?) kill a dangerous creature by suppressing (?<creature>.*) activity (?:in|on|around|near) (?<area>.*?) (?:near|between|under) (?<realm>.*?) during the hunt.  You need to kill (?<number>[0-9]+)/,
+    help_cull: /You have been tasked to help (?<partner>.*?) suppress (?<creature>.*) activity (?:in|on|around|near) (?<area>.*?) (?:near|between|under) (?<realm>.*?).  You need to kill (?<number>[0-9]+)/,
   )
   
   # convenience list to get all types of bounties

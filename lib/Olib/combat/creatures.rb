@@ -1,11 +1,8 @@
-require 'net/http'
 require 'json'
 # a collection for managing all of the creatures in a room
 
 class Creatures
   include Enumerable
-
-  METADATA_URL = "https://cdn.rawgit.com/ondreian/gemstone_data_project/c40a5dfb/creatures.json"
   
   ARCHETYPES = %i[ 
     undead living weak
@@ -21,22 +18,6 @@ class Creatures
   ]
 
   KINDS = ARCHETYPES + STATES
-
-  def self.fetch_metadata()
-    begin
-      JSON.parse Net::HTTP.get URI METADATA_URL
-    rescue
-      puts $!
-      puts $!.backtrace[0..1]
-      []
-    end
-  end
-
-  METADATA = fetch_metadata()
-  BY_NAME  = METADATA.reduce(Hash.new) do |by_name, record|
-    by_name[record["name"]] = record
-    by_name
-  end
 
   ALL = -> creature { true }
 

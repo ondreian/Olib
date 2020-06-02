@@ -10,3 +10,6 @@ end
 group :test do
   gem 'rake'
 end
+
+gem 'dry-monads'
+gem 'terminal-table'

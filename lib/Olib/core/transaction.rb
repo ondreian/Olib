@@ -14,6 +14,9 @@ class Transaction < Exist
     close: Regexp.union(
       %r[(hands you|for) (?<value>\d+)],
       %r[No #{Char.name}, I won't buy that],
+      %r[I'm sorry, #{Char.name}, but I have no use for that\.],
+      %r[He hands it back to you],
+      %r[Nope #{Char.name}, I ain't buying that\.],
       %r[basically worthless here, #{Char.name}])
     )
   
@@ -33,7 +36,7 @@ class Transaction < Exist
   def appraise()
     return self unless @value.nil?
     take
-    (match, _lines) = Appraise.capture(self.to_h, 
+    (_, match, _lines) = Appraise.capture(self.to_h, 
       "appraise \#{{id}}")
     @value = match[:value].to_i
     self
@@ -46,8 +49,12 @@ class Transaction < Exist
         transaction: self,
         reason:      "Value[#{@value}] is over Threshold[#{@threshold}]"] 
     end
-    (match, _lines) = Sell.capture(self.to_h, 
+  
+    (_, match, _lines) = Sell.capture(self.to_h, 
       "sell \#{{id}}")
+
+    
+    match[:value] = 0 unless match[:value].is_a?(Integer)
     Ok[**match]
   end
 end

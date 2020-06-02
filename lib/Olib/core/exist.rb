@@ -79,17 +79,9 @@ class Exist
     inspect()
   end
 
-  def inspect(depth= 0)
-    indent = ""
-    indent = "\n" + (["\t"] * depth).join if depth > 0 
-    body = [:id, :name, :tags].reduce("") do |acc, prop|
-      val = send(prop)
-      acc = "#{acc} #{prop}=#{val.inspect}" unless val.nil? or val.empty?
-      acc
-    end.strip
-
-    body = "#{body} contents=[#{contents.map {|i| i.inspect(depth + 1)}.join}]" unless contents.to_a.empty?
-      
-    %[#{indent}#{self.class.name}(#{body})]
+  def deconstruct_keys(keys)
+    keys.each_with_object({}) do |key, acc|
+      acc[key] = self.send(key)
+    end
   end
 end

@@ -1,0 +1,1770 @@
+{
+  "black rolton": {
+    "level": 1,
+    "skin": "rolton ear"
+  },
+  "black-winged daggerbeak": {
+    "level": 1,
+    "skin": "daggerbeak wing"
+  },
+  "carrion worm": {
+    "level": 1,
+    "skin": "worm skin"
+  },
+  "fanged rodent": {
+    "level": 1,
+    "skin": "rodent fang"
+  },
+  "fire ant": {
+    "level": 1,
+    "skin": "fire ant pincer"
+  },
+  "giant ant": {
+    "level": 1,
+    "skin": "ant pincer"
+  },
+  "giant rat": {
+    "level": 1,
+    "skin": "rat pelt"
+  },
+  "kobold": {
+    "level": 1,
+    "skin": "kobold skin"
+  },
+  "lesser ghoul": {
+    "level": 1,
+    "skin": "ghoul nail"
+  },
+  "mountain rolton": {
+    "level": 1,
+    "skin": "rolton eye"
+  },
+  "rolton": {
+    "level": 1,
+    "skin": "rolton pelt"
+  },
+  "skeleton": {
+    "level": 1,
+    "skin": "skeleton bone"
+  },
+  "slimy little grub": {
+    "level": 1
+  },
+  "spotted gnarp": {
+    "level": 1,
+    "skin": "spotted gnarp horn"
+  },
+  "young grass snake": {
+    "level": 1,
+    "skin": "snake skin"
+  },
+  "zombie rolton": {
+    "level": 1,
+    "skin": "rotting rolton pelt"
+  },
+  "mistydeep siren": {
+    "level": 2
+  },
+  "big ugly kobold": {
+    "level": 2,
+    "skin": "kobold skin"
+  },
+  "brown gak": {
+    "level": 2,
+    "skin": "brown gak hide"
+  },
+  "cave gnome": {
+    "level": 2,
+    "skin": "gnome scalp"
+  },
+  "fanged goblin": {
+    "level": 2,
+    "skin": "goblin fang"
+  },
+  "ghost": {
+    "level": 2
+  },
+  "goblin": {
+    "level": 2,
+    "skin": "goblin skin"
+  },
+  "lesser frost shade": {
+    "level": 2
+  },
+  "lesser shade": {
+    "level": 2
+  },
+  "moaning phantom": {
+    "level": 2
+  },
+  "pale crab": {
+    "level": 2,
+    "skin": "pale crab pincer"
+  },
+  "phantom": {
+    "level": 2
+  },
+  "rabid squirrel": {
+    "level": 2,
+    "skin": "squirrel tail"
+  },
+  "sea nymph": {
+    "level": 2
+  },
+  "spotted gak": {
+    "level": 2,
+    "skin": "gak hide"
+  },
+  "thyril": {
+    "level": 2
+  },
+  "bresnahanini rolton": {
+    "level": 3,
+    "skin": "rolton horn"
+  },
+  "cave gnoll": {
+    "level": 3
+  },
+  "cave nipper": {
+    "level": 3,
+    "skin": "cave nipper skin"
+  },
+  "dark vysan": {
+    "level": 3
+  },
+  "fire salamander": {
+    "level": 3,
+    "skin": "salamander skin"
+  },
+  "greater ghoul": {
+    "level": 3,
+    "skin": "ghoul scraping"
+  },
+  "greater ice spider": {
+    "level": 3,
+    "skin": "spider leg"
+  },
+  "hobgoblin": {
+    "level": 3,
+    "skin": "hobgoblin scalp"
+  },
+  "ice skeleton": {
+    "level": 3,
+    "skin": "skeleton skull"
+  },
+  "kobold shepherd": {
+    "level": 3,
+    "skin": "kobold ear"
+  },
+  "mountain snowcat": {
+    "level": 3,
+    "skin": "snowcat pelt"
+  },
+  "relnak": {
+    "level": 3,
+    "skin": "relnak sail"
+  },
+  "spotted velnalin": {
+    "level": 3,
+    "skin": "velnalin horn"
+  },
+  "striped gak": {
+    "level": 3,
+    "skin": "gak pelt"
+  },
+  "striped relnak": {
+    "level": 3,
+    "skin": "striped relnak sail"
+  },
+  "troglodyte": {
+    "level": 3
+  },
+  "velnalin": {
+    "level": 3,
+    "skin": "velnalin hide"
+  },
+  "white vysan": {
+    "level": 3
+  },
+  "black urgh": {
+    "level": 4,
+    "skin": "black urgh hide"
+  },
+  "cobra": {
+    "level": 4,
+    "skin": "cobra skin"
+  },
+  "fanged viper": {
+    "level": 4,
+    "skin": "viper skin"
+  },
+  "mongrel kobold": {
+    "level": 4,
+    "skin": "mangy kobold scalp"
+  },
+  "revenant": {
+    "level": 4
+  },
+  "ridge orc": {
+    "level": 4
+  },
+  "spotted leaper": {
+    "level": 4,
+    "skin": "spotted leaper pelt"
+  },
+  "urgh": {
+    "level": 4,
+    "skin": "urgh hide"
+  },
+  "water moccasin": {
+    "level": 4,
+    "skin": "water moccasin skin"
+  },
+  "whiptail": {
+    "level": 4,
+    "skin": "whiptail stinger"
+  },
+  "bobcat": {
+    "level": 5,
+    "skin": "bobcat claw"
+  },
+  "coyote": {
+    "level": 5,
+    "skin": "coyote tail"
+  },
+  "dark apparition": {
+    "level": 5
+  },
+  "mist wraith": {
+    "level": 5,
+    "skin": "mist wraith eye"
+  },
+  "mongrel hobgoblin": {
+    "level": 5,
+    "skin": "mongrel hobgoblin snout"
+  },
+  "nasty little gremlin": {
+    "level": 5
+  },
+  "night golem": {
+    "level": 5,
+    "skin": "night golem finger"
+  },
+  "water witch": {
+    "level": 5
+  },
+  "cockatrice": {
+    "level": 6,
+    "skin": "cockatrice feather"
+  },
+  "firephantom": {
+    "level": 6
+  },
+  "leaper": {
+    "level": 6,
+    "skin": "leaper hide"
+  },
+  "lesser mummy": {
+    "level": 6,
+    "skin": "mummy's shroud"
+  },
+  "lesser orc": {
+    "level": 6,
+    "skin": "orc hide"
+  },
+  "monkey": {
+    "level": 6,
+    "skin": "monkey paw"
+  },
+  "snowy cockatrice": {
+    "level": 6,
+    "skin": "snowy cockatrice tailfeather"
+  },
+  "spectral fisherman": {
+    "level": 6
+  },
+  "spotted lynx": {
+    "level": 6,
+    "skin": "lynx pelt"
+  },
+  "blood eagle": {
+    "level": 7,
+    "skin": "blood red eagle feather"
+  },
+  "greater kappa": {
+    "level": 7,
+    "skin": "kappa fin"
+  },
+  "hobgoblin shaman": {
+    "level": 7,
+    "skin": "hobgoblin shaman ear"
+  },
+  "lesser burrow orc": {
+    "level": 7,
+    "skin": "orc claw"
+  },
+  "lesser red orc": {
+    "level": 7,
+    "skin": "red orc scalp"
+  },
+  "shelfae soldier": {
+    "level": 7,
+    "skin": "shelfae scale"
+  },
+  "albino tomb spider": {
+    "level": 8,
+    "skin": "multi-faceted tomb spider eye"
+  },
+  "bone golem": {
+    "level": 8,
+    "skin": "golem bone"
+  },
+  "crystal crab": {
+    "level": 8,
+    "skin": "faceted crystal crab shell"
+  },
+  "greater burrow orc": {
+    "level": 8,
+    "skin": "orc claw"
+  },
+  "greater orc": {
+    "level": 8,
+    "skin": "orc scalp"
+  },
+  "greater spider": {
+    "level": 8,
+    "skin": "spider leg"
+  },
+  "mottled thrak": {
+    "level": 8
+  },
+  "thrak": {
+    "level": 8,
+    "skin": "thrak hide"
+  },
+  "brown spinner": {
+    "level": 9,
+    "skin": "brown spinner leg"
+  },
+  "crocodile": {
+    "level": 9,
+    "skin": "crocodile snout"
+  },
+  "death dirge": {
+    "level": 9,
+    "skin": "dirge skin"
+  },
+  "manticore": {
+    "level": 9,
+    "skin": "manticore tail"
+  },
+  "snow spectre": {
+    "level": 9,
+    "skin": "spectre nail"
+  },
+  "cave worm": {
+    "level": 10
+  },
+  "giant marmot": {
+    "level": 10,
+    "skin": "marmot pelt"
+  },
+  "gnoll worker": {
+    "level": 10
+  },
+  "great boar": {
+    "level": 10,
+    "skin": "boar tusk"
+  },
+  "rabid guard dog": {
+    "level": 10,
+    "skin": "rotted canine"
+  },
+  "raider orc": {
+    "level": 10
+  },
+  "werebear": {
+    "level": 10,
+    "skin": "werebear paw"
+  },
+  "neartofar orc": {
+    "level": 11,
+    "skin": "orc knuckle"
+  },
+  "shelfae chieftain": {
+    "level": 11,
+    "skin": "shelfae crest"
+  },
+  "wall guardian": {
+    "level": 11
+  },
+  "crystal golem": {
+    "level": 12
+  },
+  "dark orc": {
+    "level": 12,
+    "skin": "orc ear"
+  },
+  "darkwoode": {
+    "level": 13
+  },
+  "deranged sentry": {
+    "level": 13
+  },
+  "gnoll thief": {
+    "level": 13
+  },
+  "great stag": {
+    "level": 13,
+    "skin": "antlers"
+  },
+  "plumed cockatrice": {
+    "level": 13,
+    "skin": "cockatrice plume"
+  },
+  "tawny brindlecat": {
+    "level": 13,
+    "skin": "tawny brindlecat hide"
+  },
+  "agresh troll scout": {
+    "level": 14
+  },
+  "black boar": {
+    "level": 14,
+    "skin": "black boar hide"
+  },
+  "brown boar": {
+    "level": 14,
+    "skin": "brown boar skin"
+  },
+  "forest troll": {
+    "level": 14,
+    "skin": "troll hide"
+  },
+  "giant weasel": {
+    "level": 14,
+    "skin": "weasel pelt"
+  },
+  "great brown bear": {
+    "level": 14,
+    "skin": "brown bear skin"
+  },
+  "grey orc": {
+    "level": 14,
+    "skin": "orc beard"
+  },
+  "silverback orc": {
+    "level": 14,
+    "skin": "silverback orc knuckle"
+  },
+  "shadowy spectre": {
+    "level": 14
+  },
+  "spectre": {
+    "level": 14,
+    "skin": "spectre skin"
+  },
+  "swamp troll": {
+    "level": 14,
+    "skin": "swamp troll scalp"
+  },
+  "arctic puma": {
+    "level": 15,
+    "skin": "white puma hide"
+  },
+  "black leopard": {
+    "level": 15,
+    "skin": "black leopard paw"
+  },
+  "gnoll ranger": {
+    "level": 15
+  },
+  "humpbacked puma": {
+    "level": 15,
+    "skin": "puma paw"
+  },
+  "large ogre": {
+    "level": 15,
+    "skin": "ogre tusk"
+  },
+  "luminescent arachnid": {
+    "level": 15
+  },
+  "neartofar troll": {
+    "level": 15,
+    "skin": "greasy troll scalp"
+  },
+  "panther": {
+    "level": 15,
+    "skin": "panther pelt"
+  },
+  "puma": {
+    "level": 15,
+    "skin": "puma hide"
+  },
+  "ridgeback boar": {
+    "level": 15,
+    "skin": "yellowed boar tusk"
+  },
+  "tomb wight": {
+    "level": 15,
+    "skin": "wight claw"
+  },
+  "wolfshade": {
+    "level": 15
+  },
+  "wraith": {
+    "level": 15,
+    "skin": "wraith talon"
+  },
+  "agresh bear": {
+    "level": 16,
+    "skin": "agresh bear claw"
+  },
+  "agresh troll warrior": {
+    "level": 16
+  },
+  "banded rattlesnake": {
+    "level": 16,
+    "skin": "rattlesnake rattle"
+  },
+  "black bear": {
+    "level": 16,
+    "skin": "bear hide"
+  },
+  "cave troll": {
+    "level": 16,
+    "skin": "troll skin"
+  },
+  "fire guardian": {
+    "level": 16
+  },
+  "fire rat": {
+    "level": 16,
+    "skin": "fire rat tail"
+  },
+  "ghost wolf": {
+    "level": 16
+  },
+  "ghoul master": {
+    "level": 16,
+    "skin": "ghoul finger"
+  },
+  "hill troll": {
+    "level": 16,
+    "skin": "troll beard"
+  },
+  "mongrel troll": {
+    "level": 16,
+    "skin": "chipped troll tusk"
+  },
+  "mongrel wolfhound": {
+    "level": 16,
+    "skin": "yellowed canine"
+  },
+  "mountain ogre": {
+    "level": 16,
+    "skin": "ogre nose"
+  },
+  "phosphorescent worm": {
+    "level": 16
+  },
+  "plains orc warrior": {
+    "level": 16,
+    "skin": "scraggly orc scalp"
+  },
+  "red bear": {
+    "level": 16,
+    "skin": "bear paw"
+  },
+  "wind witch": {
+    "level": 16,
+    "skin": "crooked witch nose"
+  },
+  "black panther": {
+    "level": 17
+  },
+  "dark shambler": {
+    "level": 17,
+    "skin": "glistening black eye"
+  },
+  "forest ogre": {
+    "level": 17,
+    "skin": "ogre tusk"
+  },
+  "giant veaba": {
+    "level": 17,
+    "skin": "veaba claw"
+  },
+  "gnoll guard": {
+    "level": 17
+  },
+  "krolvin mercenary": {
+    "level": 17
+  },
+  "mountain goat": {
+    "level": 17,
+    "skin": "goat hoof"
+  },
+  "mountain troll": {
+    "level": 17,
+    "skin": "troll toe"
+  },
+  "plains ogre": {
+    "level": 17,
+    "skin": "ogre nose"
+  },
+  "plains orc scout": {
+    "level": 17,
+    "skin": "scraggly orc scalp"
+  },
+  "spiked cavern urchin": {
+    "level": 17
+  },
+  "bighorn sheep": {
+    "level": 18,
+    "skin": "bighorn sheepskin"
+  },
+  "cave lizard": {
+    "level": 18,
+    "skin": "stone-grey lizard tail"
+  },
+  "elder ghoul master": {
+    "level": 18,
+    "skin": "ghoul master claw"
+  },
+  "fire cat": {
+    "level": 18,
+    "skin": "fire cat claw"
+  },
+  "ghostly warrior": {
+    "level": 18
+  },
+  "greenwing hornet": {
+    "level": 18,
+    "skin": "hornet stinger"
+  },
+  "mountain lion": {
+    "level": 18,
+    "skin": "mountain lion skin"
+  },
+  "nedum vereri": {
+    "level": 18
+  },
+  "plains lion": {
+    "level": 18,
+    "skin": "plains lion skin"
+  },
+  "plains orc shaman": {
+    "level": 18,
+    "skin": "scraggly orc scalp"
+  },
+  "rotting krolvin pirate": {
+    "level": 18
+  },
+  "shelfae warlord": {
+    "level": 18,
+    "skin": "orange shelfae scale"
+  },
+  "thunder troll": {
+    "level": 18,
+    "skin": "troll scalp"
+  },
+  "war troll": {
+    "level": 18,
+    "skin": "troll heart"
+  },
+  "krolvin warrior": {
+    "level": 19
+  },
+  "agresh troll chieftain": {
+    "level": 20
+  },
+  "arch wight": {
+    "level": 20,
+    "skin": "wight skin"
+  },
+  "gnoll priest": {
+    "level": 20
+  },
+  "major spider": {
+    "level": 20
+  },
+  "massive grahnk": {
+    "level": 20
+  },
+  "ogre warrior": {
+    "level": 20,
+    "skin": "ogre tooth"
+  },
+  "steel golem": {
+    "level": 20
+  },
+  "striped warcat": {
+    "level": 20,
+    "skin": "warcat whisker"
+  },
+  "wood wight": {
+    "level": 20,
+    "skin": "wight scalp"
+  },
+  "ancient ghoul master": {
+    "level": 21
+  },
+  "arachne servant": {
+    "level": 21
+  },
+  "cave bear": {
+    "level": 21,
+    "skin": "bear claw"
+  },
+  "plains orc chieftain": {
+    "level": 21,
+    "skin": "scraggly orc scalp"
+  },
+  "cougar": {
+    "level": 22,
+    "skin": "cougar tail"
+  },
+  "crested basilisk": {
+    "level": 22,
+    "skin": "basilisk crest"
+  },
+  "dark panther": {
+    "level": 22,
+    "skin": "panther pelt"
+  },
+  "warthog": {
+    "level": 22,
+    "skin": "warthog snout"
+  },
+  "arachne acolyte": {
+    "level": 23
+  },
+  "centaur": {
+    "level": 23,
+    "skin": "centaur hide"
+  },
+  "centaur ranger": {
+    "level": 23,
+    "skin": "centaur hide"
+  },
+  "crazed zombie": {
+    "level": 23,
+    "skin": "zombie scalp"
+  },
+  "fenghai": {
+    "level": 23,
+    "skin": "fenghai fur"
+  },
+  "niirsha": {
+    "level": 23
+  },
+  "nonomino": {
+    "level": 23
+  },
+  "rotting woodsman": {
+    "level": 23
+  },
+  "zombie": {
+    "level": 23,
+    "skin": "zombie scalp"
+  },
+  "arctic wolverine": {
+    "level": 24,
+    "skin": "wolverine tail"
+  },
+  "burly reiver": {
+    "level": 24
+  },
+  "giant albino scorpion": {
+    "level": 24,
+    "skin": "scorpion stinger"
+  },
+  "ice hound": {
+    "level": 24,
+    "skin": "ice hound ear"
+  },
+  "night hound": {
+    "level": 24,
+    "skin": "night hound hide"
+  },
+  "reiver": {
+    "level": 24
+  },
+  "roa'ter wormling": {
+    "level": 24
+  },
+  "tree viper": {
+    "level": 24,
+    "skin": "tree viper fang"
+  },
+  "veteran reiver": {
+    "level": 24
+  },
+  "wolverine": {
+    "level": 24,
+    "skin": "wolverine pelt"
+  },
+  "carceris": {
+    "level": 25
+  },
+  "gnoll jarl": {
+    "level": 25
+  },
+  "krolvin warfarer": {
+    "level": 25
+  },
+  "sacristan spirit": {
+    "level": 25
+  },
+  "spectral monk": {
+    "level": 25
+  },
+  "arachne priest": {
+    "level": 26
+  },
+  "arachne priestess": {
+    "level": 26
+  },
+  "jungle troll": {
+    "level": 26,
+    "skin": "troll knuckle"
+  },
+  "tree spirit": {
+    "level": 26
+  },
+  "grutik savage": {
+    "level": 27
+  },
+  "cyclops": {
+    "level": 27,
+    "skin": "cyclops eye"
+  },
+  "frenzied monk": {
+    "level": 27
+  },
+  "lesser stone gargoyle": {
+    "level": 27
+  },
+  "monastic lich": {
+    "level": 27
+  },
+  "snow leopard": {
+    "level": 27,
+    "skin": "leopard skin"
+  },
+  "troll chieftain": {
+    "level": 27,
+    "skin": "troll fang"
+  },
+  "cook's assistant": {
+    "level": 28
+  },
+  "darken": {
+    "level": 28
+  },
+  "dobrem": {
+    "level": 28,
+    "skin": "dobrem snout"
+  },
+  "fire ogre": {
+    "level": 28
+  },
+  "giant hawk-owl": {
+    "level": 28,
+    "skin": "tufted hawk-owl ear"
+  },
+  "ki-lin": {
+    "level": 28
+  },
+  "martial eagle": {
+    "level": 28,
+    "skin": "martial eagle talon"
+  },
+  "moaning spirit": {
+    "level": 28
+  },
+  "grutik shaman": {
+    "level": 29
+  },
+  "arctic manticore": {
+    "level": 29,
+    "skin": "arctic manticore mane"
+  },
+  "ice troll": {
+    "level": 29,
+    "skin": "ice troll scalp"
+  },
+  "pra'eda": {
+    "level": 29
+  },
+  "scaly burgee": {
+    "level": 29,
+    "skin": "scaly burgee shell"
+  },
+  "elder tree spirit": {
+    "level": 30
+  },
+  "giant albino tomb spider": {
+    "level": 30,
+    "skin": "sheer white spider mandible"
+  },
+  "hisskra warrior": {
+    "level": 30,
+    "skin": "hisskra skin"
+  },
+  "hooded figure": {
+    "level": 30
+  },
+  "hunter troll": {
+    "level": 30,
+    "skin": "troll tongue"
+  },
+  "jungle troll chieftain": {
+    "level": 30,
+    "skin": "scrap of troll skin"
+  },
+  "lesser wood sprite": {
+    "level": 30
+  },
+  "mammoth arachnid": {
+    "level": 30,
+    "skin": "mandible"
+  },
+  "tegursh sentry": {
+    "level": 30,
+    "skin": "tegursh claw"
+  },
+  "ash hag": {
+    "level": 31,
+    "skin": "ash hag nose"
+  },
+  "krynch": {
+    "level": 31,
+    "skin": "krynch shinbone"
+  },
+  "skeletal ice troll": {
+    "level": 31
+  },
+  "wild hound": {
+    "level": 31
+  },
+  "caribou": {
+    "level": 32,
+    "skin": "a pair of caribou antlers"
+  },
+  "ghostly mara": {
+    "level": 32
+  },
+  "giant fog beetle": {
+    "level": 32,
+    "skin": "fog beetle carapace"
+  },
+  "rotting corpse": {
+    "level": 32
+  },
+  "rotting farmhand": {
+    "level": 32
+  },
+  "ghostly pooka": {
+    "level": 33
+  },
+  "hisskra shaman": {
+    "level": 33,
+    "skin": "hisskra tooth"
+  },
+  "lesser fetid corpse": {
+    "level": 33
+  },
+  "maw spore": {
+    "level": 33
+  },
+  "mezic": {
+    "level": 33
+  },
+  "moor hound": {
+    "level": 33,
+    "skin": "moor hound paw"
+  },
+  "sand beetle": {
+    "level": 33
+  },
+  "skeletal giant": {
+    "level": 33,
+    "skin": "skeletal giant bone"
+  },
+  "three-toed tegu": {
+    "level": 33,
+    "skin": "tailspike"
+  },
+  "cold guardian": {
+    "level": 34
+  },
+  "colossus vulture": {
+    "level": 34,
+    "skin": "ruff of vulture feathers"
+  },
+  "hisskra chieftain": {
+    "level": 34,
+    "skin": "hisskra crest"
+  },
+  "lava troll": {
+    "level": 34,
+    "skin": "troll eye"
+  },
+  "moor witch": {
+    "level": 34
+  },
+  "rock troll zombie": {
+    "level": 34,
+    "skin": "decaying troll eye"
+  },
+  "skeletal soldier": {
+    "level": 34
+  },
+  "spectral warrior": {
+    "level": 34
+  },
+  "tundra giant": {
+    "level": 34,
+    "skin": "tundra giant tooth"
+  },
+  "barghest": {
+    "level": 35
+  },
+  "bog troll": {
+    "level": 35,
+    "skin": "troll ear"
+  },
+  "moor eagle": {
+    "level": 35,
+    "skin": "talon"
+  },
+  "shimmering fungus": {
+    "level": 35,
+    "skin": "fungal cap"
+  },
+  "spectral black warhorse": {
+    "level": 35
+  },
+  "spectral shade": {
+    "level": 35
+  },
+  "spectral woodsman": {
+    "level": 35
+  },
+  "troll wraith": {
+    "level": 35
+  },
+  "water wyrd": {
+    "level": 35
+  },
+  "arctic titan": {
+    "level": 36,
+    "skin": "arctic titan toe"
+  },
+  "dust beetle": {
+    "level": 36
+  },
+  "fire giant": {
+    "level": 36,
+    "skin": "fire giant mane"
+  },
+  "krolvin slaver": {
+    "level": 36
+  },
+  "snow crone": {
+    "level": 36,
+    "skin": "crooked crone finger"
+  },
+  "spectral lord": {
+    "level": 36
+  },
+  "undertaker bat": {
+    "level": 36,
+    "skin": "bat wing"
+  },
+  "writhing icy bush": {
+    "level": 36,
+    "skin": "blood-stained leaf"
+  },
+  "sheruvian initiate": {
+    "level": 37
+  },
+  "huge mein golem": {
+    "level": 37
+  },
+  "lesser moor wight": {
+    "level": 37,
+    "skin": "wight skull"
+  },
+  "magru": {
+    "level": 37
+  },
+  "shadow mare": {
+    "level": 37,
+    "skin": "silver-tipped horseshoe"
+  },
+  "skeletal warhorse": {
+    "level": 37,
+    "skin": "skeletal warhorse jaw"
+  },
+  "tusked ursian": {
+    "level": 37,
+    "skin": "ursian tusk"
+  },
+  "frost giant": {
+    "level": 38,
+    "skin": "giant toe"
+  },
+  "grizzly bear": {
+    "level": 38,
+    "skin": "grizzly bear hide"
+  },
+  "krolvin corsair": {
+    "level": 38
+  },
+  "mud wasp": {
+    "level": 38,
+    "skin": "wasp stinger"
+  },
+  "shadow steed": {
+    "level": 38,
+    "skin": "silvery tail"
+  },
+  "vesperti": {
+    "level": 38,
+    "skin": "vesperti claw"
+  },
+  "wood sprite": {
+    "level": 38
+  },
+  "blackened decaying tumbleweed": {
+    "level": 39,
+    "skin": "desiccated stem"
+  },
+  "greater bog troll": {
+    "level": 39,
+    "skin": "cracked troll jawbone"
+  },
+  "greater moor wight": {
+    "level": 39,
+    "skin": "wight mane"
+  },
+  "stone gargoyle": {
+    "level": 39
+  },
+  "storm giant": {
+    "level": 39,
+    "skin": "giant skin"
+  },
+  "vourkha": {
+    "level": 39
+  },
+  "forest bendith": {
+    "level": 40
+  },
+  "kiramon worker": {
+    "level": 40,
+    "skin": "kiramon mandible"
+  },
+  "myklian": {
+    "level": 40,
+    "skin": "myklian scale"
+  },
+  "spectral miner": {
+    "level": 40
+  },
+  "writhing frost-glazed vine": {
+    "level": 40,
+    "skin": "thorn-ridden appendage"
+  },
+  "sheruvian monk": {
+    "level": 41
+  },
+  "bog wraith": {
+    "level": 41
+  },
+  "lesser ice giant": {
+    "level": 41,
+    "skin": "giant scalp"
+  },
+  "roa'ter": {
+    "level": 41,
+    "skin": "roa'ter skin"
+  },
+  "skeletal lord": {
+    "level": 41
+  },
+  "baesrukha": {
+    "level": 42
+  },
+  "dark vortece": {
+    "level": 42
+  },
+  "frozen corpse": {
+    "level": 42,
+    "skin": "frozen scalp"
+  },
+  "greater fetid corpse": {
+    "level": 42
+  },
+  "minor glacei": {
+    "level": 42
+  },
+  "phantasma": {
+    "level": 42
+  },
+  "shan cleric": {
+    "level": 42
+  },
+  "shan ranger": {
+    "level": 42
+  },
+  "shan warrior": {
+    "level": 42
+  },
+  "shan wizard": {
+    "level": 42
+  },
+  "siren lizard": {
+    "level": 42,
+    "skin": "multicolored siren lizard skin"
+  },
+  "swamp hag": {
+    "level": 42
+  },
+  "dreadnought raptor": {
+    "level": 43,
+    "skin": "raptor feathers"
+  },
+  "night mare": {
+    "level": 43,
+    "skin": "silvery hoof"
+  },
+  "wasp nest": {
+    "level": 43
+  },
+  "bog wight": {
+    "level": 44
+  },
+  "firethorn shoot": {
+    "level": 44,
+    "skin": "pulsating firethorn"
+  },
+  "forest trali": {
+    "level": 44,
+    "skin": "trali hide"
+  },
+  "gaunt spectral servant": {
+    "level": 44
+  },
+  "mastodonic leopard": {
+    "level": 44,
+    "skin": "spotted leopard pelt"
+  },
+  "polar bear": {
+    "level": 44,
+    "skin": "polar bear skin"
+  },
+  "ice wraith": {
+    "level": 45
+  },
+  "lesser vruul": {
+    "level": 45,
+    "skin": "vruul skin"
+  },
+  "dark frosty plant": {
+    "level": 45,
+    "skin": "frosted branch"
+  },
+  "cinder wasp": {
+    "level": 46,
+    "skin": "shimmering wasp wing"
+  },
+  "forest trali shaman": {
+    "level": 46,
+    "skin": "trali scalp"
+  },
+  "greater ice giant": {
+    "level": 46,
+    "skin": "giant scalp"
+  },
+  "kiramon defender": {
+    "level": 46,
+    "skin": "kiramon tongue"
+  },
+  "lesser faeroth": {
+    "level": 46,
+    "skin": "mottled faeroth crest"
+  },
+  "rotting chimera": {
+    "level": 46,
+    "skin": "chimera stinger"
+  },
+  "bog spectre": {
+    "level": 47
+  },
+  "major glacei": {
+    "level": 47
+  },
+  "dybbuk": {
+    "level": 48
+  },
+  "horned vor'taz": {
+    "level": 48,
+    "skin": "vor'taz horn"
+  },
+  "large thorned shrub": {
+    "level": 48,
+    "skin": "bleached thorn"
+  },
+  "necrotic snake": {
+    "level": 48,
+    "skin": "snake fang"
+  },
+  "red-scaled thrak": {
+    "level": 48,
+    "skin": "thrak tail"
+  },
+  "sand devil": {
+    "level": 48
+  },
+  "warrior shade": {
+    "level": 48
+  },
+  "waern": {
+    "level": 49,
+    "skin": "waern fur"
+  },
+  "banshee": {
+    "level": 50
+  },
+  "flesh golem": {
+    "level": 50
+  },
+  "greater faeroth": {
+    "level": 50,
+    "skin": "faeroth fang"
+  },
+  "shriveled icy creeper": {
+    "level": 50,
+    "skin": "shriveled cutting"
+  },
+  "seeker": {
+    "level": 52,
+    "skin": "seeker eye"
+  },
+  "snow madrinol": {
+    "level": 52,
+    "skin": "madrinol skin"
+  },
+  "tomb troll": {
+    "level": 52,
+    "skin": "troll thumb"
+  },
+  "wooly mammoth": {
+    "level": 52,
+    "skin": "mammoth tusk"
+  },
+  "ice golem": {
+    "level": 53
+  },
+  "lesser ice elemental": {
+    "level": 53
+  },
+  "sabre-tooth tiger": {
+    "level": 53,
+    "skin": "tiger incisor"
+  },
+  "stone sentinel": {
+    "level": 53
+  },
+  "animated slush": {
+    "level": 54
+  },
+  "ethereal mage apprentice": {
+    "level": 54
+  },
+  "skayl": {
+    "level": 54
+  },
+  "tomb troll necromancer": {
+    "level": 54,
+    "skin": "troll eyeball"
+  },
+  "eidolon": {
+    "level": 55
+  },
+  "nightmare steed": {
+    "level": 55,
+    "skin": "silver mane"
+  },
+  "stone troll": {
+    "level": 55
+  },
+  "decaying citadel guardsman": {
+    "level": 56
+  },
+  "glacial morph": {
+    "level": 56
+  },
+  "lava golem": {
+    "level": 56
+  },
+  "massive pyrothag": {
+    "level": 58,
+    "skin": "pyrothag hide"
+  },
+  "rotting citadel arbalester": {
+    "level": 58
+  },
+  "stone giant": {
+    "level": 58
+  },
+  "black forest viper": {
+    "level": 59,
+    "skin": "viper fang"
+  },
+  "massive black boar": {
+    "level": 59,
+    "skin": "heavy grey tusk"
+  },
+  "black forest ogre": {
+    "level": 60
+  },
+  "fire elemental": {
+    "level": 60
+  },
+  "putrefied citadel herald": {
+    "level": 60
+  },
+  "winged viper": {
+    "level": 60,
+    "skin": "pale white feather"
+  },
+  "wind wraith": {
+    "level": 61
+  },
+  "illoke mystic": {
+    "level": 62
+  },
+  "phantasmal bestial swordsman": {
+    "level": 62
+  },
+  "stone mastiff": {
+    "level": 62,
+    "skin": "stone heart"
+  },
+  "sheruvian harbinger": {
+    "level": 63
+  },
+  "ice elemental": {
+    "level": 63
+  },
+  "massive troll king": {
+    "level": 63,
+    "skin": "massive troll king hide"
+  },
+  "soul golem": {
+    "level": 63
+  },
+  "direbear": {
+    "level": 64,
+    "skin": "direbear fang"
+  },
+  "fire sprite": {
+    "level": 64
+  },
+  "grifflet": {
+    "level": 64,
+    "skin": "pelt"
+  },
+  "emaciated hierophant": {
+    "level": 66
+  },
+  "red tsark": {
+    "level": 66,
+    "skin": "tsark skin"
+  },
+  "illoke shaman": {
+    "level": 67
+  },
+  "monstrous direwolf": {
+    "level": 67,
+    "skin": "red eye"
+  },
+  "muscular supplicant": {
+    "level": 67
+  },
+  "yeti": {
+    "level": 67
+  },
+  "warped tree spirit": {
+    "level": 68
+  },
+  "lesser griffin": {
+    "level": 69,
+    "skin": "pelt"
+  },
+  "hunch-backed dogmatist": {
+    "level": 70
+  },
+  "krag yeti": {
+    "level": 70
+  },
+  "fire mage": {
+    "level": 71
+  },
+  "krag dweller": {
+    "level": 72
+  },
+  "ilvari sprite": {
+    "level": 73
+  },
+  "storm griffin": {
+    "level": 73,
+    "skin": "soft blue griffin feather"
+  },
+  "ilvari pixie": {
+    "level": 74
+  },
+  "lesser minotaur": {
+    "level": 74,
+    "skin": "minotaur hide"
+  },
+  "greater vruul": {
+    "level": 75
+  },
+  "moulis": {
+    "level": 75
+  },
+  "naisirc": {
+    "level": 75
+  },
+  "minotaur warrior": {
+    "level": 76,
+    "skin": "minotaur horn"
+  },
+  "shrickhen": {
+    "level": 76
+  },
+  "farlook": {
+    "level": 77
+  },
+  "raving lunatic": {
+    "level": 77
+  },
+  "dhu goleras": {
+    "level": 78
+  },
+  "minotaur magi": {
+    "level": 78,
+    "skin": "minotaur hoof"
+  },
+  "seraceris": {
+    "level": 78
+  },
+  "treekin warrior": {
+    "level": 80,
+    "skin": "blood-stained bark"
+  },
+  "vvrael witch": {
+    "level": 80
+  },
+  "csetairi": {
+    "level": 81
+  },
+  "caedera": {
+    "level": 82,
+    "skin": "caedera skin"
+  },
+  "earth elemental": {
+    "level": 82
+  },
+  "gnarled being": {
+    "level": 82
+  },
+  "bent being": {
+    "level": 82
+  },
+  "stooped being": {
+    "level": 82
+  },
+  "twisted being": {
+    "level": 82
+  },
+  "lesser construct": {
+    "level": 83
+  },
+  "treekin druid": {
+    "level": 83,
+    "skin": "mossy beard"
+  },
+  "vvrael warlock": {
+    "level": 84
+  },
+  "greater krynch": {
+    "level": 84
+  },
+  "gremlock": {
+    "level": 84
+  },
+  "lich qyn'arj": {
+    "level": 84
+  },
+  "illoke elder": {
+    "level": 86
+  },
+  "aivren": {
+    "level": 86,
+    "skin": "aivren gizzard"
+  },
+  "festering taint": {
+    "level": 86
+  },
+  "n'ecare": {
+    "level": 87
+  },
+  "greater earth elemental": {
+    "level": 88
+  },
+  "illoke jarl": {
+    "level": 89
+  },
+  "ithzir scout": {
+    "level": 89
+  },
+  "ithzir initiate": {
+    "level": 91
+  },
+  "lost soul": {
+    "level": 91
+  },
+  "ithzir janissary": {
+    "level": 92
+  },
+  "water elemental": {
+    "level": 92
+  },
+  "ithzir herald": {
+    "level": 93
+  },
+  "vaespilon": {
+    "level": 93
+  },
+  "triton dissembler": {
+    "level": 94,
+    "skin": "curved gold-flecked claw"
+  },
+  "huge air elemental": {
+    "level": 95
+  },
+  "huge earth elemental": {
+    "level": 95
+  },
+  "huge ice elemental": {
+    "level": 95
+  },
+  "huge water elemental": {
+    "level": 95
+  },
+  "greater construct": {
+    "level": 96
+  },
+  "ithzir adept": {
+    "level": 96
+  },
+  "lithe veiled sentinel": {
+    "level": 96
+  },
+  "siren": {
+    "level": 96
+  },
+  "triton executioner": {
+    "level": 96
+  },
+  "fallen crusader": {
+    "level": 97
+  },
+  "ithzir seer": {
+    "level": 97
+  },
+  "patchwork flesh monstrosity": {
+    "level": 97
+  },
+  "shambling lurk": {
+    "level": 97
+  },
+  "deathsworn fanatic": {
+    "level": 98
+  },
+  "spectral triton defender": {
+    "level": 98
+  },
+  "triton combatant": {
+    "level": 98
+  },
+  "huge fire elemental": {
+    "level": 99
+  },
+  "huge steam elemental": {
+    "level": 99
+  },
+  "glistening cerebralite": {
+    "level": 100,
+    "skin": "cerebralite tentacle"
+  },
+  "huge lava elemental": {
+    "level": 100
+  },
+  "huge lightning elemental": {
+    "level": 100
+  },
+  "triton radical": {
+    "level": 100,
+    "skin": "elongated triton spine"
+  },
+  "war griffin": {
+    "level": 100,
+    "skin": "war griffin talon"
+  },
+  "ithzir champion": {
+    "level": 102
+  },
+  "pale scaled shaper": {
+    "level": 102
+  },
+  "triton magus": {
+    "level": 102,
+    "skin": "iridescent triton hide"
+  },
+  "enormous rift crawler": {
+    "level": 103,
+    "skin": "jagged rift crawler tooth"
+  },
+  "ethereal triton sentry": {
+    "level": 103
+  },
+  "darkly inked fetish master": {
+    "level": 104
+  },
+  "greater water elemental": {
+    "level": 105
+  },
+  "murky soul siphon": {
+    "level": 106
+  },
+  "vvrael destroyer": {
+    "level": 108
+  },
+  "infernal lich": {
+    "level": 110,
+    "skin": "a scorched lich finger bone"
+  },
+  "frostborne lich": {
+    "level": 110,
+    "skin": "a rimed lich finger bone"
+  }
+}

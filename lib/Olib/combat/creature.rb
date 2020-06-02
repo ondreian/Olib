@@ -6,6 +6,7 @@
 # - add known spells/cmans/manuevers and algorithm for danger level by profession and skills
 require "ostruct"
 require "Olib/combat/creatures"
+require "Olib/combat/attack"
 require "Olib/core/exist"
 require "Olib/pattern_matching/rill"
 
@@ -20,15 +21,6 @@ class Creature < Exist
     start: Rill.union(%[You skinned the <pushBold/><a exist="{{id}}"],
                       %[You botched],
                       %[has already"]))
-
-  Attack = Rill.new(
-    timeout: 2,
-    start:   Rill.union(%[You (.*?) at <pushBold/>(a|an|some) <a exist="{{id}}],
-                      %[A little bit late],
-                      %[already dead], 
-                      %[I could not find what you were referring to],
-                      %[What were you referring to?]))
-
   WOUNDS = %i[
     right_leg left_leg right_arm 
     left_arm head neck chest 
@@ -65,7 +57,7 @@ class Creature < Exist
   def initialize(creature)
     super(creature)
     @wounds = {}
-    @tags   = (Exist.normalize_type_data(creature.type) + (metadata["tags"] || []) ).map(&:to_sym)
+    @tags   = Exist.normalize_type_data(creature.type).map(&:to_sym)
     TAGS.each_pair do |tag, pattern| @tags << tag if @name =~ pattern end
     Creature.add_boss_type(self)
     heal
@@ -73,14 +65,6 @@ class Creature < Exist
 
   def tags
     @tags
-  end
-
-  def level
-    metadata["level"] || Char.level
-  end
-
-  def metadata
-    Creatures::BY_NAME[name] || {}
   end
 
   def heal
@@ -174,8 +158,13 @@ class Creature < Exist
     status.include?(:stunned)
   end
 
-  def kill_shot(order = [:left_eye, :right_eye, :head, :neck, :back], default = :chest)
-    wounds   = injuries
+  def skin?
+    dead? && !@skinned && metadata.skin.is_a?(String)
+  end
+
+  def kill_shot(order = %i(left_eye right_eye head neck back), default = :chest)
+    injuries
+
     return (order
       .drop_while do |area| @wounds[area] == 3 end
       .first || default).to_game
@@ -184,6 +173,14 @@ class Creature < Exist
   def targetable?
     target if @targetable.nil?
     @targetable
+  end
+
+  def metadata()
+    OpenStruct.new Creatures::Metadata.get(name)
+  end
+
+  def level()
+    metadata.level
   end
 
   [Creatures::ARCHETYPES, Creatures::STATES].flatten.each do |state|
@@ -195,17 +192,6 @@ class Creature < Exist
   def target
     result = dothistimeout "target ##{@id}", 3, /#{Dictionary.targetable.values.join('|')}/
     @targetable = (result =~ Dictionary.targetable[:yes])
-    self
-  end
-
-  def ambush(location=nil)
-    until hidden?
-      fput "hide"
-      waitrt?
-    end
-    Char.aim(location) if location
-    fput "ambush ##{@id}"
-    waitrt?
     self
   end
 
@@ -224,43 +210,33 @@ class Creature < Exist
     status.include?(:dead)
   end
 
-  def block(method)
-    return {err: :dead} if dead?
-    Kernel.send(method)
-    return {err: :dead} if dead?
-    yield if block_given?
-  end
-
   def kill
-    block(:waitrt?) do
-      Attack.capture(self.to_h, %[kill \#{{id}}])
-    end
+    Attack.apply(self, :kill)
   end
 
   def cast
-    block(:waitcastrt?) do
-      Attack.capture(self.to_h, %[cast \#{{id}}])
-    end
+    Attack.apply(self, :cast)
   end
 
-  def fire(location=nil)
+  def fire(location: nil, qstrike: 0)
     Char.aim(location) if location
-    block(:waitrt?) do
-      Attack.capture(self.to_h, %[fire \#{{id}}])
-    end
+    Attack.apply(self, :fire)
   end
 
-  def hurl(location=nil)
+  def hurl(location: nil, qstrike: 0)
     Char.aim(location) if location
-    block(:waitrt?) do
-      Attack.capture(self.to_h, %[hurl \#{{id}}])
-    end
+    Attack.apply(self, :hurl, qstrike: qstrike)
+  end
+
+  def ambush(location: nil, qstrike: 0)
+    Char.aim(location) if location
+    Attack.apply(self, :ambush)
   end
 
   def search()
     waitrt?
     return unless dead?
-    (_, lines) = Search.capture(self.to_h, %[search \#{{id}}])
+    (_, _, lines) = Search.capture(self.to_h, %[search \#{{id}}])
     # the first line containers a creature id we want to avoid capturing
     lines[1..-1]
     .map do |line| Exist.scan(line) end
@@ -270,7 +246,8 @@ class Creature < Exist
   def skin()
     waitrt?
     return unless dead?
-    (_, lines) = Skin.capture(self.to_h, %[skin \#{{id}}])
+    (_, _, lines)= Skin.capture(self.to_h, %[skin \#{{id}}])
+    @skinned = true
     lines
     .map do |line| Exist.scan(line.split("yielding").last) end
     .flatten.compact.reject(&:gone?)

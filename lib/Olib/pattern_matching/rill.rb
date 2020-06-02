@@ -38,7 +38,10 @@ class Rill
       if (result = (line.match(begin_pattern) or line.match(end_pattern)))
         matches.merge!(result.to_h)
       end
-      return {ok: 1, matches: matches, lines: lines} if (line.match(end_pattern) and state.eql?(:open))
+
+      if (line.match(end_pattern) and state.eql?(:open))
+        return [:ok, matches, lines]
+      end
     end
   end
 

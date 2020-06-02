@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors       = ["Ondreian Shamsiel"]
   s.email         = "ondreian.shamsiel@gmail.com"
   s.homepage      = "https://github.com/ondreian/Olib"
-  s.files         = %w[Olib.gemspec] + Dir["*.md", "lib/**/*.rb"]
+  s.files         = %w[Olib.gemspec] + Dir["*.md", "lib/**/*.rb", "lib/**/*.json"]
   #s.require_paths = %w[lib]
   # s.add_runtime_dependency "shoes"
   s.license     = "MIT"

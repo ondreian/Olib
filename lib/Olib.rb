@@ -1,3 +1,4 @@
+require 'dry/monads/all'
 require "ostruct"
 
 module Olib

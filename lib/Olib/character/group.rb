@@ -2,7 +2,7 @@ require "ostruct"
 require "benchmark"
 require "Olib/character/disk"
 
-module Group
+class Group
   @@members ||= []
   @@leader  ||= nil
   @@checked ||= false
@@ -144,7 +144,7 @@ module Group
   end
 end
 
-module Group
+class Group
   module Observer
     module Term
       ##
