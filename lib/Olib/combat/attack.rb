@@ -10,6 +10,7 @@ module Attack
     %[already dead], 
     %[You don't have a spell prepared!],
     %[I could not find what you were referring to],
+    %[You position yourself to attack],
     %[What were you referring to?])
 
   @matcher = Rill.new(timeout: 2, start: @template)

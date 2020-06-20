@@ -32,8 +32,7 @@ class Go2
   def Go2.room(roomid)
     unless Room.current.id == roomid || Room.current.tags.include?(roomid)
       Char.unhide if hidden
-      start_script "go2", [roomid, "_disable_confirm_"]
-      wait_while { running? "go2" };
+      Script.run("go2", "#{roomid} _disable_confirm_")
     end
     Go2
   end

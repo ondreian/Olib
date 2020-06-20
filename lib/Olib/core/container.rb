@@ -23,7 +23,7 @@ class Container < Exist
   end
 
   def contents
-    GameObj.containers.fetch(id, []).map do |item| Item.new(item, self) end
+    GameObj.containers.fetch(id, []).map do |item| Item.of(item, self) end
   end
 
   def closed?

@@ -5,6 +5,7 @@ class Transaction < Exist
     start: %[to appraise (?:a |an |)<a exist="{{id}}"],
     close: Regexp.union(
       %r[I already appraised that],
+      %r[Sorry, #{Char.name}, I'm not buying anything this valuable today\.],
       %r[(I'll give you|How's|I'll offer you|worth at least) (?<value>\d+)],
       %r[(?<value>\d+) silvers])
     )
@@ -36,9 +37,13 @@ class Transaction < Exist
   def appraise()
     return self unless @value.nil?
     take
-    (_, match, _lines) = Appraise.capture(self.to_h, 
+    (_, match, lines) = Appraise.capture(self.to_h, 
       "appraise \#{{id}}")
-    @value = match[:value].to_i
+    if lines.any? {|line| line.include?(%[Sorry, Pixelia, I'm not buying anything this valuable today.])}
+      @value = Float::INFINITY
+    else
+      @value = match[:value].to_i
+    end
     self
   end
 

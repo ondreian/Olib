@@ -116,23 +116,15 @@ class Bounty
     Bounty.parse(checkbounty)
   end
 
-  def Bounty.ask_for_bounty
-    if invisible?
-      fput "unhide"
-    end
-
-    if hidden?
-      fput "unhide"
-    end
-
-    if Bounty.npc
-      fput "ask ##{Bounty.npc.id} for bounty"
-      Bounty
+  def Bounty.ask_for_bounty(expedite: false)
+    fput "unhide" if invisible?
+    fput "unhide" if hidden?
+    raise Exception, "could not find Bounty.npc here" unless Bounty.npc
+    if expedite
+      fput "ask ##{Bounty.npc.id} for expedite" 
     else
-      raise Exception.new "could not find Bounty.npc here"
+      fput "ask ##{Bounty.npc.id} for bounty"
     end
-    # give the XML parser time to update
-    sleep 0.2
   end
 
   def Bounty.herbalist

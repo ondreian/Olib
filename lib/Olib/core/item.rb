@@ -2,6 +2,7 @@ require "ostruct"
 require "Olib/core/exist"
 require "Olib/core/use"
 require "Olib/core/transaction"
+require "Olib/core/scroll"
 
 class GameObj
   def to_item
@@ -12,6 +13,12 @@ end
 # this is the structure for a base Object
 # wraps an instance of GameObj and adds the ability for tags, queries
 class Item < Exist
+  def self.of(item, container = nil)
+    return Scroll.new(item, container) if item.type.include?("scroll")
+    return Item.new(item, container)
+  end
+
+
   def self.fetch(id)
     new Exist.fetch(id)
   end
