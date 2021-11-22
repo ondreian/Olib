@@ -29,23 +29,32 @@ class Go2
     Go2.define_singleton_method(tag.methodize) do Go2.room(tag) end
   end
 
-  def Go2.room(roomid)
-    unless Room.current.id == roomid || Room.current.tags.include?(roomid)
+  def Go2.run(target)
+    Script.run "go2", ("%s _disable_confirm_" % target)
+  end
+
+  def Go2.room(target)
+    starting_room = Room.current.id
+    unless Room.current.id == target || Room.current.tags.include?(target)
       Char.unhide if hidden
-      Script.run("go2", "#{roomid} _disable_confirm_")
+      Go2.run(target)
+      if block_given?
+        yield
+        starting_room
+      end
     end
     Go2
   end
 
   def Go2.origin
-    Go2.room @@origin[:roomid]
+    Go2.room @@origin[:target]
     Char.hide if @@origin[:hidden]
     Go2
   end
 
   def Go2.rebase
     @@origin            = {}
-    @@origin[:roomid]   = Room.current.id
+    @@origin[:target]   = Room.current.id
     @@origin[:hidden]   = hiding?
     @@origin[:location] = Room.current.location
     Go2

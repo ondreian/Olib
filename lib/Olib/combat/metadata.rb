@@ -9,5 +9,9 @@ class Creatures
     def self.get(name)
       @repo.fetch(name.downcase) do {name: name, level: Char.level, tags: []} end
     end
+
+    def self.repo()
+      @repo.values.map {|creature| OpenStruct.new(creature)}
+    end
   end
 end

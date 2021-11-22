@@ -1,4 +1,4 @@
-module Action
+class Command
   LOCK = Mutex.new
 
   def self.lock()

@@ -1,6 +1,7 @@
 require "ostruct"
 
 module Attack
+  # AS: +491 vs DS: +195 with AvD: +25 + d100 roll: +80 = +401
   AS_DS_PATTERN = /AS: (?<as>.*) vs DS: (?<ds>.*) with AvD: (?<avd>.*) \+ d100 roll: (?<roll>.*) = (?<total>.*)$/
   CS_TD_PATTERN = /CS: (?<cs>.*) \- TD: (?<td>.*) \+ CvA: (?<cva>.*) \+ d100: (?<roll>.*) == (?<total>.*)$/
 
@@ -21,12 +22,9 @@ module Attack
       waitrt?
       waitcastrt?
       return [:err, :dead] if creature.dead?
-      case @matcher.capture(creature.to_h, build_command(verb, qstrike))
-      in [:ok, _, []]
-        return [:noop]
-      in [:ok, _, lines]
-        parse_result(lines)
-      end  
+      code, lines = @matcher.capture(creature.to_h, build_command(verb, qstrike))
+      return parse_result(lines) unless lines.empty?
+      return code
     rescue => exception
       return [:err, exception]
     end
@@ -47,7 +45,6 @@ module Attack
 
   def self.parse_cs_td(line)
     resolution = OpenStruct.new line.match(CS_TD_PATTERN).to_h
-    Log.out(resolution)
     resolution[:likelihood] = (resolution.cs + resolution.cva) - resolution.td
     return resolution
   end

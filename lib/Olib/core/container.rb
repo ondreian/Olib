@@ -1,7 +1,7 @@
 # for defining containers ala lootsack and using them across scripts
 require "Olib/core/exist"
 require "Olib/core/item"
-require "Olib/core/action"
+require "Olib/core/command"
 
 class GameObj
   def to_container
@@ -58,7 +58,7 @@ class Container < Exist
 
   def add(*items)
     items.flatten.each do |item|
-      Action.try_or_fail(command: "_drag ##{item.id} ##{id}") do
+      Command.try_or_fail(command: "_drag ##{item.id} ##{id}") do
         contents.map(&:id).include?(item.id.to_s)
       end
     end

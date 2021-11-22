@@ -176,7 +176,7 @@ class Creature < Exist
   end
 
   def metadata()
-    OpenStruct.new Creatures::Metadata.get(name)
+    OpenStruct.new Creatures::Metadata.get(name.gsub(/hanging|flying/, "").strip)
   end
 
   def level()

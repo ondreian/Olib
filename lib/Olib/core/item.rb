@@ -48,7 +48,7 @@ class Item < Exist
   def take()
     return self if held?
     fail Exception, "Error #{inspect}\nyour hands are full" if Char.left && Char.right
-    Action.try_or_fail(command: "get ##{id}") do held? end
+    Command.try_or_fail(command: "get ##{id}") do held? end
     return self
   end
 

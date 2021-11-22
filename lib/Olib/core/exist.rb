@@ -1,5 +1,5 @@
 
-require "Olib/core/action"
+require "Olib/core/command"
 
 class Exist
   GETTER  = %r[\w$]

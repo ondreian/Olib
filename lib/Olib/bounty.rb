@@ -1,15 +1,15 @@
 require "ostruct"
 
 class Bounty
-  NPCS = /guard|sergeant|Felinium|clerk|purser|taskmaster|gemcutter|jeweler|akrash|kris|Ghaerdish|Furryback|healer|dealer|Ragnoz|Maraene|Kelph|Areacne|Jhiseth|Gaedrein/i
+  NPCS = /guard|sergeant|Luthrek|Felinium|clerk|purser|taskmaster|gemcutter|jeweler|akrash|kris|Ghaerdish|Furryback|healer|dealer|Ragnoz|Maraene|Kelph|Areacne|Jhiseth|Gaedrein/i
   HERBALIST_AREAS = /illistim|vaalor|legendary rest|solhaven/i
-  @@listeners = {}
+
   # this should be refactored to use CONST
   REGEX = OpenStruct.new(
     creature_problem: /"Hmm, I've got a task here from (?<town>.*?)\.  It appears they have a creature problem they\'d like you to solve/,
     report_to_guard:  /^You succeeded in your task and should report back to/,
     get_skin_bounty:  /The local furrier/,
-    heirloom_found:   /^You have located the heirloom and should bring it back to/,
+    heirloom_found:   /^You have located (?:a|an|some) (?<heirloom>.*?) and should bring it back to one of the (?<town>.*?) gate guards\./,
     cooldown:         /^You are not currently assigned a task.  You will be eligible for new task assignment in about (?<minutes>.*?) minute(s)./,
     
     dangerous: /You have been tasked to hunt down and kill a particularly dangerous (?<creature>.*) that has established a territory (?:in|on) (?:the )?(?<area>.*?)(?: near| between| under|\.)/,
@@ -27,14 +27,14 @@ class Bounty
     escort: /Go to the (.*?) and WAIT for (?:him|her|them) to meet you there.  You must guarantee (?:his|her|their) safety to (?<destination>.*?) as soon as/,
     gem:    /The gem dealer in (?<town>.*?), (?<npc>.*?), has received orders from multiple customers requesting (?:a|an|some) (?<gem>[a-zA-Z '-]+).  You have been tasked to retrieve (?<number>[0-9]+)/,
     cull:    /^You have been tasked to suppress (?<creature>(?!bandit).*) activity (?:in|on|around) (?<area>.*?)(| (near|between) (?<realm>.*?)).  You need to kill (?<number>[0-9]+)/,
-    bandits: /^You have been tasked to suppress bandit activity (?:in|on|around) (?<area>.*?) (?:near|between|under) (?<realm>.*?).  You need to kill (?<number>[0-9]+)/,
+    bandits: /^You have been tasked to suppress bandit activity (?:in|on|around|near) (?<area>.*?) (?:near|between|under) (?<realm>.*?).  You need to kill (?<number>[0-9]+)/,
 
     rescue:  /A local divinist has had visions of the child fleeing from (?:a|an) (?<creature>.*) (?:in|on) (?:the )?(?<area>.*?)(?: near| between| under|\.)/,
     failed:  /You have failed in your task/,
     none:    /You are not currently assigned a task/,
     skin:    /^You have been tasked to retrieve (?<number>\d+) (?<skin>.*?) of at least (?<quality>.*?) quality for (?<buyer>.*?) in (?<realm>.*?)\.\s+You can SKIN them off the corpse of (a|an|some) (?<creature>.*?) or/,
     
-    help_bandits: /You have been tasked to help (?<partner>.*?) suppress bandit activity (?:in|on|around) (?<area>.*?) (?:near|between|under) (?<realm>.*?).  You need to kill (?<number>[0-9]+)/,
+    help_bandits: /You have been tasked to help (?<partner>.*?) suppress bandit activity (?:in|on|around|near) (?<area>.*?) (?:near|between|under) (?<realm>.*?).  You need to kill (?<number>[0-9]+)/,
     help_creatures: /You have been tasked to help (?<partner>.*?) kill a dangerous creature by suppressing (?<creature>.*) activity (?:in|on|around|near) (?<area>.*?) (?:near|between|under) (?<realm>.*?) during the hunt.  You need to kill (?<number>[0-9]+)/,
     help_cull: /You have been tasked to help (?<partner>.*?) suppress (?<creature>.*) activity (?:in|on|around|near) (?<area>.*?) (?:near|between|under) (?<realm>.*?).  You need to kill (?<number>[0-9]+)/,
   )
@@ -142,15 +142,6 @@ class Bounty
     Bounty
   end
 
-  def Bounty.on(namespace, &block)
-    @@listeners[namespace] = block
-    Bounty
-  end
-
-  def Bounty.listeners
-    @@listeners
-  end
-
   def Bounty.cooldown?
     not XMLData.active_spells["Next Bounty"].nil?
   end
@@ -161,38 +152,6 @@ class Bounty
       wait_while { Bounty.cooldown? }
     end
     Bounty
-  end
-
-  def Bounty.throw_missing_listener
-    msg = "\n"
-    msg.concat "\nBounty.dispatch called for `:#{Bounty.type}` without a defined listener\n\n"
-    msg.concat "define a listener with:\n"
-    msg.concat " \n" 
-    msg.concat "   Bounty.on(:#{Bounty.type}) {\n" 
-    msg.concat "      # do something\n"
-    msg.concat "   }\n"
-    msg.concat " \n"
-    msg.concat "or rescue this error (Errors::Fatal) gracefully\n"
-    msg.concat " \n"
-    raise Errors::Fatal.new msg
-  end
-
-  def Bounty.dispatch(listener=nil)
-    if listener
-      if @@listeners[listener]
-        @@listeners[listener].call
-        return Bounty
-      else 
-        Bounty.throw_missing_listener
-      end
-    end
-
-    if @@listeners[Bounty.type]
-      @@listeners[Bounty.type].call
-      return Bounty
-    else
-      Bounty.throw_missing_listener
-    end
   end
 
   def Bounty.find_guard
