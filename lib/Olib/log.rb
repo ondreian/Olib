@@ -1,18 +1,15 @@
-module Preset
-  def self.as(kind, body)
-    %[<preset id="#{kind}">#{body}</preset>\r\n]
-  end
-end
 ##
 ## contextual logging
 ##
-module Log  
-  require "cgi"
+module Log
   def self.out(msg, label: :debug)
-    return _write _view(msg, label) unless msg.is_a?(Exception)
-    ## pretty-print exception
-    _write _view(msg.message, label)
-    msg.backtrace.to_a.slice(0..5).each do |frame| _write _view(frame, label) end
+    if msg.is_a?(Exception)
+      ## pretty-print exception
+      _write _view(msg.message, label)
+      msg.backtrace.to_a.slice(0..5).each do |frame| _write _view(frame, label) end
+    else
+      self._write _view(msg, label) if Script.current.vars.include?("--debug")
+    end
   end
 
   def self._write(line)
@@ -21,7 +18,7 @@ module Log
     elsif line.include?("<") and line.include?(">")
       respond(line)
     else
-      _respond Preset.as(:debug, CGI.escapeHTML(line))
+      _respond Preset.as(:debug, line)
     end
   end
 
@@ -38,5 +35,11 @@ module Log
 
   def self.dump(*args)
     pp(*args)
+  end
+
+  module Preset
+    def self.as(kind, body)
+      %[<preset id="#{kind}">#{body}</preset>]
+    end
   end
 end

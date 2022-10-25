@@ -1,7 +1,7 @@
 require "ostruct"
 
 class Bounty
-  NPCS = /guard|sergeant|Luthrek|Felinium|clerk|purser|taskmaster|gemcutter|jeweler|akrash|kris|Ghaerdish|Furryback|healer|dealer|Ragnoz|Maraene|Kelph|Areacne|Jhiseth|Gaedrein/i
+  NPCS = /fur trader|guard|sergeant|Brindlestoat|Halfwhistle|tavernkeeper|Luthrek|Felinium|clerk|purser|taskmaster|gemcutter|jeweler|akrash|kris|Ghaerdish|Furryback|healer|dealer|Ragnoz|Maraene|Kelph|Areacne|Jhiseth|Gaedrein/i
   HERBALIST_AREAS = /illistim|vaalor|legendary rest|solhaven/i
 
   # this should be refactored to use CONST
@@ -9,7 +9,9 @@ class Bounty
     creature_problem: /"Hmm, I've got a task here from (?<town>.*?)\.  It appears they have a creature problem they\'d like you to solve/,
     report_to_guard:  /^You succeeded in your task and should report back to/,
     get_skin_bounty:  /The local furrier/,
-    heirloom_found:   /^You have located (?:a|an|some) (?<heirloom>.*?) and should bring it back to one of the (?<town>.*?) gate guards\./,
+    # You have located an antique silver bracer and should bring it back to the sentry just outside town.
+    heirloom_found:   Regexp.union(
+      /^You have located (?:a|an|some) (?<heirloom>.*?) and should bring it back to/),
     cooldown:         /^You are not currently assigned a task.  You will be eligible for new task assignment in about (?<minutes>.*?) minute(s)./,
     
     dangerous: /You have been tasked to hunt down and kill a particularly dangerous (?<creature>.*) that has established a territory (?:in|on) (?:the )?(?<area>.*?)(?: near| between| under|\.)/,
@@ -20,7 +22,7 @@ class Bounty
     get_rescue:      /"Hmm, I've got a task here from (?<town>.*?)\.  It appears that a local resident urgently needs our help in some matter/,
     get_bandits:     /"Hmm, I've got a task here from (?<town>.*?)\.  It appears they have a bandit problem they'd like you to solve./,
     get_heirloom:    /"Hmm, I've got a task here from (?<town>.*?)\.  It appears they need your help in tracking down some kind of lost heirloom/,
-    get_herb_bounty: /local herbalist|local healer|local alchemist/,
+    get_herb_bounty: /local herbalist|local healer|local alchemist|local halfling alchemist/,
     get_gem_bounty:  /"Hmm, I've got a task here from (?<town>.*?)\.  The local gem dealer, (?<npc>[a-zA-Z ]+), has an order to fill and wants our help/,
 
     herb:   /requires (?:a |an |)(?<herb>.*?) found (?:in|on|around|near) (?<area>.*?)(| (near|between) (?<realm>.*?)).  These samples must be in pristine condition.  You have been tasked to retrieve (?<number>[\d]+)/,
@@ -120,11 +122,14 @@ class Bounty
     fput "unhide" if invisible?
     fput "unhide" if hidden?
     raise Exception, "could not find Bounty.npc here" unless Bounty.npc
+    previous_state = checkbounty
     if expedite
       fput "ask ##{Bounty.npc.id} for expedite" 
     else
       fput "ask ##{Bounty.npc.id} for bounty"
     end
+    ttl = Time.now + 2
+    wait_while {checkbounty.eql?(previous_state) and Time.now < ttl}
   end
 
   def Bounty.herbalist
