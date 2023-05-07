@@ -8,7 +8,7 @@ module Log
       _write _view(msg.message, label)
       msg.backtrace.to_a.slice(0..5).each do |frame| _write _view(frame, label) end
     else
-      self._write _view(msg, label) if Script.current.vars.include?("--debug")
+      self._write _view(msg, label) #if Script.current.vars.include?("--debug")
     end
   end
 

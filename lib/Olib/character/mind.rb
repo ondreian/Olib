@@ -44,27 +44,19 @@ class Mind
   ##
   Mind.states.each_pair { |name, str|
     Mind.define_singleton_method((name.to_s + "?").to_sym) do
-      Mind.state == str
+      Mind.state.eql?(str)
     end
 
-    Mind.define_singleton_method("until_not_#{name.to_s}".to_sym) do
-      wait_until { Mind.state != str }
+    Mind.define_singleton_method("while_#{name.to_s}".to_sym) do
+      wait_while("waiting while mind / %s" % str) { 
+        Mind.state.eql? str
+      }
     end
 
     Mind.define_singleton_method("until_#{name.to_s}".to_sym) do
-      wait_until { Mind.state == str }
+      wait_until("waiting until mind / %s" % str) { 
+        Mind.state.eql?(str)
+      }
     end
   }
-  ##
-  ## @brief      returns you to your current origin and waits 
-  ##             until your mind is rested
-  ##
-  ## @param      state  The state
-  ##
-  ## @return     nil
-  ##
-  def Mind.rest!(state=Mind.states.saturated)
-    Go2.origin
-    wait_until { Mind.state != state }
-  end
 end

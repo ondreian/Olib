@@ -4,11 +4,6 @@ require "Olib/core/use"
 require "Olib/core/transaction"
 require "Olib/core/scroll"
 
-class GameObj
-  def to_item
-    Item.new self
-  end
-end
 
 # this is the structure for a base Object
 # wraps an instance of GameObj and adds the ability for tags, queries

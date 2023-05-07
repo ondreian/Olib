@@ -22,7 +22,9 @@ class Transaction < Exist
     )
   
   attr_reader :value,
-              :threshold
+              :threshold,
+              :quality,
+              :err
 
   def initialize(item, **args)
     super(item)
@@ -34,22 +36,40 @@ class Transaction < Exist
     self
   end
 
-  def appraise()
-    return self unless @value.nil?
-    take
-    (_, match, lines) = Appraise.capture(self.to_h, 
-      "appraise \#{{id}}")
+  def skilled_appraise()
+    if Skills.trading < 25
+      @err = :no_trading
+      return self
+    end
+    self.take
+    res = dothistimeout("appraise #%s" % self.id, 3, /is of (\w+) quality and worth approximately (\d+) silvers/)
+    if res =~ /is of (\w+) quality and worth approximately (\d+) silvers/
+      @quality = $1
+      @value = $2.delete(",").to_i
+    end
+    self
+  end
+
+  def shop_appraise
+    self.take
+    (_, match, lines) = Appraise.capture(self.to_h, "appraise \#{{id}}")
+
     if lines.any? {|line| line.include?(%[Sorry, #{Char.name}, I'm not buying anything this valuable today.])}
       @value = Float::INFINITY
     else
-      Log.out(match[:value])
       @value = match[:value].to_s.delete(",").to_i
     end
     self
   end
 
+  def appraise()
+    return self unless @value.nil?
+    return self.skilled_appraise unless Room.current.tags.any? {|tag| %w(gemshop furrier pawnshop).include?(tag)}
+    return self.shop_appraise
+  end
+
   def sell()
-    take
+    self.take
     if @threshold && appraise && @value > @threshold
       return Err[
         transaction: self,

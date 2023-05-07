@@ -9,28 +9,28 @@ class Use
 
   def run(&block)
     yield @item
-    @item.container.add(@item)
+    @item.container.add(@item) unless item.gone?
   end
 
   def left(&block)
     empty_left_hand
     @item.take
     Char.swap if Char.right.id == @item.id
-    run &block
+    self.run(&block)
     fill_left_hand
   end
 
   def right(&block)
     empty_right_hand
     @item.take
-    run &block
+    self.run(&block)
     fill_right_hand
   end
 
   def both(&block)
     empty_hands
     @item.take
-    run &block
+    self.run(&block)
     fill_hands
   end
 end

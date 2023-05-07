@@ -1,7 +1,7 @@
 require "ostruct"
 
 class Bounty
-  NPCS = /fur trader|guard|sergeant|Brindlestoat|Halfwhistle|tavernkeeper|Luthrek|Felinium|clerk|purser|taskmaster|gemcutter|jeweler|akrash|kris|Ghaerdish|Furryback|healer|dealer|Ragnoz|Maraene|Kelph|Areacne|Jhiseth|Gaedrein/i
+  NPCS = /Bramblefist|balding halfling alchemist|fur trader|guard|sergeant|Brindlestoat|Halfwhistle|tavernkeeper|Luthrek|Felinium|clerk|purser|taskmaster|gemcutter|jeweler|akrash|kris|Ghaerdish|Furryback|healer|dealer|Ragnoz|Maraene|Kelph|Areacne|Jhiseth|Gaedrein/i
   HERBALIST_AREAS = /illistim|vaalor|legendary rest|solhaven/i
 
   # this should be refactored to use CONST
@@ -133,6 +133,10 @@ class Bounty
   end
 
   def Bounty.herbalist
+    if Room.current.location =~ /hinterwilds/i
+      Script.run("go2", "u7503253")
+      return self
+    end
     if Room.current.location =~ HERBALIST_AREAS
       Go2.herbalist
     else

@@ -3,11 +3,6 @@ require "Olib/core/exist"
 require "Olib/core/item"
 require "Olib/core/command"
 
-class GameObj
-  def to_container
-    Container.new(self)
-  end
-end
 
 class Container < Exist
   TOPS = %w(table)
@@ -19,7 +14,7 @@ class Container < Exist
   end
 
   def check_contents
-    fput TOPS.include?(noun) ? "look on ##{id}" : "look in ##{id}"  
+    fput TOPS.include?(noun) ? "look on ##{id}" : "look in ##{id}"
   end
 
   def contents

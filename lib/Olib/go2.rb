@@ -12,14 +12,14 @@ class String
   end  
 end
 
-class Go2
+module Go2
   ##
   ## @brief      returns the filtered relevant Map db tags
   ##
   ## @return     Array
   ##
   def Go2.tags
-    Map.tags.select { |tag| !tag.include? "=" }
+    Map.tags.select { |tag| !tag.include? "=" }.uniq
   end
 
   ##
@@ -43,20 +43,6 @@ class Go2
         starting_room
       end
     end
-    Go2
-  end
-
-  def Go2.origin
-    Go2.room @@origin[:target]
-    Char.hide if @@origin[:hidden]
-    Go2
-  end
-
-  def Go2.rebase
-    @@origin            = {}
-    @@origin[:target]   = Room.current.id
-    @@origin[:hidden]   = hiding?
-    @@origin[:location] = Room.current.location
     Go2
   end
 
