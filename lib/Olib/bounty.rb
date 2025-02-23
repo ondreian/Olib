@@ -118,15 +118,30 @@ class Bounty
     Bounty.parse(checkbounty)
   end
 
+  def self.npc_404!
+    raise Exception, "could not find Bounty.npc here" unless Bounty.npc
+  end
+
+  # fix because of Dreaven's MA army fucking with XML feed
+  def self.find_npc
+    return "#%s" % self.npc.id if self.npc
+    case XMLData.room_id
+    when 15004001
+      return "Halline"
+    else
+      self.npc_404!
+    end
+  end
+
   def Bounty.ask_for_bounty(expedite: false)
     fput "unhide" if invisible?
     fput "unhide" if hidden?
-    raise Exception, "could not find Bounty.npc here" unless Bounty.npc
+    npc = self.find_npc
     previous_state = checkbounty
     if expedite
-      fput "ask ##{Bounty.npc.id} for expedite" 
+      fput "ask %s for expedite" % npc
     else
-      fput "ask ##{Bounty.npc.id} for bounty"
+      fput "ask %s for bounty" % npc
     end
     ttl = Time.now + 2
     wait_while {checkbounty.eql?(previous_state) and Time.now < ttl}

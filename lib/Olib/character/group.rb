@@ -1,6 +1,10 @@
+=begin
+MIGRATED TO LICH CORE
+
 require "ostruct"
 require "benchmark"
 require "Olib/character/disk"
+
 
 class Group
   @@members ||= []
@@ -299,3 +303,4 @@ class Group
 
   Observer.attach()
 end
+=end
